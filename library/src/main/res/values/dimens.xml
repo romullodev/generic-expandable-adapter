@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_size_small">20dp</dimen>
+
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">18dp</dimen>
+    <dimen name="padding_xlarge">14dp</dimen>
+
+    <dimen name="margin_xxsmall">1dp</dimen>
+    <dimen name="margin_xsmall">4dp</dimen>
+    <dimen name="margin_small">6dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_large">18dp</dimen>
+    <dimen name="margin_xlarge">24dp</dimen>
+
+    <dimen name="card_elevation_small">3dp</dimen>
+    <dimen name="card_radius">5dp</dimen>
+
+    <dimen name="thickness">1dp</dimen>
+</resources>

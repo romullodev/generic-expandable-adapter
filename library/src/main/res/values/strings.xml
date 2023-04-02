@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="expandable_adapter_title_expand">Expandir</string>
+    <string name="expandable_adapter_total_bands">%1s títulos</string>
+</resources>

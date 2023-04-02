@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CardView.Style.Default" parent="CardView.Dark">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="android:foreground">@drawable/shape_thickness_with_no_background</item>
+    </style>
+</resources>
