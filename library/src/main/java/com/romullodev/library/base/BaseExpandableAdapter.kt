@@ -71,12 +71,12 @@ abstract class BaseExpandableAdapter<H, I, P>(
             false
         ).run {
             return when (viewType) {
-                VIEW_TYPE_HEADER -> BaseExpandableAdapterViewHolder.HeaderExpandableAdapter(
+                VIEW_TYPE_HEADER -> BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I, P>(
                     headerBinding = this,
                     icExpanded = getExpandedIcImageView(this),
                     bindHeaderCallback = getHeaderBindingCallback(),
                     performOperationOnHeaderViewHolderInitMethod = performOperationOnHeaderViewHolderInitMethod()
-                )
+                ).apply { headerBinding.root }
                 else -> BaseExpandableAdapterViewHolder.ItemExpandableAdapter(
                     itemBinding = this,
                     bindItemCallback = getItemBindingCallback(),
@@ -113,7 +113,7 @@ abstract class BaseExpandableAdapter<H, I, P>(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         class HeaderExpandableAdapter<H, I, P>(
-            private val headerBinding: ViewDataBinding,
+            val headerBinding: ViewDataBinding,
             icExpanded: ImageView?,
             performOperationOnHeaderViewHolderInitMethod: ViewHolderHeaderInitMethodCallback,
             private val bindHeaderCallback: HeaderBindingCallback<H, P>

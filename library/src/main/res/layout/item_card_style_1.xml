@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewItemCardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_small"
@@ -11,9 +12,10 @@
         app:cardCornerRadius="@dimen/card_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutItemCardContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/shape_thickness_with_background">
+            tools:background="@drawable/shape_thickness_with_background">
 
             <TextView
                 android:id="@+id/textViewItemCardStyle1Name"

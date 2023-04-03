@@ -3,11 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/customExpandableAdapterFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.romullodev.generic_expandable_adapter.FirstFragment"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/defaultExpandableAdapterFragment"
+        android:name="com.romullodev.generic_expandable_adapter.DefaultExpandableAdapterFragment"
+        tools:layout="@layout/fragment_default_expandable_adapter">
+        <action
+            android:id="@+id/action_FirstFragment_to_customExpandableAdapterFragment"
+            app:destination="@id/customExpandableAdapterFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/customExpandableAdapterFragment"
+        android:name="com.romullodev.generic_expandable_adapter.CustomExpandableAdapterFragment"
+        android:label="CustomExpandableAdapterFragment"
+        tools:layout="@layout/fragment_custom_expandable_adapter"/>
 </navigation>

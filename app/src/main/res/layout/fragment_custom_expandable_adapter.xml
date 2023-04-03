@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    tools:context=".DefaultExpandableAdapterFragment">
 
     <TextView
         android:id="@+id/textViewMyPlaylist"
@@ -14,14 +14,14 @@
         android:gravity="start"
         android:paddingStart="@dimen/padding_medium"
         android:paddingTop="@dimen/padding_medium"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_marginTop="@dimen/margin_xlarge"
         android:textStyle="bold"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry"
-        android:text="@string/my_playlist" />
+        android:text="@string/custom" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewExpandableAdapterDemo"
@@ -33,5 +33,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewMyPlaylist"
-        tools:listitem="@layout/header_card_style_1"/>
+        tools:listitem="@layout/custom_header"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

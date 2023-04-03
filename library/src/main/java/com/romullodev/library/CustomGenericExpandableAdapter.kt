@@ -5,10 +5,6 @@ import androidx.databinding.ViewDataBinding
 import com.romullodev.library.base.BaseExpandableAdapter
 import com.romullodev.library.base.HeaderBindingCallback
 import com.romullodev.library.base.ItemBindingCallback
-import com.romullodev.library.databinding.DefaultHeaderLayoutBinding
-import com.romullodev.library.databinding.DefaultItemLayoutBinding
-import com.romullodev.library.entities.DefaultDataHeader
-import com.romullodev.library.entities.DefaultDataItem
 
 class CustomGenericExpandableAdapter<H, I, P>(
     header: H,
@@ -17,8 +13,8 @@ class CustomGenericExpandableAdapter<H, I, P>(
     private val headerBindingCallback: HeaderBindingCallback<H, P>,
     private val getLayoutParamsSetup: P,
     private val getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
-    private val headerLayout: Int,
-    private val itemLayout: Int
+    headerLayout: Int,
+    itemLayout: Int
 ) : BaseExpandableAdapter<H, I, P>(
     headerObject = header,
     headerLayoutRes = headerLayout,

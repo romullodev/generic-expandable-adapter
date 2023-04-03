@@ -3,4 +3,13 @@
     <color name="black_900">#292929</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="rock_color">#550B0C</color>
+    <color name="pop_color">#B07123</color>
+    <color name="electronic_color">#743D0E</color>
+    <color name="hip_hop_color">#636363</color>
+    <color name="jazz_color">#866F6E</color>
+    <color name="blues_color">#006D9B</color>
+    <color name="reggae_color">#015F43</color>
+    <color name="green">#0E936C</color>
 </resources>

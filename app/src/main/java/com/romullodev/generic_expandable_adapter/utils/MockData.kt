@@ -1,208 +1,216 @@
 package com.romullodev.generic_expandable_adapter.utils
 
 import com.romullodev.generic_expandable_adapter.R
-import com.romullodev.library.entities.CardItemStyle1
-import com.romullodev.library.entities.CardStyle1
+import com.romullodev.library.entities.CardItemModel
+import com.romullodev.library.entities.CardHeaderModel
 
 object MockData {
 
-    private fun getRockBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
-            itemName = "Arctic Monkeys"
+    private fun getRockBands(): List<CardItemModel> = listOf(
+        CardItemModel(
+            itemName = "Arctic Monkeys",
+            backgroundColorRes = R.color.green
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Imagine Dragons"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Foo Fighters"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "The Black Keys"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Kings of Leon"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Muse"
         ),
     )
 
-    private fun getPopBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getPopBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Taylor Swift"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Ed Sheeran"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Adele"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Bruno Mars"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Katy Perry"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Justin Timberlake"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Lady Gaga"
         ),
     )
 
-    private fun getHipHopBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getHipHopBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Kendrick Lamar"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Drake"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "J. Cole"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Kanye West"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Travis Scott"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Post Malone"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Cardi B "
         ),
     )
 
-    private fun getJazzBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getJazzBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Kamasi Washington"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Robert Glasper"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Snarky Puppy"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Gregory Porter"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Esperanza Spalding"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Christian Scott"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Hiromi Uehara"
         ),
     )
 
-    private fun getBluesBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getBluesBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Gary Clark Jr."
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Joe Bonamassa"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Beth Hart"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Tedeschi Trucks Band"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "John Mayer"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Seasick Steve"
         )
     )
 
-    private fun getReggaeBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getReggaeBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Damian Marley"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Chronixx"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Protoje"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Morgan Heritage"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Rebelution"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Kabaka Pyramid"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Alborosie"
         )
     )
 
-    private fun getElectronicBands(): List<CardItemStyle1> = listOf(
-        CardItemStyle1(
+    private fun getElectronicBands(): List<CardItemModel> = listOf(
+        CardItemModel(
             itemName = "Daft Punk"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "The Chainsmokers"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Avicii"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Calvin Harris"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Major Lazer"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Disclosure"
         ),
-        CardItemStyle1(
+        CardItemModel(
             itemName = "Zedd"
         )
     )
 
-    fun getMusicStyles(): List<CardStyle1> = listOf(
-        CardStyle1(
+    fun getMusicStyles(): List<CardHeaderModel> = listOf(
+        CardHeaderModel(
             cardName = "Rock",
             backgroundImgRes = R.drawable.rock,
             items = getRockBands(),
+            backgroundColorItems = R.color.rock_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Pop",
             backgroundImgRes = R.drawable.pop,
             items = getPopBands(),
+            backgroundColorItems = R.color.pop_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Hip Hop",
             backgroundImgRes = R.drawable.hip_hop,
             items = getHipHopBands(),
+            backgroundColorItems = R.color.hip_hop_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Jazz",
             backgroundImgRes = R.drawable.jazz,
             items = getJazzBands(),
+            backgroundColorItems = R.color.jazz_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Blues",
             backgroundImgRes = R.drawable.blues,
             items = getBluesBands(),
+            backgroundColorItems = R.color.blues_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Reggae",
             backgroundImgRes = R.drawable.reggae,
             items = getReggaeBands(),
+            backgroundColorItems = R.color.reggae_color
         ),
-        CardStyle1(
+        CardHeaderModel(
             cardName = "Electronic",
             backgroundImgRes = R.drawable.eletronic,
             items = getElectronicBands(),
+            backgroundColorItems = R.color.electronic_color
         ),
     )
 }
