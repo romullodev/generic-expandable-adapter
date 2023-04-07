@@ -7,14 +7,12 @@ import com.romullodev.library.databinding.HeaderCardStyle1Binding
 import com.romullodev.library.databinding.ItemCardStyle1Binding
 import com.romullodev.library.entities.CardItemModel
 import com.romullodev.library.entities.CardHeaderModel
-import com.romullodev.library.utils.setupBackgroundColor
-import com.romullodev.library.utils.setupImage
-import com.romullodev.library.utils.setupShapeOnHeader
-import com.romullodev.library.utils.setupShapeOnItem
+import com.romullodev.library.entities.CardHeaderStyle
+import com.romullodev.library.entities.CardItemStyle
+import com.romullodev.library.utils.*
 
 class DefaultGenericExpandableAdapter(
-    header: CardHeaderModel,
-    private val hasThickness: Boolean,
+    header: CardHeaderModel
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel, Unit>(
     headerObject = header,
     headerLayoutRes = R.layout.header_card_style_1,
@@ -26,10 +24,7 @@ class DefaultGenericExpandableAdapter(
         { item, header, binding ->
             (binding as? ItemCardStyle1Binding)?.run {
                 textViewItemCardStyle1Name.text = item.itemName
-                constraintLayoutItemCardContainer.setupBackgroundColor(
-                    colorRes = item.backgroundColorRes ?: header.backgroundColorItems,
-                    hasThickness = hasThickness
-                )
+                setupItemStyle(binding, item.cardItemStyle, header.cardHeaderStyle)
             }
         }
 
@@ -41,17 +36,49 @@ class DefaultGenericExpandableAdapter(
                     R.string.expandable_adapter_total_bands,
                     header.items.size.toString()
                 )
-                header.backgroundImgRes?.let {
-                    imageViewBackgroundCardStyle1.setupImage(it)
-                }
-                header.backgroundColorRes?.let {
-                    imageViewBackgroundCardStyle1.setupBackgroundColor(
-                        colorRes = it,
-                        hasThickness = hasThickness
-                    )
-                }
+                setupHeaderStyle(binding, header.cardHeaderStyle)
             }
         }
+
+    private fun setupItemStyle(
+        binding: ItemCardStyle1Binding,
+        cardItemStyle: CardItemStyle,
+        cardHeaderStyle: CardHeaderStyle
+    ) {
+        binding.run {
+            textViewItemCardStyle1Name.setupTextColor(cardItemStyle.titleColorRes)
+            constraintLayoutItemCardContainer.setupShapeWithBackground(
+                backgroundColorRes = cardItemStyle.backgroundColorRes ?: cardHeaderStyle.backgroundColorItems
+                ?: R.color.black,
+                hasThickness = cardItemStyle.hasThickness,
+                thicknessColorRes = cardItemStyle.thicknessColor
+            )
+        }
+    }
+
+    private fun setupHeaderStyle(
+        binding: HeaderCardStyle1Binding,
+        cardHeaderStyle: CardHeaderStyle
+    ) {
+        binding.run {
+            textViewCardStyle1Title.setupTextColor(cardHeaderStyle.titleColorRes)
+            textViewCardStyle1Subtitle.setupTextColor(cardHeaderStyle.subtitleColorRes)
+            cardHeaderStyle.backgroundImgRes?.let {
+                imageViewBackgroundCardStyle1.setupImage(it)
+                cardViewHeaderCardContainer.setupShapeWithNoBackground(
+                    hasThickness = cardHeaderStyle.hasThickness,
+                    thicknessColorRes = cardHeaderStyle.thicknessColor
+                )
+            } ?: run {
+                constraintLayoutHeaderCardContainer.setupShapeWithBackground(
+                    backgroundColorRes = cardHeaderStyle.backgroundColorRes,
+                    hasThickness = cardHeaderStyle.hasThickness,
+                    thicknessColorRes = cardHeaderStyle.thicknessColor
+                )
+            }
+            imageViewArrowDown.setupTintColor(cardHeaderStyle.arrowDownIconColorRes)
+        }
+    }
 
     override fun getLayoutParamsSetup() = Unit
 
@@ -60,16 +87,16 @@ class DefaultGenericExpandableAdapter(
             imageViewArrowDown
         } ?: throw Exception("error on perform cast do header binding")
 
-    override fun performOperationOnHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {
-        binding ->
-        (binding as HeaderCardStyle1Binding).apply {
-            cardViewHeaderCardContainer.setupShapeOnHeader(hasThickness = hasThickness)
-        }
-    }
-    override fun performOperationOnItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {
-            binding ->
-        (binding as ItemCardStyle1Binding).apply {
-            cardViewItemCardContainer.setupShapeOnItem(hasThickness = hasThickness)
-        }
-    }
+//    override fun performOperationOnHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {
+//        binding ->
+//        (binding as HeaderCardStyle1Binding).apply {
+//            cardViewHeaderCardContainer.setupShapeOnHeader()
+//        }
+//    }
+//    override fun performOperationOnItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {
+//            binding ->
+//        (binding as ItemCardStyle1Binding).apply {
+//            cardViewItemCardContainer.setupShapeOnItem()
+//        }
+//    }
 }

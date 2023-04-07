@@ -38,7 +38,7 @@ class CustomExpandableAdapterFragment : Fragment() {
 
     private fun setupAdapterByCustom() {
         binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapter(
-            dataHeaders = MockData.getMusicStyles(),
+            dataHeaders = MockData.getMusics(),
             getItemsCallback = { getItemsCallback(it) },
             itemBindingCallback = getItemBindingCallback(),
             headerBindingCallback = getHeaderBindingCallback(),

@@ -4,4 +4,8 @@
         <item name="cardCornerRadius">@dimen/card_radius</item>
         <item name="android:foreground">@drawable/shape_thickness_no_background</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CustomCornerSize" parent="">
+        <item name="cornerSize">@dimen/card_radius</item>
+    </style>
 </resources>

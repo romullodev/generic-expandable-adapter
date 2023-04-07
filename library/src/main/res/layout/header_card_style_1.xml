@@ -7,20 +7,20 @@
         android:id="@+id/cardViewHeaderCardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:foreground="@drawable/shape_thickness_no_background"
         android:layout_marginHorizontal="@dimen/margin_small"
         android:layout_marginBottom="@dimen/margin_xsmall"
         app:cardCornerRadius="@dimen/card_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutHeaderCardContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="@drawable/shape_no_thickness_with_background">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageViewBackgroundCardStyle1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/thickness"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -36,11 +36,11 @@
                 android:paddingStart="@dimen/padding_medium"
                 android:paddingTop="@dimen/padding_medium"
                 android:textStyle="bold"
-                android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlSymmetry"
-                tools:text="Title" />
+                tools:text="Title"
+                tools:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/textViewCardStyle1Subtitle"
@@ -49,22 +49,23 @@
                 android:gravity="start"
                 android:paddingStart="@dimen/padding_medium"
                 android:paddingBottom="@dimen/padding_medium"
-                android:textColor="@color/a_40_white"
                 app:layout_constraintStart_toStartOf="@+id/textViewCardStyle1Title"
                 app:layout_constraintTop_toBottomOf="@+id/textViewCardStyle1Title"
                 tools:ignore="RtlSymmetry"
-                tools:text="subtitle" />
+                tools:text="subtitle"
+                tools:textColor="@color/black" />
 
             <ImageView
                 android:id="@+id/imageViewArrowDown"
                 android:layout_width="@dimen/icon_size_small"
                 android:layout_height="@dimen/icon_size_small"
-                android:contentDescription="@string/expandable_adapter_title_expand"
                 android:layout_marginEnd="@dimen/padding_medium"
+                android:contentDescription="@string/expandable_adapter_title_expand"
                 android:src="@drawable/chevron_down_solid"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:tint="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

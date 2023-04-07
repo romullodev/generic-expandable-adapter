@@ -3,11 +3,7 @@
     android:shape="rectangle">
     <stroke
         android:width="@dimen/thickness"
-        android:color="#000000" />
-    <gradient
-        android:startColor="#e6e6e6"
-        android:centerColor="#e6e6e6"
-        android:endColor="#e6e6e6"/>
+        android:color="#FFFFFF" />
     <corners
         android:radius="@dimen/card_radius"/>
 </shape>

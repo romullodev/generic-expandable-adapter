@@ -1,10 +1,14 @@
 package com.romullodev.library.utils
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +25,10 @@ fun View.visibleOrGone(isVisible: Boolean) {
 }
 
 fun RecyclerView.setupDefaultExpandableAdapter(
-    dataHeaders: List<CardHeaderModel>,
-    hasThickness: Boolean = true
+    dataHeaders: List<CardHeaderModel>
 ) {
     dataHeaders.map {
-        DefaultGenericExpandableAdapter(it, hasThickness)
+        DefaultGenericExpandableAdapter(it)
     }.let {
         ConcatAdapter.Config.Builder()
             .setIsolateViewTypes(false)
@@ -77,33 +80,65 @@ fun ImageView.setupImage(drawableImgRes: Int?) {
     }
 }
 
-fun View.setupBackgroundColor(colorRes: Int?, hasThickness: Boolean) {
-    background = (ContextCompat.getDrawable(context,
-        if (hasThickness)
-            R.drawable.shape_thickness_with_background
-        else
-            R.drawable.shape_no_thickness_with_background
+fun ImageView.setupTintColor(colorRes: Int) {
+    ImageViewCompat.setImageTintList(
+        this,
+        ColorStateList.valueOf(
+            ContextCompat.getColor(context, colorRes)
+        )
+    )
+}
+
+fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {
+    foreground = (ContextCompat.getDrawable(
+        context,
+        R.drawable.shape_no_background
     ) as GradientDrawable).run {
-        setColor(
-            ContextCompat.getColor(context, colorRes ?: R.color.eerie_black)
+        setStroke(
+            if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
+            ContextCompat.getColor(context, thicknessColorRes)
         )
         this
     }
 }
 
-fun CardView.setupShapeOnHeader(hasThickness: Boolean) {
-    if (hasThickness)
-        foreground = ContextCompat.getDrawable(context, R.drawable.shape_thickness_no_background)
-    else
-        background = ContextCompat.getDrawable(context, R.drawable.shape_no_thickness_no_background)
+//fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {
+//    (ContextCompat.getDrawable(
+//        context,
+//        R.drawable.shape_no_background
+//    ) as GradientDrawable).run {
+//        setStroke(
+//            if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
+//            ContextCompat.getColor(context, thicknessColorRes)
+//        )
+//        this
+//    }.also {
+//        if (hasThickness)
+//            foreground = it
+//        else
+//            background = it
+//    }
+//}
+
+fun ConstraintLayout.setupShapeWithBackground(backgroundColorRes: Int?, hasThickness: Boolean, thicknessColorRes: Int) {
+    background = (ContextCompat.getDrawable(
+        context,
+        R.drawable.shape_with_background
+    ) as GradientDrawable).run {
+        setColor(
+            ContextCompat.getColor(context, backgroundColorRes ?: R.color.eerie_black)
+        )
+        setStroke(
+            if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
+            ContextCompat.getColor(context, thicknessColorRes)
+        )
+        this
+    }
 }
 
-fun CardView.setupShapeOnItem(hasThickness: Boolean) {
-    background = ContextCompat.getDrawable(
-        context,
-        if (hasThickness)
-            R.drawable.shape_thickness_with_background
-        else
-            R.drawable.shape_no_thickness_with_background
+
+fun TextView.setupTextColor(colorRes: Int) {
+    setTextColor(
+        ContextCompat.getColor(context, colorRes)
     )
 }
