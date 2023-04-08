@@ -16,15 +16,15 @@ import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
 typealias ItemBindingCallback<I, H> = (item: I, header: H, itemBinding: ViewDataBinding) -> Unit
-typealias HeaderBindingCallback<H, P> = (header: H, layoutParamsSetup: P, headerBinding: ViewDataBinding) -> Unit
+typealias HeaderBindingCallback<H> = (header: H, headerBinding: ViewDataBinding) -> Unit
 typealias ViewHolderHeaderInitMethodCallback = (headerBinding: ViewDataBinding) -> Unit
 typealias ViewHolderItemInitMethodCallback = (itemBinding: ViewDataBinding) -> Unit
 
-abstract class BaseExpandableAdapter<H, I, P>(
+abstract class BaseExpandableAdapter<H, I>(
     private val headerObject: H,
     private val headerLayoutRes: Int,
     private val itemLayoutRes: Int
-) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableAdapterViewHolder<H, I, P>>() {
+) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableAdapterViewHolder<H, I>>() {
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
@@ -33,9 +33,7 @@ abstract class BaseExpandableAdapter<H, I, P>(
 
     abstract fun getItemBindingCallback(): ItemBindingCallback<I, H>
 
-    abstract fun getHeaderBindingCallback(): HeaderBindingCallback<H, P>
-
-    abstract fun getLayoutParamsSetup(): P
+    abstract fun getHeaderBindingCallback(): HeaderBindingCallback<H>
 
     abstract fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView?
 
@@ -60,7 +58,7 @@ abstract class BaseExpandableAdapter<H, I, P>(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseExpandableAdapterViewHolder<H, I, P> {
+    ): BaseExpandableAdapterViewHolder<H, I> {
         DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context),
             when (viewType) {
@@ -71,7 +69,7 @@ abstract class BaseExpandableAdapter<H, I, P>(
             false
         ).run {
             return when (viewType) {
-                VIEW_TYPE_HEADER -> BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I, P>(
+                VIEW_TYPE_HEADER -> BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I>(
                     headerBinding = this,
                     icExpanded = getExpandedIcImageView(this),
                     bindHeaderCallback = getHeaderBindingCallback(),
@@ -88,18 +86,17 @@ abstract class BaseExpandableAdapter<H, I, P>(
 
     override fun getItemCount(): Int = if (isExpanded) getItems(headerObject).size + 1 else 1
 
-    override fun onBindViewHolder(holder: BaseExpandableAdapterViewHolder<H, I, P>, position: Int) {
+    override fun onBindViewHolder(holder: BaseExpandableAdapterViewHolder<H, I>, position: Int) {
         when (holder) {
-            is BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I, P> -> {
+            is BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I> -> {
                 holder.bindHeader(
                     header = headerObject,
-                    layoutParamsSetup = getLayoutParamsSetup(),
                     totalItems = getItems(headerObject).size,
                     onHeaderClickListener = onHeaderClickListener,
                     isExpanded = isExpanded
                 )
             }
-            is BaseExpandableAdapterViewHolder.ItemExpandableAdapter<H, I, P> -> {
+            is BaseExpandableAdapterViewHolder.ItemExpandableAdapter<H, I> -> {
                 holder.bindItem(
                     item = getItems(headerObject)[position - 1],
                     header = headerObject
@@ -108,16 +105,16 @@ abstract class BaseExpandableAdapter<H, I, P>(
         }
     }
 
-    sealed class BaseExpandableAdapterViewHolder<H, I, P>(
+    sealed class BaseExpandableAdapterViewHolder<H, I>(
         binding: ViewDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        class HeaderExpandableAdapter<H, I, P>(
+        class HeaderExpandableAdapter<H, I>(
             val headerBinding: ViewDataBinding,
             icExpanded: ImageView?,
             performOperationOnHeaderViewHolderInitMethod: ViewHolderHeaderInitMethodCallback,
-            private val bindHeaderCallback: HeaderBindingCallback<H, P>
-        ) : BaseExpandableAdapterViewHolder<H, I, P>(headerBinding) {
+            private val bindHeaderCallback: HeaderBindingCallback<H>
+        ) : BaseExpandableAdapterViewHolder<H, I>(headerBinding) {
 
             init {
                 performOperationOnHeaderViewHolderInitMethod.invoke(headerBinding)
@@ -126,7 +123,6 @@ abstract class BaseExpandableAdapter<H, I, P>(
             internal val icExpand: ImageView? = icExpanded
             fun bindHeader(
                 header: H,
-                layoutParamsSetup: P,
                 totalItems: Int,
                 isExpanded: Boolean,
                 onHeaderClickListener: View.OnClickListener
@@ -137,15 +133,15 @@ abstract class BaseExpandableAdapter<H, I, P>(
                     icExpand.visibleOrGone(totalItems > 0)
                 }
                 headerBinding.root.setOnClickListener(onHeaderClickListener)
-                bindHeaderCallback.invoke(header, layoutParamsSetup, headerBinding)
+                bindHeaderCallback.invoke(header, headerBinding)
             }
         }
 
-        class ItemExpandableAdapter<H, I, P>(
+        class ItemExpandableAdapter<H, I>(
             private val itemBinding: ViewDataBinding,
             performOperationOnItemViewHolderInitMethod: ViewHolderItemInitMethodCallback,
             private val bindItemCallback: ItemBindingCallback<I, H>
-        ) : BaseExpandableAdapterViewHolder<H, I, P>(itemBinding) {
+        ) : BaseExpandableAdapterViewHolder<H, I>(itemBinding) {
 
             init {
                 performOperationOnItemViewHolderInitMethod.invoke(itemBinding)

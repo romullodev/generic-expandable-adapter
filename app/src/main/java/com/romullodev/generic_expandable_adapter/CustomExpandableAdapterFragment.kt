@@ -7,10 +7,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ConcatAdapter
 import com.romullodev.generic_expandable_adapter.databinding.CustomHeaderBinding
 import com.romullodev.generic_expandable_adapter.databinding.CustomItemBinding
 import com.romullodev.generic_expandable_adapter.databinding.FragmentCustomExpandableAdapterBinding
+import com.romullodev.generic_expandable_adapter.utils.CustomHeaderModel
+import com.romullodev.generic_expandable_adapter.utils.CustomItemModel
 import com.romullodev.generic_expandable_adapter.utils.MockData
+import com.romullodev.library.CustomGenericExpandableAdapter
+import com.romullodev.library.base.ExpandableAdapterAnimation
 import com.romullodev.library.entities.CardHeaderModel
 import com.romullodev.library.entities.CardItemModel
 import com.romullodev.library.utils.setupCustomExpandableAdapter
@@ -33,16 +38,35 @@ class CustomExpandableAdapterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAdapterByCustom()
+        setupCustomAdapterByExtension()
+        //setupCustomAdapterByAdapter()
     }
 
-    private fun setupAdapterByCustom() {
-        binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapter(
-            dataHeaders = MockData.getMusics(),
+    private fun setupCustomAdapterByAdapter() {
+        binding.recyclerViewExpandableAdapterDemo.run {
+            MockData.getCustomHeader().map {
+                CustomExpandableAdapter(
+                    header = it,
+                )
+            }.let {
+                ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(false)
+                    .build().run {
+                        ConcatAdapter(this, it).also {
+                            adapter = it
+                            itemAnimator = ExpandableAdapterAnimation()
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun setupCustomAdapterByExtension() {
+        binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapter<CustomHeaderModel, CustomItemModel>(
+            dataHeaders = MockData.getCustomHeader(),
             getItemsCallback = { getItemsCallback(it) },
             itemBindingCallback = getItemBindingCallback(),
             headerBindingCallback = getHeaderBindingCallback(),
-            getLayoutParamsSetup = Unit,
             getExpandedIcImageView = { getExpandedIcImageView(it) },
             headerLayout = R.layout.custom_header,
             itemLayout = R.layout.custom_item
@@ -52,19 +76,19 @@ class CustomExpandableAdapterFragment : Fragment() {
     private fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         (headerBinding as? CustomHeaderBinding)?.imageViewArrowDown
 
-    private fun getItemsCallback(header: CardHeaderModel): List<CardItemModel> = header.items
+    private fun getItemsCallback(header: CustomHeaderModel): List<CustomItemModel> = header.items
 
-    private fun getItemBindingCallback(): (item: CardItemModel, header: CardHeaderModel, itemBinding: ViewDataBinding) -> Unit =
+    private fun getItemBindingCallback(): (item: CustomItemModel, header: CustomHeaderModel, itemBinding: ViewDataBinding) -> Unit =
         { item, _, itemBinding ->
             (itemBinding as? CustomItemBinding)?.run {
-                textViewCustomItemTitle.text = item.itemName
+                textViewCustomItemTitle.text = item.customItemName
             }
         }
 
-    private fun getHeaderBindingCallback(): (header: CardHeaderModel, layoutParamsSetup: Unit, headerBinding: ViewDataBinding) -> Unit =
-        { header, _, headerBinding ->
+    private fun getHeaderBindingCallback(): (header: CustomHeaderModel, headerBinding: ViewDataBinding) -> Unit =
+        { header, headerBinding ->
             (headerBinding as? CustomHeaderBinding)?.run {
-                textViewCustomTitle.text = header.cardName
+                textViewCustomTitle.text = header.customHeaderName
             }
         }
 

@@ -13,7 +13,7 @@ import com.romullodev.library.utils.*
 
 class DefaultGenericExpandableAdapter(
     header: CardHeaderModel
-) : BaseExpandableAdapter<CardHeaderModel, CardItemModel, Unit>(
+) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     headerObject = header,
     headerLayoutRes = R.layout.header_card_style_1,
     itemLayoutRes = R.layout.item_card_style_1
@@ -28,8 +28,8 @@ class DefaultGenericExpandableAdapter(
             }
         }
 
-    override fun getHeaderBindingCallback(): HeaderBindingCallback<CardHeaderModel, Unit> =
-        { header, _, binding ->
+    override fun getHeaderBindingCallback(): HeaderBindingCallback<CardHeaderModel> =
+        { header, binding ->
             (binding as? HeaderCardStyle1Binding)?.run {
                 textViewCardStyle1Title.text = header.cardName
                 textViewCardStyle1Subtitle.text = root.context.getString(
@@ -80,23 +80,9 @@ class DefaultGenericExpandableAdapter(
         }
     }
 
-    override fun getLayoutParamsSetup() = Unit
-
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView =
         (headerBinding as? HeaderCardStyle1Binding)?.run {
             imageViewArrowDown
         } ?: throw Exception("error on perform cast do header binding")
 
-//    override fun performOperationOnHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {
-//        binding ->
-//        (binding as HeaderCardStyle1Binding).apply {
-//            cardViewHeaderCardContainer.setupShapeOnHeader()
-//        }
-//    }
-//    override fun performOperationOnItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {
-//            binding ->
-//        (binding as ItemCardStyle1Binding).apply {
-//            cardViewItemCardContainer.setupShapeOnItem()
-//        }
-//    }
 }

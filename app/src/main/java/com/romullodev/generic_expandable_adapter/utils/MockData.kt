@@ -4,28 +4,41 @@ import com.romullodev.generic_expandable_adapter.R
 import com.romullodev.library.entities.CardHeaderModel
 import com.romullodev.library.entities.CardHeaderStyle
 import com.romullodev.library.entities.CardItemModel
+import com.romullodev.library.entities.CardItemStyle
 
 object MockData {
 
     private fun getRockBands(): List<CardItemModel> = listOf(
         CardItemModel(
             itemName = "Arctic Monkeys",
+            cardItemStyle = CardItemStyle(
+                backgroundColorRes = R.color.green,
+                thicknessColor = R.color.pop_color
+            )
         ),
-//        CardItemModel(
-//            itemName = "Imagine Dragons"
-//        ),
-//        CardItemModel(
-//            itemName = "Foo Fighters"
-//        ),
-//        CardItemModel(
-//            itemName = "The Black Keys"
-//        ),
-//        CardItemModel(
-//            itemName = "Kings of Leon"
-//        ),
-//        CardItemModel(
-//            itemName = "Muse"
-//        ),
+        CardItemModel(
+            itemName = "Imagine Dragons",
+            cardItemStyle = CardItemStyle(
+                backgroundColorRes = R.color.rock_color,
+                thicknessColor = R.color.reggae_color
+            )
+        ),
+        CardItemModel(
+            itemName = "Foo Fighters",
+            cardItemStyle = CardItemStyle(
+                backgroundColorRes = R.color.rock_color,
+                hasThickness = false
+            )
+        ),
+        CardItemModel(
+            itemName = "The Black Keys"
+        ),
+        CardItemModel(
+            itemName = "Kings of Leon"
+        ),
+        CardItemModel(
+            itemName = "Muse"
+        ),
     )
 
     private fun getPopBands(): List<CardItemModel> = listOf(
@@ -169,63 +182,151 @@ object MockData {
         )
     )
 
-    fun getMusics(): List<CardHeaderModel> = listOf(
+    fun getMusicsWithBackground(): List<CardHeaderModel> = listOf(
         CardHeaderModel(
             cardName = "Rock",
             items = getRockBands(),
             cardHeaderStyle = CardHeaderStyle(
                 backgroundImgRes = R.drawable.rock,
-                backgroundColorItems = R.color.rock_color,
-                hasThickness = false,
+                backgroundColorItems = R.color.rock_color
             )
         ),
-//        CardHeaderModel(
-//            cardName = "Pop",
-//            items = getPopBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.pop,
-//                backgroundColorItems = R.color.pop_color,
-//            ),
-//        ),
-//        CardHeaderModel(
-//            cardName = "Hip Hop",
-//            items = getHipHopBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.hip_hop,
-//                backgroundColorItems = R.color.hip_hop_color,
-//            ),
-//        ),
-//        CardHeaderModel(
-//            cardName = "Jazz",
-//            items = getJazzBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.jazz,
-//                backgroundColorItems = R.color.jazz_color,
-//            ),
-//        ),
-//        CardHeaderModel(
-//            cardName = "Blues",
-//            items = getBluesBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.blues,
-//                backgroundColorItems = R.color.blues_color,
-//            ),
-//        ),
-//        CardHeaderModel(
-//            cardName = "Reggae",
-//            items = getReggaeBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.reggae,
-//                backgroundColorItems = R.color.reggae_color,
-//            ),
-//        ),
-//        CardHeaderModel(
-//            cardName = "Electronic",
-//            items = getElectronicBands(),
-//            cardHeaderStyle = CardHeaderStyle(
-//                backgroundImgRes = R.drawable.eletronic,
-//                backgroundColorItems = R.color.electronic_color,
-//            ),
-//        ),
+        CardHeaderModel(
+            cardName = "Pop",
+            items = getPopBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.pop,
+                backgroundColorItems = R.color.pop_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Hip Hop",
+            items = getHipHopBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.hip_hop,
+                backgroundColorItems = R.color.hip_hop_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Jazz",
+            items = getJazzBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.jazz,
+                backgroundColorItems = R.color.jazz_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Blues",
+            items = getBluesBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.blues,
+                backgroundColorItems = R.color.blues_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Reggae",
+            items = getReggaeBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.reggae,
+                backgroundColorItems = R.color.reggae_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Electronic",
+            items = getElectronicBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundImgRes = R.drawable.eletronic,
+                backgroundColorItems = R.color.electronic_color,
+            ),
+        ),
     )
+
+    fun getMusicsWithNoBackground(): List<CardHeaderModel> = listOf(
+        CardHeaderModel(
+            cardName = "Rock",
+            items = getRockBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.rock_color,
+                backgroundColorItems = R.color.rock_color,
+                hasThickness = false
+            )
+        ),
+        CardHeaderModel(
+            cardName = "Pop",
+            items = getPopBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.pop_color,
+                backgroundColorItems = R.color.pop_color,
+                thicknessColor = R.color.pop_color
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Hip Hop",
+            items = getHipHopBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.hip_hop_color,
+                backgroundColorItems = R.color.hip_hop_color
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Jazz",
+            items = getJazzBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.jazz_color,
+                backgroundColorItems = R.color.jazz_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Blues",
+            items = getBluesBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.blues_color,
+                backgroundColorItems = R.color.blues_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Reggae",
+            items = getReggaeBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.reggae_color,
+                backgroundColorItems = R.color.reggae_color,
+            ),
+        ),
+        CardHeaderModel(
+            cardName = "Electronic",
+            items = getElectronicBands(),
+            cardHeaderStyle = CardHeaderStyle(
+                backgroundColorRes = R.color.electronic_color,
+                backgroundColorItems = R.color.electronic_color,
+            ),
+        ),
+    )
+
+    private fun getCustomItem(): List<CustomItemModel> =
+        listOf(
+            CustomItemModel(
+                customItemName = "Item 1"
+            ),
+            CustomItemModel(
+                customItemName = "Item 2"
+            ),
+            CustomItemModel(
+                customItemName = "Item 3"
+            ),
+        )
+    fun getCustomHeader(): List<CustomHeaderModel> =
+        listOf(
+            CustomHeaderModel(
+                customHeaderName = "Header 1",
+                items = getCustomItem()
+            ),
+            CustomHeaderModel(
+                customHeaderName = "Header 2",
+                items = getCustomItem()
+            ),
+            CustomHeaderModel(
+                customHeaderName = "Header 3",
+                items = getCustomItem()
+            ),
+        )
 }

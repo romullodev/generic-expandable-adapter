@@ -5,4 +5,5 @@
     <color name="a_40_white">#99FFFFFF</color>
     <color name="darken_red">#4E0000</color>
     <color name="eerie_black">#1C1C1C</color>
+    <color name="transparent">#00000000</color>
 </resources>

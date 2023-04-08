@@ -6,16 +6,15 @@ import com.romullodev.library.base.BaseExpandableAdapter
 import com.romullodev.library.base.HeaderBindingCallback
 import com.romullodev.library.base.ItemBindingCallback
 
-class CustomGenericExpandableAdapter<H, I, P>(
+class CustomGenericExpandableAdapter<H, I>(
     header: H,
     private val getItemsCallback: (header: H) -> List<I>,
     private val itemBindingCallback: ItemBindingCallback<I, H>,
-    private val headerBindingCallback: HeaderBindingCallback<H, P>,
-    private val getLayoutParamsSetup: P,
+    private val headerBindingCallback: HeaderBindingCallback<H>,
     private val getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
     headerLayout: Int,
     itemLayout: Int
-) : BaseExpandableAdapter<H, I, P>(
+) : BaseExpandableAdapter<H, I>(
     headerObject = header,
     headerLayoutRes = headerLayout,
     itemLayoutRes = itemLayout
@@ -24,9 +23,7 @@ class CustomGenericExpandableAdapter<H, I, P>(
 
     override fun getItemBindingCallback(): ItemBindingCallback<I, H> = itemBindingCallback
 
-    override fun getHeaderBindingCallback(): HeaderBindingCallback<H, P> = headerBindingCallback
-
-    override fun getLayoutParamsSetup(): P = getLayoutParamsSetup
+    override fun getHeaderBindingCallback(): HeaderBindingCallback<H> = headerBindingCallback
 
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         getExpandedIcImageView.invoke(headerBinding)

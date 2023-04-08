@@ -41,23 +41,21 @@ fun RecyclerView.setupDefaultExpandableAdapter(
     }
 }
 
-fun <H, I, P> RecyclerView.setupCustomExpandableAdapter(
+fun <H, I> RecyclerView.setupCustomExpandableAdapter(
     dataHeaders: List<H>,
     getItemsCallback: (header: H) -> List<I>,
     itemBindingCallback: ItemBindingCallback<I, H>,
-    headerBindingCallback: HeaderBindingCallback<H, P>,
-    getLayoutParamsSetup: P,
+    headerBindingCallback: HeaderBindingCallback<H>,
     getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
     headerLayout: Int,
     itemLayout: Int
 ) {
     dataHeaders.map {
-        CustomGenericExpandableAdapter<H, I, P>(
+        CustomGenericExpandableAdapter<H, I>(
             header = it,
             getItemsCallback = getItemsCallback,
             itemBindingCallback = itemBindingCallback,
             headerBindingCallback = headerBindingCallback,
-            getLayoutParamsSetup = getLayoutParamsSetup,
             getExpandedIcImageView = getExpandedIcImageView,
             headerLayout = headerLayout,
             itemLayout = itemLayout
@@ -101,24 +99,6 @@ fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes
         this
     }
 }
-
-//fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {
-//    (ContextCompat.getDrawable(
-//        context,
-//        R.drawable.shape_no_background
-//    ) as GradientDrawable).run {
-//        setStroke(
-//            if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
-//            ContextCompat.getColor(context, thicknessColorRes)
-//        )
-//        this
-//    }.also {
-//        if (hasThickness)
-//            foreground = it
-//        else
-//            background = it
-//    }
-//}
 
 fun ConstraintLayout.setupShapeWithBackground(backgroundColorRes: Int?, hasThickness: Boolean, thicknessColorRes: Int) {
     background = (ContextCompat.getDrawable(
