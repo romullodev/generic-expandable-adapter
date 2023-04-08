@@ -32,8 +32,8 @@ class DefaultExpandableAdapterFragment : Fragment() {
 
     private fun setupAdapterByDefault() {
         binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
-            dataHeaders = MockData.getMusicsWithNoBackground()
-            //dataHeaders = MockData.getMusicsWithBackground()
+            //dataHeaders = MockData.getMusicsWithNoBackground()
+            dataHeaders = MockData.getMusicsWithBackground()
         )
     }
 
