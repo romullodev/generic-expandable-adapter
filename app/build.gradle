@@ -35,13 +35,11 @@ android {
     }
 
     buildTypes {
-        buildTypes {
-            release {
-                minifyEnabled false
-                debuggable false
-                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                signingConfig signingConfigs.ExpandableAdapter
-            }
+        release {
+            minifyEnabled false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.ExpandableAdapter
         }
     }
     compileOptions {
