@@ -6,9 +6,9 @@ import com.romullodev.generic_expandable_adapter.databinding.CustomHeaderBinding
 import com.romullodev.generic_expandable_adapter.databinding.CustomItemBinding
 import com.romullodev.generic_expandable_adapter.utils.CustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.CustomItemModel
-import com.romullodev.library.base.BaseExpandableAdapter
-import com.romullodev.library.base.HeaderBindingCallback
-import com.romullodev.library.base.ItemBindingCallback
+import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.base.HeaderBindingCallback
+import com.github.romullodev.generic_expandable_adapter.base.ItemBindingCallback
 
 class CustomExpandableAdapter(
     header: CustomHeaderModel

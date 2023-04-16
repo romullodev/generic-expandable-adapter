@@ -8,17 +8,14 @@ import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ConcatAdapter
+import com.github.romullodev.generic_expandable_adapter.base.ExpandableAdapterAnimation
+import com.github.romullodev.generic_expandable_adapter.utils.setupCustomExpandableAdapter
 import com.romullodev.generic_expandable_adapter.databinding.CustomHeaderBinding
 import com.romullodev.generic_expandable_adapter.databinding.CustomItemBinding
 import com.romullodev.generic_expandable_adapter.databinding.FragmentCustomExpandableAdapterBinding
 import com.romullodev.generic_expandable_adapter.utils.CustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.CustomItemModel
 import com.romullodev.generic_expandable_adapter.utils.MockData
-import com.romullodev.library.CustomGenericExpandableAdapter
-import com.romullodev.library.base.ExpandableAdapterAnimation
-import com.romullodev.library.entities.CardHeaderModel
-import com.romullodev.library.entities.CardItemModel
-import com.romullodev.library.utils.setupCustomExpandableAdapter
 
 class CustomExpandableAdapterFragment : Fragment() {
 

@@ -1,10 +1,10 @@
 package com.romullodev.generic_expandable_adapter.utils
 
 import com.romullodev.generic_expandable_adapter.R
-import com.romullodev.library.entities.CardHeaderModel
-import com.romullodev.library.entities.CardHeaderStyle
-import com.romullodev.library.entities.CardItemModel
-import com.romullodev.library.entities.CardItemStyle
+import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderStyle
+import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
+import com.github.romullodev.generic_expandable_adapter.entities.CardItemStyle
 
 object MockData {
 

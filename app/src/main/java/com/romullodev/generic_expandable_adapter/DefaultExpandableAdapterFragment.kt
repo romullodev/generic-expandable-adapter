@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.romullodev.generic_expandable_adapter.databinding.FragmentDefaultExpandableAdapterBinding
 import com.romullodev.generic_expandable_adapter.utils.MockData
-import com.romullodev.library.utils.setupDefaultExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.utils.setupDefaultExpandableAdapter
 
 class DefaultExpandableAdapterFragment : Fragment() {
 
