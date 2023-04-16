@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'maven-publish'
 }
 
 android {
@@ -45,4 +46,17 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+// Maven Local Publish Script (We only need this for local publish, to test the library)
+afterEvaluate{
+    android.libraryVariants.each{ variant ->
+        publishing.publications.create(variant.name, MavenPublication) {
+            from components.findByName(variant.name)
+
+            groupId = 'com.github.romullodev'
+            artifactId = 'generic-expandable-adapter'
+            version = '1.0.0'
+        }
+    }
 }
