@@ -54,7 +54,7 @@ afterEvaluate {
         publishing.publications.create(variant.name, MavenPublication) {
             from components.findByName(variant.name)
 
-            groupId = 'com.github.romullodev'
+            groupId = 'com.local.romullodev'
             artifactId = 'generic-expandable-adapter'
             version = '1.0.0'
         }
