@@ -5,14 +5,33 @@
 
 Esta biblioteca fornece uma abstração com tipos genéricos que facilita a implementação de um adapter expansível, podendo ser feito por meio de herança ou através  de uma extension. Além disso, ela também fornece uma implementação padrão de um adapter expansível customizado. Esta abstração foi baseada no artigo de [HOUSSEIN OUERGHEMMI](https://github.com/OHoussein) intitulado [Create an expandable RecyclerView with the ConcatAdapter](https://medium.com/codeshake/create-an-expandable-recyclerview-with-the-mergeadapter-254fd671fa5b).
 
+## Instalação
+
+### Adicione o repositório ```jitpack.io``` no build.gradle (app)
+
+ ```groove
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
+### Adicione a dependência da biblioteca
+
+```groove
+implementation 'com.github.romullodev:generic-expandable-adapter:1.0.0'
+```
+
 ## Implementação Padrão
 
 Utilize as classes ```CardHeaderModel``` e ```CardItemModel``` como modelo para o cabeçalho e seus itens, respectivamente. A estilização pode ser customizada através da classe ```CardHeaderStyle``` para o cabeçalho e da classe ```CardItemStyle``` para os itens. O código abaixo exemplifica uma implementação utilizando a extension ```setupDefaultExpandableAdapter```.
 
 ```kotlin
 fun setupAdapterByDefault() {
-  binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
-    dataHeaders = MockData.getMusicsWithBackground()
+    binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
+        dataHeaders = MockData.getMusicsWithBackground()
     )
 }
 
@@ -25,7 +44,7 @@ fun getMusicsWithBackground(): List<CardHeaderModel> = listOf(
             backgroundColorItems = R.color.rock_color
         )
     ),
-)        
+)
 
 fun getRockBands(): List<CardItemModel> = listOf(
     CardItemModel(
