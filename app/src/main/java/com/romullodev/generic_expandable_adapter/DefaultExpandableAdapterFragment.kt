@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.romullodev.generic_expandable_adapter.databinding.FragmentDefaultExpandableAdapterBinding
 import com.romullodev.generic_expandable_adapter.utils.MockData
 import com.github.romullodev.generic_expandable_adapter.utils.setupDefaultExpandableAdapter
@@ -32,10 +33,12 @@ class DefaultExpandableAdapterFragment : Fragment() {
 
     private fun setupAdapterByDefault() {
         binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
-            //dataHeaders = MockData.getMusicsWithNoBackground()
-            dataHeaders = MockData.getMusicsWithBackground()
+            //dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = false)
+            dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = true)
         )
     }
+
+    fun getRecyclerView(): RecyclerView = binding.recyclerViewExpandableAdapterDemo
 
     override fun onDestroyView() {
         super.onDestroyView()

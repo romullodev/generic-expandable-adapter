@@ -14,30 +14,29 @@ import com.github.romullodev.generic_expandable_adapter.entities.CardItemStyle
 import com.github.romullodev.generic_expandable_adapter.utils.*
 
 class DefaultGenericExpandableAdapter(
-    header: CardHeaderModel
+    header: CardHeaderModel,
+    expandAllAtFirst: Boolean = false
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
-    headerObject = header,
+    data = header,
     headerLayoutRes = R.layout.header_card_style_1,
-    itemLayoutRes = R.layout.item_card_style_1
+    itemLayoutRes = R.layout.item_card_style_1,
+    expandAllAtFirst = expandAllAtFirst
 ) {
     override fun getItems(headerObject: CardHeaderModel): List<CardItemModel> = headerObject.items
 
-    override fun getItemBindingCallback(): ItemBindingCallback<CardItemModel, CardHeaderModel> =
+    override fun onItemBinding(): ItemBindingCallback<CardItemModel, CardHeaderModel> =
         { item, header, binding ->
             (binding as? ItemCardStyle1Binding)?.run {
-                textViewItemCardStyle1Name.text = item.itemName
+                textViewItemCardStyle1Name.text = item.itemTitle
                 setupItemStyle(binding, item.cardItemStyle, header.cardHeaderStyle)
             }
         }
 
-    override fun getHeaderBindingCallback(): HeaderBindingCallback<CardHeaderModel> =
+    override fun onHeaderBinding(): HeaderBindingCallback<CardHeaderModel> =
         { header, binding ->
             (binding as? HeaderCardStyle1Binding)?.run {
-                textViewCardStyle1Title.text = header.cardName
-                textViewCardStyle1Subtitle.text = root.context.getString(
-                    R.string.expandable_adapter_total_bands,
-                    header.items.size.toString()
-                )
+                textViewCardStyle1Title.text = header.headerTitle
+                textViewCardStyle1Subtitle.text = header.headerSubtitle
                 setupHeaderStyle(binding, header.cardHeaderStyle)
             }
         }

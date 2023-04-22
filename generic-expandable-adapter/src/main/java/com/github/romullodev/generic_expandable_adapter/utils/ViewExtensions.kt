@@ -25,10 +25,11 @@ fun View.visibleOrGone(isVisible: Boolean) {
 }
 
 fun RecyclerView.setupDefaultExpandableAdapter(
-    dataHeaders: List<CardHeaderModel>
+    dataHeaders: List<CardHeaderModel>,
+    expandAllAtFirst: Boolean = false
 ) {
     dataHeaders.map {
-        DefaultGenericExpandableAdapter(it)
+        DefaultGenericExpandableAdapter(it, expandAllAtFirst)
     }.let {
         ConcatAdapter.Config.Builder()
             .setIsolateViewTypes(false)
@@ -38,6 +39,13 @@ fun RecyclerView.setupDefaultExpandableAdapter(
                     itemAnimator = ExpandableAdapterAnimation()
                 }
             }
+    }
+}
+
+fun RecyclerView.updateDefaultExpandableAdapterHeaderAt(position: Int, header: CardHeaderModel) {
+    (adapter as ConcatAdapter).run {
+        (adapters[position] as DefaultGenericExpandableAdapter).updateData(header)
+        notifyItemChanged(position)
     }
 }
 

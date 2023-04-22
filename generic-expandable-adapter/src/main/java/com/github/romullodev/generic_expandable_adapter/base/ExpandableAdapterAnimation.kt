@@ -16,7 +16,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         changeFlags: Int,
         payloads: MutableList<Any>
     ): ItemHolderInfo {
-        return if (viewHolder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             HeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
@@ -29,7 +29,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         state: RecyclerView.State,
         viewHolder: ViewHolder
     ): ItemHolderInfo {
-        return if (viewHolder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             HeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
@@ -44,7 +44,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         preInfo: ItemHolderInfo,
         postInfo: ItemHolderInfo
     ): Boolean {
-        if (preInfo is HeaderItemInfo && postInfo is HeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        if (preInfo is HeaderItemInfo && postInfo is HeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             holder.icExpand?.run {
                 ObjectAnimator
                     .ofFloat(
@@ -80,7 +80,7 @@ class HeaderItemInfo : RecyclerView.ItemAnimator.ItemHolderInfo() {
     internal var arrowRotation: Float = 0F
 
     override fun setFrom(holder: ViewHolder): RecyclerView.ItemAnimator.ItemHolderInfo {
-        if (holder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        if (holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             holder.icExpand?.run {
                 arrowRotation = rotation
             }

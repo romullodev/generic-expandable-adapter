@@ -15,15 +15,16 @@ class CustomGenericExpandableAdapter<H, I>(
     headerLayout: Int,
     itemLayout: Int
 ) : BaseExpandableAdapter<H, I>(
-    headerObject = header,
+    data = header,
     headerLayoutRes = headerLayout,
-    itemLayoutRes = itemLayout
+    itemLayoutRes = itemLayout,
+    false
 ) {
     override fun getItems(headerObject: H): List<I> = getItemsCallback.invoke(headerObject)
 
-    override fun getItemBindingCallback(): ItemBindingCallback<I, H> = itemBindingCallback
+    override fun onItemBinding(): ItemBindingCallback<I, H> = itemBindingCallback
 
-    override fun getHeaderBindingCallback(): HeaderBindingCallback<H> = headerBindingCallback
+    override fun onHeaderBinding(): HeaderBindingCallback<H> = headerBindingCallback
 
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         getExpandedIcImageView.invoke(headerBinding)
