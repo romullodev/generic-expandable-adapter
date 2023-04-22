@@ -49,6 +49,17 @@ fun RecyclerView.updateDefaultExpandableAdapterHeaderAt(position: Int, header: C
     }
 }
 
+fun RecyclerView.addNewHeaderModel(newHeader: CardHeaderModel, expandAllAtFirst: Boolean = false) {
+    (adapter as ConcatAdapter).run {
+        adapters.size.let {
+            addAdapter(
+                DefaultGenericExpandableAdapter(newHeader, expandAllAtFirst)
+            )
+            notifyItemInserted(it-1)
+        }
+    }
+}
+
 fun <H, I> RecyclerView.setupCustomExpandableAdapter(
     dataHeaders: List<H>,
     getItemsCallback: (header: H) -> List<I>,
@@ -93,6 +104,7 @@ fun ImageView.setupTintColor(colorRes: Int) {
             ContextCompat.getColor(context, colorRes)
         )
     )
+    imageTintList
 }
 
 fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {

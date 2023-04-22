@@ -27,7 +27,7 @@ class DefaultGenericExpandableAdapter(
     override fun onItemBinding(): ItemBindingCallback<CardItemModel, CardHeaderModel> =
         { item, header, binding ->
             (binding as? ItemCardStyle1Binding)?.run {
-                textViewItemCardStyle1Name.text = item.itemTitle
+                textViewItemCardStyle1Title.text = item.itemTitle
                 setupItemStyle(binding, item.cardItemStyle, header.cardHeaderStyle)
             }
         }
@@ -47,7 +47,7 @@ class DefaultGenericExpandableAdapter(
         cardHeaderStyle: CardHeaderStyle
     ) {
         binding.run {
-            textViewItemCardStyle1Name.setupTextColor(cardItemStyle.titleColorRes)
+            textViewItemCardStyle1Title.setupTextColor(cardItemStyle.titleColorRes)
             constraintLayoutItemCardContainer.setupShapeWithBackground(
                 backgroundColorRes = cardItemStyle.backgroundColorRes ?: cardHeaderStyle.backgroundColorItems
                 ?: R.color.black,

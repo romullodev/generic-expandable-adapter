@@ -1,83 +1,58 @@
 package com.github.romullodev.generic_expandable_adapter
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ConcatAdapter
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_BACKGROUND_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_IMG_BACKGROUND
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_SUBTITLE
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_SUBTITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_THICKNESS_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_TITLE
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.HEADER_TITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.ITEM_BACKGROUND_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.ITEM_THICKNESS_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.ITEM_TITLE
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.ITEM_TITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.getHeaderModel
-import com.github.romullodev.generic_expandable_adapter.Utils.Companion.getItemModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderStyle
-import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardItemStyle
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_ITEMS
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_EXPANDABLE_IC_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_IMG_BACKGROUND
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_THICKNESS_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_BACKGROUND_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_THICKNESS_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getHeaderModelFilled
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getItemModelFilled
+import com.github.romullodev.generic_expandable_adapter.util.addHeader
+import com.github.romullodev.generic_expandable_adapter.util.updateHeaderAt
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
-
-/**
- * TODO:
- * 1 - permitir atualizar os dados do recyclerView apos a instancia
- */
-
 @RunWith(RobolectricTestRunner::class)
 class DefaultGenericExpandableAdapterTest : BaseTest() {
 
     @Test
     fun `check info on header`() {
-        val headerBinding = getHeaderBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    headerTitle = HEADER_TITLE, headerSubtitle = HEADER_SUBTITLE
-                )
-            ), 0
-        )
         assertEquals(HEADER_TITLE, headerBinding.textViewCardStyle1Title.text)
         assertEquals(HEADER_SUBTITLE, headerBinding.textViewCardStyle1Subtitle.text)
     }
 
     @Test
     fun `check info on item`() {
-        val itemBinding = getItemBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    items = listOf(
-                        getItemModel().copy(
-                            itemTitle = ITEM_TITLE
-                        )
-                    )
-                )
-            ), 1
-        )
-
-        assertEquals(ITEM_TITLE, itemBinding.textViewItemCardStyle1Name.text)
+        assertEquals(ITEM_TITLE, itemBinding.textViewItemCardStyle1Title.text)
     }
 
     @Test
     fun `check background color on header`() {
-        val headerBinding = getHeaderBindingInflated(
+        headerBinding = getHeaderBindingInflated(
             listOf(
-                getHeaderModel().copy(
-                    cardHeaderStyle = CardHeaderStyle(
-                        backgroundColorRes = HEADER_BACKGROUND_COLOR
+                getHeaderModelFilled().copy(
+                    cardHeaderStyle = getHeaderModelFilled().cardHeaderStyle.copy(
+                        backgroundImgRes = null
                     )
                 )
-            ), 0
+            )
         )
-
         val expectedDrawable = (ContextCompat.getDrawable(
             headerBinding.root.context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
@@ -94,20 +69,6 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
 
     @Test
     fun `check background color on item`() {
-        val itemBinding = getItemBindingInflated(
-            listOf(
-                CardHeaderModel(
-                    items = listOf(
-                        CardItemModel(
-                            cardItemStyle = CardItemStyle(
-                                backgroundColorRes = ITEM_BACKGROUND_COLOR
-                            )
-                        )
-                    )
-                )
-            ), 1
-        )
-
         val expectedDrawable = (ContextCompat.getDrawable(
             itemBinding.root.context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
@@ -124,41 +85,7 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     }
 
     @Test
-    fun `check background img on header`() {
-        val headerBinding = getHeaderBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    cardHeaderStyle = CardHeaderStyle(
-                        backgroundImgRes = HEADER_IMG_BACKGROUND,
-                        backgroundColorRes = HEADER_BACKGROUND_COLOR
-                    )
-                )
-            ), 0
-        )
-
-        assertEquals(
-            shadowOf(
-                ContextCompat.getDrawable(
-                    headerBinding.root.context,
-                    HEADER_IMG_BACKGROUND
-                )
-            ).createdFromResId,
-            shadowOf(headerBinding.imageViewBackgroundCardStyle1.background).createdFromResId
-        )
-    }
-
-    @Test
     fun `check title and subtitle color on header`() {
-        val headerBinding = getHeaderBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    cardHeaderStyle = CardHeaderStyle(
-                        titleColorRes = HEADER_TITLE_COLOR, subtitleColorRes = HEADER_SUBTITLE_COLOR
-
-                    )
-                )
-            ), 0
-        )
         assertEquals(
             ContextCompat.getColor(headerBinding.root.context, HEADER_TITLE_COLOR),
             headerBinding.textViewCardStyle1Title.currentTextColor,
@@ -167,45 +94,28 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             ContextCompat.getColor(headerBinding.root.context, HEADER_SUBTITLE_COLOR),
             headerBinding.textViewCardStyle1Subtitle.currentTextColor,
         )
-
     }
-
 
     @Test
     fun `check tile color on item`() {
-        val itemBinding = getItemBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    items = listOf(
-                        getItemModel().copy(
-                            cardItemStyle = CardItemStyle(
-                                titleColorRes = ITEM_TITLE_COLOR
-                            )
-                        )
-                    )
-                )
-            ), 1
-        )
-
         assertEquals(
             ContextCompat.getColor(itemBinding.root.context, ITEM_TITLE_COLOR),
-            itemBinding.textViewItemCardStyle1Name.currentTextColor,
+            itemBinding.textViewItemCardStyle1Title.currentTextColor,
         )
     }
 
-
     @Test
-    fun `check stroke color with background color on header`() {
-        val headerBinding = getHeaderBindingInflated(
+    fun `check stroke with background color on header`() {
+        headerBinding = getHeaderBindingInflated(
             listOf(
-                getHeaderModel().copy(
-                    cardHeaderStyle = CardHeaderStyle(
-                        backgroundColorRes = HEADER_BACKGROUND_COLOR,
-                        thicknessColor = HEADER_THICKNESS_COLOR
+                getHeaderModelFilled().copy(
+                    cardHeaderStyle = getHeaderModelFilled().cardHeaderStyle.copy(
+                        backgroundImgRes = null
                     )
                 )
-            ), 0
+            )
         )
+
         val expectedDrawable = (ContextCompat.getDrawable(
             headerBinding.root.context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
@@ -228,19 +138,6 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
 
     @Test
     fun `check stroke on item`() {
-        val itemBinding = getItemBindingInflated(
-            listOf(
-                getHeaderModel().copy(
-                    items = listOf(
-                        getItemModel().copy(
-                            cardItemStyle = CardItemStyle(
-                                thicknessColor = ITEM_THICKNESS_COLOR
-                            )
-                        )
-                    )
-                )
-            ), 1
-        )
         val context = itemBinding.root.context
         val expectedDrawable = (ContextCompat.getDrawable(
             context, R.drawable.shape_with_background
@@ -263,57 +160,219 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
 
     }
 
-    /*
     @Test
-    fun `check stroke color with background img on header`() {
-        TODO()
+    fun `check stroke with background img on header`() {
+        headerBinding = getHeaderBindingInflated(listOf(getHeaderModelFilled()))
+
+        val context = headerBinding.root.context
+        val expectedDrawable = (ContextCompat.getDrawable(
+            context,
+            R.drawable.shape_no_background
+        ) as GradientDrawable).run {
+            setStroke(
+                context.resources.getDimension(R.dimen.thickness).toInt(),
+                ContextCompat.getColor(context, HEADER_THICKNESS_COLOR)
+            )
+            this
+        }
+
+        assertEquals(
+            shadowOf(expectedDrawable).strokeColor,
+            shadowOf(headerBinding.cardViewHeaderCardContainer.foreground as GradientDrawable).strokeColor
+        )
+        assertEquals(
+            shadowOf(expectedDrawable).strokeWidth,
+            shadowOf(headerBinding.cardViewHeaderCardContainer.foreground as GradientDrawable).strokeWidth
+        )
     }
 
     @Test
-    fun `check stroke color on header`() {
-        TODO()
+    fun `check priority with header and item background color`() {
+        val data = getHeaderModelFilled().let { headerModel ->
+            getItemModelFilled().let { itemModel ->
+                listOf(
+                    headerModel.copy(
+                        cardHeaderStyle = headerModel.cardHeaderStyle.copy(
+                            backgroundColorItems = HEADER_BACKGROUND_ITEMS
+                        ),
+                        items = listOf(
+                            itemModel,
+                            itemModel.copy(
+                                cardItemStyle = itemModel.cardItemStyle.copy(
+                                    backgroundColorRes = null
+                                )
+                            )
+                        )
+                    )
+                )
+            }
+        }
+
+        val expectedDrawableOnFirstItem = (ContextCompat.getDrawable(
+            itemBinding.root.context, R.drawable.shape_with_background
+        ) as GradientDrawable).run {
+            setColor(
+                ContextCompat.getColor(itemBinding.root.context, ITEM_BACKGROUND_COLOR)
+            )
+            this
+        }
+
+        val expectedDrawableOnSecondItem = (ContextCompat.getDrawable(
+            itemBinding.root.context, R.drawable.shape_with_background
+        ) as GradientDrawable).run {
+            setColor(
+                ContextCompat.getColor(itemBinding.root.context, HEADER_BACKGROUND_ITEMS)
+            )
+            this
+        }
+
+        itemBinding = getItemBindingInflated(data)
+        assertEquals(
+            shadowOf(expectedDrawableOnFirstItem).lastSetColor,
+            shadowOf(itemBinding.constraintLayoutItemCardContainer.background as GradientDrawable).lastSetColor
+        )
+        itemBinding = getItemBindingInflated(data,2)
+        assertEquals(
+            shadowOf(expectedDrawableOnSecondItem).lastSetColor,
+            shadowOf(itemBinding.constraintLayoutItemCardContainer.background as GradientDrawable).lastSetColor
+        )
     }
 
     @Test
-    fun `check stroke color on item`() {
-        TODO()
+    fun `check priority with img and background color on header`() {
+        assertEquals(
+            shadowOf(ContextCompat.getDrawable(headerBinding.root.context, HEADER_IMG_BACKGROUND))
+                .createdFromResId,
+            shadowOf(headerBinding.imageViewBackgroundCardStyle1.background)
+                .createdFromResId
+        )
     }
 
     @Test
-    fun `check priority on header background`() {
-        TODO()
+    fun `check add new header model extension`() {
+        val newHeaderTitle = "new.header.title"
+        val newItemTitle = "new.item.title"
+        val updatedHeaderModel = getHeaderModelFilled().copy(
+            headerTitle = newHeaderTitle,
+            items = listOf(
+                getItemModelFilled().copy(
+                    itemTitle = newItemTitle
+                )
+            )
+        )
+        val newData = listOf(
+            getHeaderModelFilled().copy(
+                items = listOf(
+                    getItemModelFilled(),
+                    getItemModelFilled()
+                )
+            ),
+            getHeaderModelFilled().copy(
+                items = listOf(
+                    getItemModelFilled(),
+                    getItemModelFilled(),
+                    getItemModelFilled()
+                )
+            ),
+            getHeaderModelFilled().copy(
+                items = listOf(
+                    getItemModelFilled(),
+                    getItemModelFilled(),
+                    getItemModelFilled(),
+                    getItemModelFilled()
+                )
+            )
+        )
+
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(newData)
+        recyclerView.addHeader(updatedHeaderModel)
+
+        headerBinding = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(12)
+        )
+        itemBinding = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(13)
+        )
+        assertEquals(newHeaderTitle, headerBinding.textViewCardStyle1Title.text)
+        assertEquals(newItemTitle, itemBinding.textViewItemCardStyle1Title.text)
     }
-    */
+
+    @Test
+    fun `check update header extension`() {
+        val newHeaderTitle = "new.header.title"
+        val newItemTitle = "new.item.title"
+        val updatedHeaderModel = getHeaderModelFilled().copy(
+            headerTitle = newHeaderTitle,
+            items = listOf(
+                getItemModelFilled().copy(
+                    itemTitle = newItemTitle
+                )
+            )
+        )
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(listOf(getHeaderModelFilled()))
+        headerBinding = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(0)
+        )
+        itemBinding = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(1)
+        )
+        assertEquals(HEADER_TITLE, headerBinding.textViewCardStyle1Title.text)
+        assertEquals(ITEM_TITLE, itemBinding.textViewItemCardStyle1Title.text)
+
+        recyclerView.updateHeaderAt(0, updatedHeaderModel)
+
+        headerBinding = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(0)
+        )
+        itemBinding = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(1)
+        )
+
+        assertEquals(newHeaderTitle, headerBinding.textViewCardStyle1Title.text)
+        assertEquals(newItemTitle, itemBinding.textViewItemCardStyle1Title.text)
+    }
+
+    @Test
+    fun `check expandable icon color`() {
+        assertEquals(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(headerBinding.root.context, HEADER_EXPANDABLE_IC_COLOR)
+            ).defaultColor,
+            headerBinding.imageViewArrowDown.imageTintList?.defaultColor
+        )
+    }
+
     @Test
     fun `check expandable icon visibility`() {
-        val headerBindingIcVisible = getHeaderBindingInflated(
-            listOf(getHeaderModel()), 0
-        )
-        assertEquals(View.VISIBLE, headerBindingIcVisible.imageViewArrowDown.visibility)
+        headerBinding = getHeaderBindingInflated(listOf(getHeaderModelFilled()))
+        assertEquals(View.VISIBLE, headerBinding.imageViewArrowDown.visibility)
 
-        val headerBindingIcGone = getHeaderBindingInflated(
-            listOf(getHeaderModel().copy(items = listOf())), 0
+        headerBinding = getHeaderBindingInflated(
+            listOf(getHeaderModelFilled().copy(items = listOf()))
         )
-        assertEquals(View.GONE, headerBindingIcGone.imageViewArrowDown.visibility)
+        assertEquals(View.GONE, headerBinding.imageViewArrowDown.visibility)
     }
 
     @Test
     fun `check total items on adapter`() {
-        val recyclerView = getSetupAdapterOnRecyclerView(
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
             listOf(
-                getHeaderModel().copy(
+                getHeaderModelFilled().copy(
                     items = listOf(
-                        getItemModel(), getItemModel()
+                        getItemModelFilled(), getItemModelFilled()
                     )
                 ),
-                getHeaderModel().copy(
+                getHeaderModelFilled().copy(
                     items = listOf(
-                        getItemModel(), getItemModel(), getItemModel(), getItemModel()
+                        getItemModelFilled(),
+                        getItemModelFilled(),
+                        getItemModelFilled(),
+                        getItemModelFilled()
                     )
                 ),
-                getHeaderModel().copy(
+                getHeaderModelFilled().copy(
                     items = listOf(
-                        getItemModel(), getItemModel(), getItemModel()
+                        getItemModelFilled(), getItemModelFilled(), getItemModelFilled()
                     )
                 ),
             ),
