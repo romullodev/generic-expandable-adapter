@@ -13,21 +13,21 @@ import com.github.romullodev.generic_expandable_adapter.base.ItemBindingCallback
 class CustomExpandableAdapter(
     header: CustomHeaderModel
 ): BaseExpandableAdapter<CustomHeaderModel, CustomItemModel>(
-    headerObject = header,
+    data = header,
     headerLayoutRes = R.layout.custom_header,
     itemLayoutRes = R.layout.custom_item
 ) {
     override fun getItems(headerObject: CustomHeaderModel): List<CustomItemModel>  =
         headerObject.items
 
-    override fun getItemBindingCallback(): ItemBindingCallback<CustomItemModel, CustomHeaderModel> =
+    override fun onItemBinding(): ItemBindingCallback<CustomItemModel, CustomHeaderModel> =
         { item, _, itemBinding ->
             (itemBinding as? CustomItemBinding)?.run {
                 textViewCustomItemTitle.text = item.customItemName
             }
         }
 
-    override fun getHeaderBindingCallback(): HeaderBindingCallback<CustomHeaderModel> =
+    override fun onHeaderBinding(): HeaderBindingCallback<CustomHeaderModel> =
         { header, headerBinding ->
             (headerBinding as? CustomHeaderBinding)?.run {
                 textViewCustomTitle.text = header.customHeaderName

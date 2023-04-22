@@ -25,10 +25,11 @@ fun View.visibleOrGone(isVisible: Boolean) {
 }
 
 fun RecyclerView.setupDefaultExpandableAdapter(
-    dataHeaders: List<CardHeaderModel>
+    dataHeaders: List<CardHeaderModel>,
+    expandAllAtFirst: Boolean = false
 ) {
     dataHeaders.map {
-        DefaultGenericExpandableAdapter(it)
+        DefaultGenericExpandableAdapter(it, expandAllAtFirst)
     }.let {
         ConcatAdapter.Config.Builder()
             .setIsolateViewTypes(false)
@@ -38,6 +39,24 @@ fun RecyclerView.setupDefaultExpandableAdapter(
                     itemAnimator = ExpandableAdapterAnimation()
                 }
             }
+    }
+}
+
+fun RecyclerView.updateDefaultExpandableAdapterHeaderAt(position: Int, header: CardHeaderModel) {
+    (adapter as ConcatAdapter).run {
+        (adapters[position] as DefaultGenericExpandableAdapter).updateData(header)
+        notifyItemChanged(position)
+    }
+}
+
+fun RecyclerView.addNewHeaderModel(newHeader: CardHeaderModel, expandAllAtFirst: Boolean = false) {
+    (adapter as ConcatAdapter).run {
+        adapters.size.let {
+            addAdapter(
+                DefaultGenericExpandableAdapter(newHeader, expandAllAtFirst)
+            )
+            notifyItemInserted(it-1)
+        }
     }
 }
 
@@ -85,6 +104,7 @@ fun ImageView.setupTintColor(colorRes: Int) {
             ContextCompat.getColor(context, colorRes)
         )
     )
+    imageTintList
 }
 
 fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {

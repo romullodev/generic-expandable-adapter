@@ -20,27 +20,35 @@ typealias ViewHolderHeaderInitMethodCallback = (headerBinding: ViewDataBinding) 
 typealias ViewHolderItemInitMethodCallback = (itemBinding: ViewDataBinding) -> Unit
 
 abstract class BaseExpandableAdapter<H, I>(
-    private val headerObject: H,
+    data: H,
     private val headerLayoutRes: Int,
-    private val itemLayoutRes: Int
-) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableAdapterViewHolder<H, I>>() {
+    private val itemLayoutRes: Int,
+    expandAllAtFirst: Boolean
+) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableViewHolder<H, I>>() {
+
+    private var headerObject = data
+
+    internal fun updateData(data: H){
+        headerObject = data
+        notifyDataSetChanged()
+    }
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
 
     abstract fun getItems(headerObject: H): List<I>
 
-    abstract fun getItemBindingCallback(): ItemBindingCallback<I, H>
+    abstract fun onItemBinding(): ItemBindingCallback<I, H>
 
-    abstract fun getHeaderBindingCallback(): HeaderBindingCallback<H>
+    abstract fun onHeaderBinding(): HeaderBindingCallback<H>
 
     abstract fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView?
 
-    open fun performOperationOnHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {}
+    open fun onHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {}
 
-    open fun performOperationOnItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {}
+    open fun onItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {}
 
-    private var isExpanded: Boolean by Delegates.observable(false) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
+    private var isExpanded: Boolean by Delegates.observable(expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
         if (newExpandedValue) {
             notifyItemRangeInserted(1, getItems(headerObject).size)
             //To update the header expand icon
@@ -57,7 +65,7 @@ abstract class BaseExpandableAdapter<H, I>(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseExpandableAdapterViewHolder<H, I> {
+    ): BaseExpandableViewHolder<H, I> {
         DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context),
             when (viewType) {
@@ -68,16 +76,16 @@ abstract class BaseExpandableAdapter<H, I>(
             false
         ).run {
             return when (viewType) {
-                VIEW_TYPE_HEADER -> BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I>(
+                VIEW_TYPE_HEADER -> BaseExpandableViewHolder.HeaderExpandableViewHolder<H, I>(
                     headerBinding = this,
                     icExpanded = getExpandedIcImageView(this),
-                    bindHeaderCallback = getHeaderBindingCallback(),
-                    performOperationOnHeaderViewHolderInitMethod = performOperationOnHeaderViewHolderInitMethod()
+                    bindHeaderCallback = onHeaderBinding(),
+                    performOperationOnHeaderViewHolderInitMethod = onHeaderViewHolderInitMethod()
                 ).apply { headerBinding.root }
-                else -> BaseExpandableAdapterViewHolder.ItemExpandableAdapter(
+                else -> BaseExpandableViewHolder.ItemExpandableViewHolder(
                     itemBinding = this,
-                    bindItemCallback = getItemBindingCallback(),
-                    performOperationOnItemViewHolderInitMethod = performOperationOnItemViewHolderInitMethod()
+                    bindItemCallback = onItemBinding(),
+                    performOperationOnItemViewHolderInitMethod = onItemViewHolderInitMethod()
                 )
             }
         }
@@ -85,9 +93,9 @@ abstract class BaseExpandableAdapter<H, I>(
 
     override fun getItemCount(): Int = if (isExpanded) getItems(headerObject).size + 1 else 1
 
-    override fun onBindViewHolder(holder: BaseExpandableAdapterViewHolder<H, I>, position: Int) {
+    override fun onBindViewHolder(holder: BaseExpandableViewHolder<H, I>, position: Int) {
         when (holder) {
-            is BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<H, I> -> {
+            is BaseExpandableViewHolder.HeaderExpandableViewHolder<H, I> -> {
                 holder.bindHeader(
                     header = headerObject,
                     totalItems = getItems(headerObject).size,
@@ -95,7 +103,7 @@ abstract class BaseExpandableAdapter<H, I>(
                     isExpanded = isExpanded
                 )
             }
-            is BaseExpandableAdapterViewHolder.ItemExpandableAdapter<H, I> -> {
+            is BaseExpandableViewHolder.ItemExpandableViewHolder<H, I> -> {
                 holder.bindItem(
                     item = getItems(headerObject)[position - 1],
                     header = headerObject
@@ -104,16 +112,16 @@ abstract class BaseExpandableAdapter<H, I>(
         }
     }
 
-    sealed class BaseExpandableAdapterViewHolder<H, I>(
+    sealed class BaseExpandableViewHolder<H, I>(
         binding: ViewDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        class HeaderExpandableAdapter<H, I>(
+        class HeaderExpandableViewHolder<H, I>(
             val headerBinding: ViewDataBinding,
             icExpanded: ImageView?,
             performOperationOnHeaderViewHolderInitMethod: ViewHolderHeaderInitMethodCallback,
             private val bindHeaderCallback: HeaderBindingCallback<H>
-        ) : BaseExpandableAdapterViewHolder<H, I>(headerBinding) {
+        ) : BaseExpandableViewHolder<H, I>(headerBinding) {
 
             init {
                 performOperationOnHeaderViewHolderInitMethod.invoke(headerBinding)
@@ -136,11 +144,11 @@ abstract class BaseExpandableAdapter<H, I>(
             }
         }
 
-        class ItemExpandableAdapter<H, I>(
-            private val itemBinding: ViewDataBinding,
+        class ItemExpandableViewHolder<H, I>(
+            val itemBinding: ViewDataBinding,
             performOperationOnItemViewHolderInitMethod: ViewHolderItemInitMethodCallback,
             private val bindItemCallback: ItemBindingCallback<I, H>
-        ) : BaseExpandableAdapterViewHolder<H, I>(itemBinding) {
+        ) : BaseExpandableViewHolder<H, I>(itemBinding) {
 
             init {
                 performOperationOnItemViewHolderInitMethod.invoke(itemBinding)

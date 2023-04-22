@@ -3,7 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="a_40_white">#99FFFFFF</color>
-    <color name="darken_red">#4E0000</color>
+    <color name="color_1">#4E0000</color>
+    <color name="color_2">#1E4020</color>
+    <color name="color_3">#FA5000</color>
+    <color name="color_4">#4251f5</color>
     <color name="eerie_black">#1C1C1C</color>
     <color name="transparent">#00000000</color>
 </resources>

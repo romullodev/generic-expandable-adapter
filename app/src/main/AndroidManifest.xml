@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Genericexpandableadapter"
         tools:targetApi="31">
         <activity
+            android:name="com.github.romullodev.generic_expandable_adapter.demo.DemoActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
