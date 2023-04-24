@@ -18,6 +18,8 @@ typealias ItemBindingCallback<I, H> = (item: I, header: H, itemBinding: ViewData
 typealias HeaderBindingCallback<H> = (header: H, headerBinding: ViewDataBinding) -> Unit
 typealias ViewHolderHeaderInitMethodCallback = (headerBinding: ViewDataBinding) -> Unit
 typealias ViewHolderItemInitMethodCallback = (itemBinding: ViewDataBinding) -> Unit
+typealias HeaderBindViewHolderCallback<H> = (headerBinding: ViewDataBinding, header: H) -> Unit
+typealias ItemBindViewHolderCallback<I, H> = (itemBinding: ViewDataBinding, item: I, header: H) -> Unit
 
 abstract class BaseExpandableAdapter<H, I>(
     data: H,
@@ -28,7 +30,7 @@ abstract class BaseExpandableAdapter<H, I>(
 
     private var headerObject = data
 
-    internal fun updateData(data: H){
+    internal fun updateData(data: H) {
         headerObject = data
         notifyDataSetChanged()
     }
@@ -44,9 +46,15 @@ abstract class BaseExpandableAdapter<H, I>(
 
     abstract fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView?
 
-    open fun onHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = {}
+    abstract fun getMainHeaderLayoutView(headerBinding: ViewDataBinding): View
 
-    open fun onItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = {}
+    open fun onHeaderViewHolderInitMethod(): ViewHolderHeaderInitMethodCallback = { _ -> }
+
+    open fun onItemViewHolderInitMethod(): ViewHolderItemInitMethodCallback = { _ -> }
+
+    open fun onHeaderBindViewHolder(): HeaderBindViewHolderCallback<H> = { _, _ -> }
+
+    open fun onItemBindViewHolder(): ItemBindViewHolderCallback<I, H> = { _, _, _ -> }
 
     private var isExpanded: Boolean by Delegates.observable(expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
         if (newExpandedValue) {
@@ -80,7 +88,8 @@ abstract class BaseExpandableAdapter<H, I>(
                     headerBinding = this,
                     icExpanded = getExpandedIcImageView(this),
                     bindHeaderCallback = onHeaderBinding(),
-                    performOperationOnHeaderViewHolderInitMethod = onHeaderViewHolderInitMethod()
+                    performOperationOnHeaderViewHolderInitMethod = onHeaderViewHolderInitMethod(),
+                    mainHeaderLayoutView = getMainHeaderLayoutView(this)
                 ).apply { headerBinding.root }
                 else -> BaseExpandableViewHolder.ItemExpandableViewHolder(
                     itemBinding = this,
@@ -96,6 +105,10 @@ abstract class BaseExpandableAdapter<H, I>(
     override fun onBindViewHolder(holder: BaseExpandableViewHolder<H, I>, position: Int) {
         when (holder) {
             is BaseExpandableViewHolder.HeaderExpandableViewHolder<H, I> -> {
+                onHeaderBindViewHolder().invoke(
+                    holder.headerBinding,
+                    headerObject
+                )
                 holder.bindHeader(
                     header = headerObject,
                     totalItems = getItems(headerObject).size,
@@ -104,6 +117,11 @@ abstract class BaseExpandableAdapter<H, I>(
                 )
             }
             is BaseExpandableViewHolder.ItemExpandableViewHolder<H, I> -> {
+                onItemBindViewHolder().invoke(
+                    holder.itemBinding,
+                    getItems(headerObject)[position - 1],
+                    headerObject,
+                )
                 holder.bindItem(
                     item = getItems(headerObject)[position - 1],
                     header = headerObject
@@ -120,6 +138,7 @@ abstract class BaseExpandableAdapter<H, I>(
             val headerBinding: ViewDataBinding,
             icExpanded: ImageView?,
             performOperationOnHeaderViewHolderInitMethod: ViewHolderHeaderInitMethodCallback,
+            private val mainHeaderLayoutView: View,
             private val bindHeaderCallback: HeaderBindingCallback<H>
         ) : BaseExpandableViewHolder<H, I>(headerBinding) {
 
@@ -135,11 +154,11 @@ abstract class BaseExpandableAdapter<H, I>(
                 onHeaderClickListener: View.OnClickListener
             ) {
                 icExpand?.run {
-                    rotation = if (isExpanded) IC_EXPANDED_ROTATION_DEG else IC_COLLAPSED_ROTATION_DEG
-                    //icExpand.setOnClickListener(onHeaderClickListener)
+                    rotation =
+                        if (isExpanded) IC_EXPANDED_ROTATION_DEG else IC_COLLAPSED_ROTATION_DEG
                     icExpand.visibleOrGone(totalItems > 0)
                 }
-                headerBinding.root.setOnClickListener(onHeaderClickListener)
+                mainHeaderLayoutView.setOnClickListener(onHeaderClickListener)
                 bindHeaderCallback.invoke(header, headerBinding)
             }
         }

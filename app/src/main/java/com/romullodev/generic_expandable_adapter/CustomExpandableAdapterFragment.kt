@@ -66,9 +66,13 @@ class CustomExpandableAdapterFragment : Fragment() {
             headerBindingCallback = getHeaderBindingCallback(),
             getExpandedIcImageView = { getExpandedIcImageView(it) },
             headerLayout = R.layout.custom_header,
-            itemLayout = R.layout.custom_item
+            itemLayout = R.layout.custom_item,
+            getMainHeaderLayoutView = { getMainHeaderLayoutView(it) }
         )
     }
+
+    private fun getMainHeaderLayoutView(headerBinding: ViewDataBinding): View =
+        (headerBinding as CustomHeaderBinding).cardViewHeaderContainer
 
     private fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         (headerBinding as? CustomHeaderBinding)?.imageViewArrowDown

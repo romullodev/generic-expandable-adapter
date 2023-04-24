@@ -18,4 +18,7 @@
     <dimen name="card_radius">5dp</dimen>
 
     <dimen name="thickness">1dp</dimen>
+
+    <dimen name="header_height">60dp</dimen>
+    <dimen name="item_height">40dp</dimen>
 </resources>

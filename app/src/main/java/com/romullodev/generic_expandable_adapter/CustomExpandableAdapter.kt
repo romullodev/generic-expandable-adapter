@@ -1,5 +1,6 @@
 package com.romullodev.generic_expandable_adapter
 
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.romullodev.generic_expandable_adapter.databinding.CustomHeaderBinding
@@ -15,7 +16,8 @@ class CustomExpandableAdapter(
 ): BaseExpandableAdapter<CustomHeaderModel, CustomItemModel>(
     data = header,
     headerLayoutRes = R.layout.custom_header,
-    itemLayoutRes = R.layout.custom_item
+    itemLayoutRes = R.layout.custom_item,
+    expandAllAtFirst = false
 ) {
     override fun getItems(headerObject: CustomHeaderModel): List<CustomItemModel>  =
         headerObject.items
@@ -36,4 +38,7 @@ class CustomExpandableAdapter(
 
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         (headerBinding as? CustomHeaderBinding)?.imageViewArrowDown
+
+    override fun getMainHeaderLayoutView(headerBinding: ViewDataBinding): View =
+        (headerBinding as CustomHeaderBinding).cardViewHeaderContainer
 }

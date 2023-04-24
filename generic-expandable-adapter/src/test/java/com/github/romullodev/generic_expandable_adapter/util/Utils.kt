@@ -24,6 +24,7 @@ class Utils {
         val ITEM_THICKNESS_COLOR = R.color.color_3
 
         fun getHeaderModelFilled() = CardHeaderModel(
+            id = 1L,
             headerTitle = HEADER_TITLE,
             headerSubtitle = HEADER_SUBTITLE,
             items = listOf(
@@ -40,6 +41,7 @@ class Utils {
         )
 
         fun getItemModelFilled() = CardItemModel(
+            id = 2L,
             itemTitle = ITEM_TITLE,
             cardItemStyle = CardItemStyle(
                 backgroundColorRes = ITEM_BACKGROUND_COLOR,

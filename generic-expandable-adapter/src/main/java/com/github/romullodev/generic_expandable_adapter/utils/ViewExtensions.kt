@@ -1,10 +1,12 @@
 package com.github.romullodev.generic_expandable_adapter.utils
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -19,6 +21,7 @@ import com.github.romullodev.generic_expandable_adapter.base.ExpandableAdapterAn
 import com.github.romullodev.generic_expandable_adapter.base.HeaderBindingCallback
 import com.github.romullodev.generic_expandable_adapter.base.ItemBindingCallback
 import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
 
 fun View.visibleOrGone(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
@@ -26,10 +29,15 @@ fun View.visibleOrGone(isVisible: Boolean) {
 
 fun RecyclerView.setupDefaultExpandableAdapter(
     dataHeaders: List<CardHeaderModel>,
-    expandAllAtFirst: Boolean = false
+    expandAllAtFirst: Boolean = false,
+    onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit
 ) {
     dataHeaders.map {
-        DefaultGenericExpandableAdapter(it, expandAllAtFirst)
+        DefaultGenericExpandableAdapter(
+            header = it,
+            expandAllAtFirst = expandAllAtFirst,
+            onSwipeOptionSelected = onSwipeOptionSelected
+        )
     }.let {
         ConcatAdapter.Config.Builder()
             .setIsolateViewTypes(false)
@@ -53,9 +61,13 @@ fun RecyclerView.addNewHeaderModel(newHeader: CardHeaderModel, expandAllAtFirst:
     (adapter as ConcatAdapter).run {
         adapters.size.let {
             addAdapter(
-                DefaultGenericExpandableAdapter(newHeader, expandAllAtFirst)
+                DefaultGenericExpandableAdapter(
+                    newHeader,
+                    expandAllAtFirst
+                ) { optionId, header, item ->
+                }
             )
-            notifyItemInserted(it-1)
+            notifyItemInserted(it - 1)
         }
     }
 }
@@ -66,6 +78,7 @@ fun <H, I> RecyclerView.setupCustomExpandableAdapter(
     itemBindingCallback: ItemBindingCallback<I, H>,
     headerBindingCallback: HeaderBindingCallback<H>,
     getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
+    getMainHeaderLayoutView: (headerBinding: ViewDataBinding) -> View,
     headerLayout: Int,
     itemLayout: Int
 ) {
@@ -77,7 +90,8 @@ fun <H, I> RecyclerView.setupCustomExpandableAdapter(
             headerBindingCallback = headerBindingCallback,
             getExpandedIcImageView = getExpandedIcImageView,
             headerLayout = headerLayout,
-            itemLayout = itemLayout
+            itemLayout = itemLayout,
+            mainHeaderLayoutView = getMainHeaderLayoutView
         )
     }.let {
         ConcatAdapter.Config.Builder()
@@ -104,10 +118,9 @@ fun ImageView.setupTintColor(colorRes: Int) {
             ContextCompat.getColor(context, colorRes)
         )
     )
-    imageTintList
 }
 
-fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int) {
+fun View.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int, @DimenRes radiusDimenRes: Int) {
     foreground = (ContextCompat.getDrawable(
         context,
         R.drawable.shape_no_background
@@ -116,11 +129,17 @@ fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes
             if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
             ContextCompat.getColor(context, thicknessColorRes)
         )
+        //cornerRadius = context.resources.getDimension(radiusDimenRes)
         this
     }
 }
 
-fun ConstraintLayout.setupShapeWithBackground(backgroundColorRes: Int?, hasThickness: Boolean, thicknessColorRes: Int) {
+fun View.setupShapeWithBackground(
+    backgroundColorRes: Int?,
+    hasThickness: Boolean,
+    thicknessColorRes: Int,
+    @DimenRes radiusDimenRes: Int
+) {
     background = (ContextCompat.getDrawable(
         context,
         R.drawable.shape_with_background
@@ -132,10 +151,10 @@ fun ConstraintLayout.setupShapeWithBackground(backgroundColorRes: Int?, hasThick
             if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
             ContextCompat.getColor(context, thicknessColorRes)
         )
+        //cornerRadius = context.resources.getDimension(radiusDimenRes)
         this
     }
 }
-
 
 fun TextView.setupTextColor(colorRes: Int) {
     setTextColor(

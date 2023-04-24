@@ -50,6 +50,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation "org.robolectric:robolectric:4.10"
     kaptTest "androidx.databinding:databinding-compiler:8.1.0-alpha11"
+    implementation 'com.apachat:swipereveallayout-android:1.1.2'
 }
 
 // Maven Local Publish Script (We only need this for local publish, to test the library)
