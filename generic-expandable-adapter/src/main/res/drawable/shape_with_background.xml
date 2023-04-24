@@ -5,6 +5,4 @@
         android:startColor="#1C1C1C"
         android:centerColor="#1C1C1C"
         android:endColor="#1C1C1C"/>
-    <corners
-        android:radius="@dimen/card_radius"/>
 </shape>

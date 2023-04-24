@@ -24,9 +24,7 @@
             android:id="@+id/cardViewHeaderCardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/transparent"
-            app:cardCornerRadius="@dimen/card_radius"
-            tools:foreground="@drawable/shape_thickness_no_background">
+            app:cardBackgroundColor="@color/transparent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutHeaderCardContainer"

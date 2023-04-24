@@ -242,8 +242,7 @@ object MockData {
             ),
             items = getRockBands(),
             cardHeaderStyle = CardHeaderStyle(
-                backgroundColorItems = R.color.rock_color,
-                radiusHeaderContainer = com.github.romullodev.generic_expandable_adapter.R.dimen.header_height
+                backgroundColorItems = R.color.rock_color
             ).run {
                 if (hasBackgroundImg)
                     copy(backgroundImgRes = R.drawable.rock)

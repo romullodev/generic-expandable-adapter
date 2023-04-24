@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.DimenRes
 import androidx.databinding.ViewDataBinding
 import com.apachat.swipereveallayout.core.ViewBinder
 import com.github.romullodev.generic_expandable_adapter.base.*
@@ -16,7 +17,8 @@ import com.github.romullodev.generic_expandable_adapter.utils.*
 class DefaultGenericExpandableAdapter(
     header: CardHeaderModel,
     expandAllAtFirst: Boolean = false,
-    private val onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit
+    private val layoutStyle: LayoutStyle = LayoutStyle(),
+    private val onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit,
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     data = header,
     headerLayoutRes = R.layout.header_card_style_1,
@@ -37,7 +39,10 @@ class DefaultGenericExpandableAdapter(
         (headerBinding as HeaderCardStyle1Binding).cardViewHeaderCardContainer
 
     override fun onHeaderBindViewHolder(): HeaderBindViewHolderCallback<CardHeaderModel> =
-        { headerBinding, header -> bindSwipeLayoutOnHeader(headerBinding, header) }
+        { headerBinding, header ->
+            bindSwipeLayoutOnHeader(headerBinding, header)
+
+        }
 
     private fun bindSwipeLayoutOnHeader(headerBinding: ViewDataBinding, header: CardHeaderModel) {
         header.swipeOptionsOnHeader?.let {
@@ -86,14 +91,14 @@ class DefaultGenericExpandableAdapter(
                 cardViewHeaderCardContainer.setupShapeWithNoBackground(
                     hasThickness = cardHeaderStyle.hasThickness,
                     thicknessColorRes = cardHeaderStyle.thicknessColor,
-                    radiusDimenRes = cardHeaderStyle.radiusHeaderContainer
+                    radiusDimenRes = layoutStyle.radius
                 )
             } ?: run {
                 constraintLayoutHeaderCardContainer.setupShapeWithBackground(
                     backgroundColorRes = cardHeaderStyle.backgroundColorRes,
                     hasThickness = cardHeaderStyle.hasThickness,
                     thicknessColorRes = cardHeaderStyle.thicknessColor,
-                    radiusDimenRes = cardHeaderStyle.radiusHeaderContainer
+                    radiusDimenRes = layoutStyle.radius
                 )
             }
             imageViewArrowDown.setupTintColor(cardHeaderStyle.arrowDownIconColorRes)
@@ -128,7 +133,7 @@ class DefaultGenericExpandableAdapter(
                 backgroundColorRes = option.backgroundColor,
                 hasThickness = header.cardHeaderStyle.hasThickness,
                 thicknessColorRes = header.cardHeaderStyle.thicknessColor,
-                radiusDimenRes = header.cardHeaderStyle.radiusHeaderContainer
+                radiusDimenRes = layoutStyle.radius
             )
         }
 
@@ -148,13 +153,14 @@ class DefaultGenericExpandableAdapter(
     ) {
         binding.run {
             textViewItemCardStyle1Title.setupTextColor(cardItemStyle.titleColorRes)
+            cardViewItemCardContainer.setupCardRadius(layoutStyle.radius)
             constraintLayoutItemCardContainer.setupShapeWithBackground(
                 backgroundColorRes = cardItemStyle.backgroundColorRes
                     ?: cardHeaderStyle.backgroundColorItems
                     ?: R.color.black,
                 hasThickness = cardItemStyle.hasThickness,
                 thicknessColorRes = cardItemStyle.thicknessColor,
-                radiusDimenRes = cardHeaderStyle.radiusHeaderContainer
+                radiusDimenRes = layoutStyle.radius
             )
         }
     }
@@ -166,7 +172,7 @@ class DefaultGenericExpandableAdapter(
         layoutSwipeOnItem.linearLayoutGenericSwipeItemContainer.run {
             if (childCount == 0) {
                 header.swipeOptionsOnItem?.map {
-                    addView(getSwipeOptionViewOnItem(item, it, context))
+                    addView(getSwipeOptionViewOnItem(item, header, it, context))
                 }
             }
         }
@@ -174,6 +180,7 @@ class DefaultGenericExpandableAdapter(
 
     private fun getSwipeOptionViewOnItem(
         item: CardItemModel,
+        header: CardHeaderModel,
         option: SwipeOption<CardItemModel>,
         context: Context
     ): View =
@@ -187,7 +194,7 @@ class DefaultGenericExpandableAdapter(
                 backgroundColorRes = option.backgroundColor,
                 hasThickness = item.cardItemStyle.hasThickness,
                 thicknessColorRes = item.cardItemStyle.thicknessColor,
-                radiusDimenRes = item.cardItemStyle.radiusItemContainer
+                radiusDimenRes = layoutStyle.radius
             )
         }
 

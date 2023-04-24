@@ -23,14 +23,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewItemCardContainer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            app:cardCornerRadius="@dimen/card_radius">
+            android:layout_height="@dimen/item_height">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutItemCardContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:background="@drawable/shape_thickness_with_background">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textViewItemCardStyle1Title"

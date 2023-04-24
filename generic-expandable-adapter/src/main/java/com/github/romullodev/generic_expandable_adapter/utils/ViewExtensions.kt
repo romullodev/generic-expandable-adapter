@@ -40,7 +40,7 @@ fun RecyclerView.setupDefaultExpandableAdapter(
         )
     }.let {
         ConcatAdapter.Config.Builder()
-            .setIsolateViewTypes(false)
+            .setIsolateViewTypes(true)
             .build().run {
                 ConcatAdapter(this, it).also {
                     adapter = it
@@ -95,7 +95,7 @@ fun <H, I> RecyclerView.setupCustomExpandableAdapter(
         )
     }.let {
         ConcatAdapter.Config.Builder()
-            .setIsolateViewTypes(false)
+            .setIsolateViewTypes(true)
             .build().run {
                 ConcatAdapter(this, it).also {
                     adapter = it
@@ -120,18 +120,23 @@ fun ImageView.setupTintColor(colorRes: Int) {
     )
 }
 
-fun View.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int, @DimenRes radiusDimenRes: Int) {
+fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int, @DimenRes radiusDimenRes: Int) {
+    setupCardRadius(radiusDimenRes)
     foreground = (ContextCompat.getDrawable(
         context,
         R.drawable.shape_no_background
     ) as GradientDrawable).run {
+        cornerRadius = context.resources.getDimension(radiusDimenRes)
         setStroke(
             if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
             ContextCompat.getColor(context, thicknessColorRes)
         )
-        //cornerRadius = context.resources.getDimension(radiusDimenRes)
         this
     }
+}
+
+fun CardView.setupCardRadius(@DimenRes radiusDimenRes: Int) {
+    radius = context.resources.getDimension(radiusDimenRes)
 }
 
 fun View.setupShapeWithBackground(
@@ -151,7 +156,7 @@ fun View.setupShapeWithBackground(
             if (hasThickness) context.resources.getDimension(R.dimen.thickness).toInt() else 0,
             ContextCompat.getColor(context, thicknessColorRes)
         )
-        //cornerRadius = context.resources.getDimension(radiusDimenRes)
+        cornerRadius = context.resources.getDimension(radiusDimenRes)
         this
     }
 }

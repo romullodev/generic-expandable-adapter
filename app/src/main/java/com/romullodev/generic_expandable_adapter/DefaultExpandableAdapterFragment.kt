@@ -37,8 +37,7 @@ class DefaultExpandableAdapterFragment : Fragment() {
     private fun setupAdapterByDefault() {
         binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
             //dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = false)
-            dataHeaders =
-            MockData.getMusics(requireContext(), hasBackgroundImg = true)
+            dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = true)
         ) { optionId, cardHeaderModel, cardItemModel ->
             when (optionId) {
                 HEADER_SWIPE_DELETE_ID ->

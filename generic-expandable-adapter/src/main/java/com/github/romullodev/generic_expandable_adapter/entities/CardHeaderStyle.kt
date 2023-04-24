@@ -1,6 +1,5 @@
 package com.github.romullodev.generic_expandable_adapter.entities
 
-import androidx.annotation.DimenRes
 import com.github.romullodev.generic_expandable_adapter.R
 
 data class CardHeaderStyle(
@@ -11,6 +10,5 @@ data class CardHeaderStyle(
     val arrowDownIconColorRes: Int = R.color.white,
     val hasThickness: Boolean = true,
     val thicknessColor: Int = R.color.white,
-    val backgroundColorItems: Int? = null,
-    @DimenRes val radiusHeaderContainer: Int = R.dimen.card_radius
+    val backgroundColorItems: Int? = null
 )
