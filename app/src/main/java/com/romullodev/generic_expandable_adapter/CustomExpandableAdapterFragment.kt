@@ -8,13 +8,12 @@ import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ConcatAdapter
-import com.github.romullodev.generic_expandable_adapter.base.ExpandableAdapterAnimation
+import com.github.romullodev.generic_expandable_adapter.base.GenericExpandableAdapterAnimation
 import com.github.romullodev.generic_expandable_adapter.utils.setupCustomExpandableAdapter
-import com.romullodev.generic_expandable_adapter.databinding.CustomHeaderBinding
-import com.romullodev.generic_expandable_adapter.databinding.CustomItemBinding
-import com.romullodev.generic_expandable_adapter.databinding.FragmentCustomExpandableAdapterBinding
-import com.romullodev.generic_expandable_adapter.utils.CustomHeaderModel
-import com.romullodev.generic_expandable_adapter.utils.CustomItemModel
+import com.romullodev.generic_expandable_adapter.adapter.MyCustomExpandableAdapter
+import com.romullodev.generic_expandable_adapter.databinding.*
+import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
+import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
 import com.romullodev.generic_expandable_adapter.utils.MockData
 
 class CustomExpandableAdapterFragment : Fragment() {
@@ -42,7 +41,7 @@ class CustomExpandableAdapterFragment : Fragment() {
     private fun setupCustomAdapterByAdapter() {
         binding.recyclerViewExpandableAdapterDemo.run {
             MockData.getCustomHeader().map {
-                CustomExpandableAdapter(
+                MyCustomExpandableAdapter(
                     header = it,
                 )
             }.let {
@@ -51,7 +50,7 @@ class CustomExpandableAdapterFragment : Fragment() {
                     .build().run {
                         ConcatAdapter(this, it).also {
                             adapter = it
-                            itemAnimator = ExpandableAdapterAnimation()
+                            itemAnimator = GenericExpandableAdapterAnimation()
                         }
                     }
             }
@@ -59,37 +58,37 @@ class CustomExpandableAdapterFragment : Fragment() {
     }
 
     private fun setupCustomAdapterByExtension() {
-        binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapter<CustomHeaderModel, CustomItemModel>(
+        binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
             dataHeaders = MockData.getCustomHeader(),
             getItemsCallback = { getItemsCallback(it) },
             itemBindingCallback = getItemBindingCallback(),
             headerBindingCallback = getHeaderBindingCallback(),
             getExpandedIcImageView = { getExpandedIcImageView(it) },
-            headerLayout = R.layout.custom_header,
-            itemLayout = R.layout.custom_item,
+            headerLayout = R.layout.my_custom_header,
+            itemLayout = R.layout.my_custom_item,
             getMainHeaderLayoutView = { getMainHeaderLayoutView(it) }
         )
     }
 
     private fun getMainHeaderLayoutView(headerBinding: ViewDataBinding): View =
-        (headerBinding as CustomHeaderBinding).cardViewHeaderContainer
+        (headerBinding as MyCustomHeaderBinding).cardViewHeaderContainer
 
     private fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
-        (headerBinding as? CustomHeaderBinding)?.imageViewArrowDown
+        (headerBinding as? MyCustomHeaderBinding)?.imageViewArrowDown
 
-    private fun getItemsCallback(header: CustomHeaderModel): List<CustomItemModel> = header.items
+    private fun getItemsCallback(header: MyCustomHeaderModel): List<MyCustomItemModel> = header.items
 
-    private fun getItemBindingCallback(): (item: CustomItemModel, header: CustomHeaderModel, itemBinding: ViewDataBinding) -> Unit =
+    private fun getItemBindingCallback(): (item: MyCustomItemModel, header: MyCustomHeaderModel, itemBinding: ViewDataBinding) -> Unit =
         { item, _, itemBinding ->
-            (itemBinding as? CustomItemBinding)?.run {
-                textViewCustomItemTitle.text = item.customItemName
+            (itemBinding as? MyCustomItemBinding)?.run {
+                textViewCustomItemTitle.text = item.myCustomItemName
             }
         }
 
-    private fun getHeaderBindingCallback(): (header: CustomHeaderModel, headerBinding: ViewDataBinding) -> Unit =
+    private fun getHeaderBindingCallback(): (header: MyCustomHeaderModel, headerBinding: ViewDataBinding) -> Unit =
         { header, headerBinding ->
-            (headerBinding as? CustomHeaderBinding)?.run {
-                textViewCustomTitle.text = header.customHeaderName
+            (headerBinding as? MyCustomHeaderBinding)?.run {
+                textViewCustomTitle.text = header.myCustomHeaderName
             }
         }
 

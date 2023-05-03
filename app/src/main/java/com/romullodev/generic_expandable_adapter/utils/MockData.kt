@@ -376,31 +376,31 @@ object MockData {
         ),
     )
 
-    private fun getCustomItem(): List<CustomItemModel> =
+    private fun getCustomItem(): List<MyCustomItemModel> =
         listOf(
-            CustomItemModel(
-                customItemName = "Item 1"
+            MyCustomItemModel(
+                myCustomItemName = "Item 1"
             ),
-            CustomItemModel(
-                customItemName = "Item 2"
+            MyCustomItemModel(
+                myCustomItemName = "Item 2"
             ),
-            CustomItemModel(
-                customItemName = "Item 3"
+            MyCustomItemModel(
+                myCustomItemName = "Item 3"
             ),
         )
 
-    fun getCustomHeader(): List<CustomHeaderModel> =
+    fun getCustomHeader(): List<MyCustomHeaderModel> =
         listOf(
-            CustomHeaderModel(
-                customHeaderName = "Header 1",
+            MyCustomHeaderModel(
+                myCustomHeaderName = "Header 1",
                 items = getCustomItem()
             ),
-            CustomHeaderModel(
-                customHeaderName = "Header 2",
+            MyCustomHeaderModel(
+                myCustomHeaderName = "Header 2",
                 items = getCustomItem()
             ),
-            CustomHeaderModel(
-                customHeaderName = "Header 3",
+            MyCustomHeaderModel(
+                myCustomHeaderName = "Header 3",
                 items = getCustomItem()
             ),
         )

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class ExpandableAdapterAnimation : DefaultItemAnimator() {
+class GenericExpandableAdapterAnimation : DefaultItemAnimator() {
 
     override fun recordPreLayoutInformation(
         state: RecyclerView.State,

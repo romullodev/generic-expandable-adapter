@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.annotation.DimenRes
 import androidx.databinding.ViewDataBinding
 import com.apachat.swipereveallayout.core.ViewBinder
 import com.github.romullodev.generic_expandable_adapter.base.*
@@ -18,7 +17,7 @@ class DefaultGenericExpandableAdapter(
     header: CardHeaderModel,
     expandAllAtFirst: Boolean = false,
     private val layoutStyle: LayoutStyle = LayoutStyle(),
-    private val onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit,
+    private val onSwipeOptionListener: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit,
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     data = header,
     headerLayoutRes = R.layout.header_card_style_1,
@@ -27,6 +26,8 @@ class DefaultGenericExpandableAdapter(
 ) {
 
     private val viewBinderHelper: ViewBinder = ViewBinder()
+
+    fun getOnSwipeOptionListener(): (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = onSwipeOptionListener
 
     override fun getItems(headerObject: CardHeaderModel): List<CardItemModel> = headerObject.items
 
@@ -41,7 +42,6 @@ class DefaultGenericExpandableAdapter(
     override fun onHeaderBindViewHolder(): HeaderBindViewHolderCallback<CardHeaderModel> =
         { headerBinding, header ->
             bindSwipeLayoutOnHeader(headerBinding, header)
-
         }
 
     private fun bindSwipeLayoutOnHeader(headerBinding: ViewDataBinding, header: CardHeaderModel) {
@@ -123,7 +123,7 @@ class DefaultGenericExpandableAdapter(
         context: Context
     ): View =
         getSetupImageView(context, option, header.id).apply {
-            setOnClickListener { onSwipeOptionSelected.invoke(option.optionId, header, null) }
+            setOnClickListener { onSwipeOptionListener.invoke(option.optionId, header, null) }
             layoutParams = ViewGroup.LayoutParams(
                 context.resources.getDimension(R.dimen.header_height).toInt(),
                 context.resources.getDimension(R.dimen.header_height).toInt(),
@@ -185,7 +185,7 @@ class DefaultGenericExpandableAdapter(
         context: Context
     ): View =
         getSetupImageView(context, option, item.id).apply {
-            setOnClickListener { onSwipeOptionSelected.invoke(option.optionId, null, item) }
+            setOnClickListener { onSwipeOptionListener.invoke(option.optionId, null, item) }
             layoutParams = ViewGroup.LayoutParams(
                 context.resources.getDimension(R.dimen.item_height).toInt(),
                 context.resources.getDimension(R.dimen.item_height).toInt()
