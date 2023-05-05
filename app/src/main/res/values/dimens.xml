@@ -6,4 +6,7 @@
     <dimen name="my_custom_width_item_option">15dp</dimen>
     <dimen name="my_custom_radius_option">4dp</dimen>
     <dimen name="my_custom_radius">4dp</dimen>
+
+    <dimen name="my_custom_swipe_options_width_on_header">45dp</dimen>
+    <dimen name="my_custom_swipe_options_width_on_item">35dp</dimen>
 </resources>

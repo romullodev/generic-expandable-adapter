@@ -1,8 +1,12 @@
 package com.github.romullodev.generic_expandable_adapter.entities
 
-data class SwipeOption<T>(
+import androidx.annotation.DimenRes
+
+data class SwipeOptionDefault<T>(
     val icon: Int,
     val iconColor: Int,
     val backgroundColor: Int,
-    val optionId: Int
+    val optionId: Int,
+    @DimenRes
+    val width: Int
 )

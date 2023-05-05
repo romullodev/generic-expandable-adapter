@@ -5,12 +5,15 @@ import androidx.databinding.ViewDataBinding
 import com.github.romullodev.generic_expandable_adapter.base.*
 import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderCustomModel
 import com.github.romullodev.generic_expandable_adapter.entities.BaseItemCustomModel
+import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOption
 
 class CustomGenericExpandableAdapterV2<AdapterH: BaseHeaderCustomModel<AdapterH, AdapterI> , AdapterI: BaseItemCustomModel>(
     private val onBindingItem: OnBindingItemCustom<AdapterI, AdapterH>,
     private val onBindingHeader: HeaderBindingCallback<AdapterH>,
     private val getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
     private val onCustomSwipeOption: OnCustomSwipeOption<AdapterH, AdapterI>,
+    customSwipeOptionsOnHeader: List<CustomSwipeOption<AdapterH>>,
+    customSwipeOptionsOnItem: List<CustomSwipeOption<AdapterI>>,
     header: AdapterH,
     headerLayout: Int,
     itemLayout: Int,
@@ -19,6 +22,8 @@ class CustomGenericExpandableAdapterV2<AdapterH: BaseHeaderCustomModel<AdapterH,
     data = header,
     headerLayoutRes = headerLayout,
     itemLayoutRes = itemLayout,
+    customSwipeOptionsOnHeader = customSwipeOptionsOnHeader,
+    customSwipeOptionsOnItem = customSwipeOptionsOnItem,
     expandAllAtFirst
 ) {
     override fun onBindingItem(): OnBindingItemCustom<AdapterI, AdapterH> = onBindingItem

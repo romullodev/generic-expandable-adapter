@@ -5,37 +5,92 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.romullodev.generic_expandable_adapter.CustomGenericExpandableAdapter
-import com.github.romullodev.generic_expandable_adapter.CustomGenericExpandableAdapterV2
-import com.github.romullodev.generic_expandable_adapter.DefaultGenericExpandableAdapter
-import com.github.romullodev.generic_expandable_adapter.R
+import com.github.romullodev.generic_expandable_adapter.*
 import com.github.romullodev.generic_expandable_adapter.base.*
-import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.BaseItemCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
+import com.github.romullodev.generic_expandable_adapter.entities.*
 
 fun View.visibleOrGone(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
-fun RecyclerView.setupDefaultExpandableAdapter(
+//fun RecyclerView.setupDefaultExpandableAdapter(
+//    dataHeaders: List<CardHeaderModel>,
+//    expandAllAtFirst: Boolean = false,
+//    onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = { _, _, _ -> }
+//) {
+//    dataHeaders.map {
+//        DefaultGenericExpandableAdapter(
+//            header = it,
+//            expandAllAtFirst = expandAllAtFirst,
+//            onSwipeOptionListener = onSwipeOptionSelected
+//        )
+//    }.let {
+//        ConcatAdapter.Config.Builder()
+//            .setIsolateViewTypes(true)
+//            .build().run {
+//                ConcatAdapter(this, it).also {
+//                    adapter = it
+//                    itemAnimator = GenericExpandableAdapterAnimation()
+//                }
+//            }
+//    }
+//}
+
+fun RecyclerView.setupDefaultExpandableAdapterV2(
     dataHeaders: List<CardHeaderModel>,
+    customSwipeOptionsOnHeader: List<SwipeOptionDefault<CardHeaderModel>> = emptyList(),
+    customSwipeOptionsOnItem: List<SwipeOptionDefault<CardItemModel>> = emptyList(),
     expandAllAtFirst: Boolean = false,
-    onSwipeOptionSelected: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = { _, _, _ -> }
+    layoutStyle: LayoutStyle = LayoutStyle(),
+    onSwipeOption: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = { _, _, _ -> },
 ) {
     dataHeaders.map {
-        DefaultGenericExpandableAdapter(
+        DefaultGenericExpandableAdapterV2(
             header = it,
+            customSwipeOptionsOnHeader = customSwipeOptionsOnHeader.map { defaultOption ->
+                CustomSwipeOption(
+                    icon = defaultOption.icon,
+                    iconColor = defaultOption.iconColor,
+                    backgroundColor = defaultOption.backgroundColor,
+                    optionId = defaultOption.optionId,
+                    width = defaultOption.width,
+                    height = R.dimen.default_header_height,
+                    radius = layoutStyle.radius,
+                    hasThickness = it.cardHeaderStyle.hasThickness,
+                    thicknessColor = it.cardHeaderStyle.thicknessColor,
+                )
+            },
+            customSwipeOptionsOnItem = customSwipeOptionsOnItem.map { defaultOption ->
+                CustomSwipeOption<CardItemModel>(
+                    icon = defaultOption.icon,
+                    iconColor = defaultOption.iconColor,
+                    backgroundColor = defaultOption.backgroundColor,
+                    optionId = defaultOption.optionId,
+                    width = defaultOption.width,
+                    height = R.dimen.default_item_height,
+                    radius = layoutStyle.radius
+                ).run {
+                    if (it.items.isNotEmpty()) {
+                        copy(
+                            hasThickness = it.items.first().cardItemStyle.hasThickness,
+                            thicknessColor = it.items.first().cardItemStyle.thicknessColor,
+                        )
+                    } else
+                        this
+                }
+            },
             expandAllAtFirst = expandAllAtFirst,
-            onSwipeOptionListener = onSwipeOptionSelected
+            onCustomSwipeOption = onSwipeOption,
+            layoutStyle = layoutStyle
         )
     }.let {
         ConcatAdapter.Config.Builder()
@@ -43,43 +98,43 @@ fun RecyclerView.setupDefaultExpandableAdapter(
             .build().run {
                 ConcatAdapter(this, it).also {
                     adapter = it
-                    itemAnimator = GenericExpandableAdapterAnimation()
+                    itemAnimator = CustomExpandableAdapterAnimation()
                 }
             }
     }
 }
 
-fun RecyclerView.updateDefaultExpandableAdapterHeaderAt(position: Int, header: CardHeaderModel) {
-    (adapter as ConcatAdapter).run {
-        (adapters[position] as DefaultGenericExpandableAdapter).updateData(header)
-        notifyItemChanged(position)
-    }
-}
+//fun RecyclerView.updateDefaultExpandableAdapterHeaderAt(position: Int, header: CardHeaderModel) {
+//    (adapter as ConcatAdapter).run {
+//        (adapters[position] as DefaultGenericExpandableAdapter).updateData(header)
+//        notifyItemChanged(position)
+//    }
+//}
 
-fun RecyclerView.addNewHeaderModel(
-    newHeader: CardHeaderModel, 
-    expandAllAtFirst: Boolean = false,
-    onSwipeOptionListener: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = { _, _, _ -> }
-) {
-    (adapter as ConcatAdapter).run {
-        adapters.size.let {
-            addAdapter(
-                DefaultGenericExpandableAdapter(
-                    header = newHeader,
-                    expandAllAtFirst = expandAllAtFirst,
-                    onSwipeOptionListener =
-                    if (it == 0)
-                        onSwipeOptionListener
-                    else
-                        (adapters.first() as DefaultGenericExpandableAdapter).getOnSwipeOptionListener() 
-                )             
-            )
-            notifyItemInserted(
-                (it - 1).coerceAtLeast(0)
-            )
-        }
-    }
-}
+//fun RecyclerView.addNewHeaderModel(
+//    newHeader: CardHeaderModel,
+//    expandAllAtFirst: Boolean = false,
+//    onSwipeOptionListener: (optionId: Int, CardHeaderModel?, CardItemModel?) -> Unit = { _, _, _ -> }
+//) {
+//    (adapter as ConcatAdapter).run {
+//        adapters.size.let {
+//            addAdapter(
+//                DefaultGenericExpandableAdapter(
+//                    header = newHeader,
+//                    expandAllAtFirst = expandAllAtFirst,
+//                    onSwipeOptionListener =
+//                    if (it == 0)
+//                        onSwipeOptionListener
+//                    else
+//                        (adapters.first() as DefaultGenericExpandableAdapter).getOnSwipeOptionListener()
+//                )
+//            )
+//            notifyItemInserted(
+//                (it - 1).coerceAtLeast(0)
+//            )
+//        }
+//    }
+//}
 
 fun <H, I> RecyclerView.setupCustomExpandableAdapter(
     dataHeaders: List<H>,
@@ -114,15 +169,17 @@ fun <H, I> RecyclerView.setupCustomExpandableAdapter(
     }
 }
 
-fun <H: BaseHeaderCustomModel<H, I>, I: BaseItemCustomModel> RecyclerView.setupCustomExpandableAdapterV2(
+fun <H : BaseHeaderCustomModel<H, I>, I : BaseItemCustomModel> RecyclerView.setupCustomExpandableAdapterV2(
     onBindingHeader: OnBindingHeaderCustom<H>,
     onBindingItem: OnBindingItemCustom<I, H>,
     getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
-    onCustomSwipeOption: OnCustomSwipeOption<H, I>,
     dataHeaders: List<H>,
     headerLayout: Int,
     itemLayout: Int,
-    expandAllAtFirst: Boolean = false
+    onCustomSwipeOption: OnCustomSwipeOption<H, I> = { _, _, _ -> },
+    customSwipeOptionsOnHeader: List<CustomSwipeOption<H>> = emptyList(),
+    customSwipeOptionsOnItem: List<CustomSwipeOption<I>> = emptyList(),
+    expandAllAtFirst: Boolean = false,
 ) {
     dataHeaders.map {
         CustomGenericExpandableAdapterV2(
@@ -133,7 +190,9 @@ fun <H: BaseHeaderCustomModel<H, I>, I: BaseItemCustomModel> RecyclerView.setupC
             header = it,
             headerLayout = headerLayout,
             itemLayout = itemLayout,
-            expandAllAtFirst = expandAllAtFirst
+            expandAllAtFirst = expandAllAtFirst,
+            customSwipeOptionsOnHeader = customSwipeOptionsOnHeader,
+            customSwipeOptionsOnItem = customSwipeOptionsOnItem
         )
     }.let {
         ConcatAdapter.Config.Builder()
@@ -162,7 +221,11 @@ fun ImageView.setupTintColor(colorRes: Int) {
     )
 }
 
-fun CardView.setupShapeWithNoBackground(hasThickness: Boolean, thicknessColorRes: Int, @DimenRes radiusDimenRes: Int) {
+fun CardView.setupShapeWithNoBackground(
+    hasThickness: Boolean,
+    thicknessColorRes: Int,
+    @DimenRes radiusDimenRes: Int
+) {
     setupCardRadius(radiusDimenRes)
     foreground = (ContextCompat.getDrawable(
         context,

@@ -19,6 +19,6 @@
 
     <dimen name="thickness">1dp</dimen>
 
-    <dimen name="header_height">60dp</dimen>
-    <dimen name="item_height">40dp</dimen>
+    <dimen name="default_header_height">60dp</dimen>
+    <dimen name="default_item_height">40dp</dimen>
 </resources>

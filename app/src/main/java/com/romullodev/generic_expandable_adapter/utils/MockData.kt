@@ -248,28 +248,6 @@ object MockData {
                 else
                     copy(backgroundColorRes = R.color.rock_color)
             },
-            swipeOptionsOnHeader = listOf(
-                SwipeOption(
-                    icon = R.drawable.ic_delete,
-                    iconColor = R.color.white,
-                    backgroundColor = R.color.holo_red_dark,
-                    optionId = HEADER_SWIPE_DELETE_ID
-                ),
-                SwipeOption(
-                    icon = R.drawable.ic_edit,
-                    iconColor = R.color.white,
-                    backgroundColor = R.color.darker_gray,
-                    optionId = HEADER_SWIPE_EDIT_ID
-                )
-            ),
-            swipeOptionsOnItem = listOf(
-                SwipeOption(
-                    icon = R.drawable.ic_delete,
-                    iconColor = R.color.white,
-                    backgroundColor = R.color.holo_red_dark,
-                    optionId = ITEM_SWIPE_DELETE_ID
-                )
-            )
         ),
         CardHeaderModel(
             id = 49L,
@@ -397,57 +375,16 @@ object MockData {
                 myCustomHeaderId = 4L,
                 myCustomHeaderName = "Header 1",
                 items = getCustomItem(),
-                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
-                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
             ),
             MyCustomHeaderModel(
                 myCustomHeaderId = 5L,
                 myCustomHeaderName = "Header 2",
                 items = getCustomItem(),
-                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
-                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
             ),
             MyCustomHeaderModel(
                 myCustomHeaderId = 6L,
                 myCustomHeaderName = "Header 3",
                 items = getCustomItem(),
-                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
-                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
-            ),
-        )
-
-    private fun getSwipeOptionsOnHeader(): List<CustomSwipeOption<MyCustomHeaderModel>> =
-        listOf(
-            CustomSwipeOption(
-                icon = R.drawable.ic_delete,
-                iconColor = R.color.white,
-                backgroundColor = R.color.holo_red_dark,
-                optionId = HEADER_SWIPE_DELETE_ID,
-                width = R.dimen.my_custom_width_header_option,
-                height = R.dimen.my_custom_height_header,
-                radius = R.dimen.my_custom_radius_option,
-            ),
-            CustomSwipeOption(
-                icon = R.drawable.ic_edit,
-                iconColor = R.color.white,
-                backgroundColor = R.color.darker_gray,
-                optionId = HEADER_SWIPE_EDIT_ID,
-                width = R.dimen.my_custom_width_header_option,
-                height = R.dimen.my_custom_height_header,
-                radius = R.dimen.my_custom_radius_option,
-            )
-        )
-
-    private fun getSwipeOptionsOnItem(): List<CustomSwipeOption<MyCustomItemModel>> =
-        listOf(
-            CustomSwipeOption(
-                icon = R.drawable.ic_delete,
-                iconColor = R.color.white,
-                backgroundColor = R.color.holo_red_dark,
-                optionId = ITEM_SWIPE_DELETE_ID,
-                width = R.dimen.my_custom_width_header_option,
-                height = R.dimen.my_custom_height_item,
-                radius = R.dimen.my_custom_radius_option,
             ),
         )
 }

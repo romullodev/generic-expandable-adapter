@@ -15,7 +15,7 @@
         <!-- Your secondary layout here -->
         <include
             android:id="@+id/layoutSwipeOnItem"
-            layout="@layout/generic_swipe_option_item"
+            layout="@layout/generic_swipe_option"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
