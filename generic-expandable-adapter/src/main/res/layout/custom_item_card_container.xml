@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.apachat.swipereveallayout.core.SwipeLayout
+        android:id="@+id/swipeRevealLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_xxsmall"
+        app:dragEdge="right"
+        app:mode="same_level">
+
+        <!-- Your secondary layout here -->
+        <include
+            android:id="@+id/layoutSwipeOnItem"
+            layout="@layout/generic_swipe_option_item"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <!-- Your main layout here -->
+        <FrameLayout
+            android:id="@+id/frameLayoutCustomItemContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.apachat.swipereveallayout.core.SwipeLayout>
+</layout>

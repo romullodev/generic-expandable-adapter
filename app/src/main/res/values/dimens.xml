@@ -1,3 +1,9 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="my_custom_height_header">40dp</dimen>
+    <dimen name="my_custom_height_item">35dp</dimen>
+
+    <dimen name="my_custom_width_header_option">40dp</dimen>
+    <dimen name="my_custom_width_item_option">15dp</dimen>
+    <dimen name="my_custom_radius_option">4dp</dimen>
+    <dimen name="my_custom_radius">4dp</dimen>
 </resources>

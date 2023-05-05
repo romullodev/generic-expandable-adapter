@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--    TODO: usar somente um container-->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutGenericSwipeHeaderContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
-<!--        <ImageButton-->
-<!--            android:id="@+id/imageButtonDeleteHeader"-->
-<!--            android:layout_width="@dimen/header_height"-->
-<!--            android:layout_height="@dimen/header_height"-->
-<!--            android:contentDescription="@null"-->
-<!--            android:paddingStart="8dp"-->
-<!--            android:paddingEnd="8dp"/>-->
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -9,7 +9,6 @@ object MockData {
     const val HEADER_SWIPE_DELETE_ID = 1
     const val HEADER_SWIPE_EDIT_ID = 2
     const val ITEM_SWIPE_DELETE_ID = 3
-    const val ITEM_SWIPE_EDIT_ID = 4
 
     private fun getRockBands(): List<CardItemModel> = listOf(
         CardItemModel(
@@ -379,12 +378,15 @@ object MockData {
     private fun getCustomItem(): List<MyCustomItemModel> =
         listOf(
             MyCustomItemModel(
+                myCustomItemId = 1L,
                 myCustomItemName = "Item 1"
             ),
             MyCustomItemModel(
+                myCustomItemId = 2L,
                 myCustomItemName = "Item 2"
             ),
             MyCustomItemModel(
+                myCustomItemId = 3L,
                 myCustomItemName = "Item 3"
             ),
         )
@@ -392,16 +394,60 @@ object MockData {
     fun getCustomHeader(): List<MyCustomHeaderModel> =
         listOf(
             MyCustomHeaderModel(
+                myCustomHeaderId = 4L,
                 myCustomHeaderName = "Header 1",
-                items = getCustomItem()
+                items = getCustomItem(),
+                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
+                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
             ),
             MyCustomHeaderModel(
+                myCustomHeaderId = 5L,
                 myCustomHeaderName = "Header 2",
-                items = getCustomItem()
+                items = getCustomItem(),
+                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
+                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
             ),
             MyCustomHeaderModel(
+                myCustomHeaderId = 6L,
                 myCustomHeaderName = "Header 3",
-                items = getCustomItem()
+                items = getCustomItem(),
+                myCustomSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
+                myCustomSwipeOptionsOnItem = getSwipeOptionsOnItem()
+            ),
+        )
+
+    private fun getSwipeOptionsOnHeader(): List<CustomSwipeOption<MyCustomHeaderModel>> =
+        listOf(
+            CustomSwipeOption(
+                icon = R.drawable.ic_delete,
+                iconColor = R.color.white,
+                backgroundColor = R.color.holo_red_dark,
+                optionId = HEADER_SWIPE_DELETE_ID,
+                width = R.dimen.my_custom_width_header_option,
+                height = R.dimen.my_custom_height_header,
+                radius = R.dimen.my_custom_radius_option,
+            ),
+            CustomSwipeOption(
+                icon = R.drawable.ic_edit,
+                iconColor = R.color.white,
+                backgroundColor = R.color.darker_gray,
+                optionId = HEADER_SWIPE_EDIT_ID,
+                width = R.dimen.my_custom_width_header_option,
+                height = R.dimen.my_custom_height_header,
+                radius = R.dimen.my_custom_radius_option,
+            )
+        )
+
+    private fun getSwipeOptionsOnItem(): List<CustomSwipeOption<MyCustomItemModel>> =
+        listOf(
+            CustomSwipeOption(
+                icon = R.drawable.ic_delete,
+                iconColor = R.color.white,
+                backgroundColor = R.color.holo_red_dark,
+                optionId = ITEM_SWIPE_DELETE_ID,
+                width = R.dimen.my_custom_width_header_option,
+                height = R.dimen.my_custom_height_item,
+                radius = R.dimen.my_custom_radius_option,
             ),
         )
 }

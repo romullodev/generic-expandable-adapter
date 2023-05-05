@@ -13,11 +13,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.romullodev.generic_expandable_adapter.CustomGenericExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.CustomGenericExpandableAdapterV2
 import com.github.romullodev.generic_expandable_adapter.DefaultGenericExpandableAdapter
 import com.github.romullodev.generic_expandable_adapter.R
-import com.github.romullodev.generic_expandable_adapter.base.GenericExpandableAdapterAnimation
-import com.github.romullodev.generic_expandable_adapter.base.HeaderBindingCallback
-import com.github.romullodev.generic_expandable_adapter.base.ItemBindingCallback
+import com.github.romullodev.generic_expandable_adapter.base.*
+import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderCustomModel
+import com.github.romullodev.generic_expandable_adapter.entities.BaseItemCustomModel
 import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
 import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
 
@@ -108,6 +109,39 @@ fun <H, I> RecyclerView.setupCustomExpandableAdapter(
                 ConcatAdapter(this, it).also {
                     adapter = it
                     itemAnimator = GenericExpandableAdapterAnimation()
+                }
+            }
+    }
+}
+
+fun <H: BaseHeaderCustomModel<H, I>, I: BaseItemCustomModel> RecyclerView.setupCustomExpandableAdapterV2(
+    onBindingHeader: OnBindingHeaderCustom<H>,
+    onBindingItem: OnBindingItemCustom<I, H>,
+    getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
+    onCustomSwipeOption: OnCustomSwipeOption<H, I>,
+    dataHeaders: List<H>,
+    headerLayout: Int,
+    itemLayout: Int,
+    expandAllAtFirst: Boolean = false
+) {
+    dataHeaders.map {
+        CustomGenericExpandableAdapterV2(
+            onBindingItem = onBindingItem,
+            onBindingHeader = onBindingHeader,
+            getExpandedIcImageView = getExpandedIcImageView,
+            onCustomSwipeOption = onCustomSwipeOption,
+            header = it,
+            headerLayout = headerLayout,
+            itemLayout = itemLayout,
+            expandAllAtFirst = expandAllAtFirst
+        )
+    }.let {
+        ConcatAdapter.Config.Builder()
+            .setIsolateViewTypes(true)
+            .build().run {
+                ConcatAdapter(this, it).also {
+                    adapter = it
+                    itemAnimator = CustomExpandableAdapterAnimation()
                 }
             }
     }
