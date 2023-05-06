@@ -393,4 +393,19 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             3 + 5 + 4, (recyclerView.adapter as ConcatAdapter).itemCount
         )
     }
+
+    @Test
+    fun `check options on header`() {
+
+    }
+
+    @Test
+    fun `check options on item`() {
+
+    }
+
+//    @Test
+//    fun ``() {
+//
+//    }
 }

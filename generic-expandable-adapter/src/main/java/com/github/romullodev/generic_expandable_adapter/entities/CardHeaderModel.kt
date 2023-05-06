@@ -5,7 +5,7 @@ data class CardHeaderModel(
     val headerSubtitle: String = String(),
     val items: List<CardItemModel>,
     val cardHeaderStyle: CardHeaderStyle = CardHeaderStyle(),
-): BaseHeaderCustomModel<CardHeaderModel, CardItemModel> {
+): BaseHeaderModel<CardHeaderModel, CardItemModel> {
 
     override fun getCustomItems(): List<CardItemModel> = items
 

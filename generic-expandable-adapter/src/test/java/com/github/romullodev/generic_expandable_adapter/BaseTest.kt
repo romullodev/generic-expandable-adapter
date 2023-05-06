@@ -59,7 +59,7 @@ open class BaseTest {
     ): RecyclerView =
         Robolectric.buildActivity(DemoActivity::class.java).setup().get().run {
             binding.recyclerViewDemoActivity.apply {
-                setupDefaultExpandableAdapter(data, true)
+                setupDefaultExpandableAdapter(dataHeaders = data, expandAllAtFirst = true)
                 updateMeasure()
             }
         }

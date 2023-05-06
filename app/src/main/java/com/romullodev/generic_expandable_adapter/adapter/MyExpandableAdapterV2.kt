@@ -3,9 +3,9 @@ package com.romullodev.generic_expandable_adapter.adapter
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.github.romullodev.generic_expandable_adapter.base.*
-import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.BaseItemCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOption
+import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.BaseItemModel
+import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
 import com.romullodev.generic_expandable_adapter.R
 import com.romullodev.generic_expandable_adapter.databinding.MyCustomHeaderBinding
 import com.romullodev.generic_expandable_adapter.databinding.MyCustomItemBinding
@@ -13,26 +13,26 @@ import com.romullodev.generic_expandable_adapter.utils.MockData
 import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
 
-class MyCustomExpandableAdapterV2(
+class MyExpandableAdapterV2(
     header: MyCustomHeaderModel,
-    private val onCustomSwipeOption: OnCustomSwipeOption<MyCustomHeaderModel, MyCustomItemModel>
-) : BaseCustomExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
+    private val onSwipeOption: OnSwipeOption<MyCustomHeaderModel, MyCustomItemModel>
+) : BaseExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
     data = header,
     headerLayoutRes = R.layout.my_custom_header,
     itemLayoutRes = R.layout.my_custom_item,
     expandAllAtFirst = false,
-    customSwipeOptionsOnHeader = getCustomSwipeOptionsOnHeader(),
-    customSwipeOptionsOnItem = getCustomSwipeOptionsOnItem()
+    optionsOnHeader = getCustomSwipeOptionsOnHeader(),
+    optionsOnItem = getCustomSwipeOptionsOnItem()
 ) {
-    override fun onBindingItem(): OnBindingItemCustom<BaseItemCustomModel, BaseHeaderCustomModel<MyCustomHeaderModel, MyCustomItemModel>> =
-        { item: BaseItemCustomModel, _, itemBinding ->
+    override fun onBindingItem(): OnBindingItem<BaseItemModel, BaseHeaderModel<MyCustomHeaderModel, MyCustomItemModel>> =
+        { item: BaseItemModel, _, itemBinding ->
             (itemBinding as? MyCustomItemBinding)?.run {
                 textViewCustomItemTitle.text = (item as MyCustomItemModel).myCustomItemName
             }
         }
 
-    override fun onBindingHeader(): OnBindingHeaderCustom<BaseHeaderCustomModel<MyCustomHeaderModel, MyCustomItemModel>> =
-        { header: BaseHeaderCustomModel<MyCustomHeaderModel, MyCustomItemModel>, headerBinding ->
+    override fun onBindingHeader(): OnBindingHeader<BaseHeaderModel<MyCustomHeaderModel, MyCustomItemModel>> =
+        { header: BaseHeaderModel<MyCustomHeaderModel, MyCustomItemModel>, headerBinding ->
             (headerBinding as? MyCustomHeaderBinding)?.run {
                 textViewCustomTitle.text = (header as MyCustomHeaderModel).myCustomHeaderName
             }
@@ -41,13 +41,13 @@ class MyCustomExpandableAdapterV2(
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         (headerBinding as? MyCustomHeaderBinding)?.imageViewArrowDown
 
-    override fun onCustomSwipeOption(): OnCustomSwipeOption<MyCustomHeaderModel, MyCustomItemModel> =
-        onCustomSwipeOption
+    override fun onSwipeOption(): OnSwipeOption<MyCustomHeaderModel, MyCustomItemModel> =
+        onSwipeOption
 
     companion object {
-        private fun getCustomSwipeOptionsOnHeader(): List<CustomSwipeOption<MyCustomHeaderModel>> =
+        private fun getCustomSwipeOptionsOnHeader(): List<GenericSwipeOption> =
             listOf(
-                CustomSwipeOption(
+                GenericSwipeOption(
                     icon = R.drawable.ic_delete,
                     iconColor = R.color.white,
                     backgroundColor = R.color.holo_red_dark,
@@ -56,7 +56,7 @@ class MyCustomExpandableAdapterV2(
                     height = R.dimen.my_custom_height_header,
                     radius = R.dimen.my_custom_radius_option,
                 ),
-                CustomSwipeOption(
+                GenericSwipeOption(
                     icon = R.drawable.ic_edit,
                     iconColor = R.color.white,
                     backgroundColor = R.color.darker_gray,
@@ -67,9 +67,9 @@ class MyCustomExpandableAdapterV2(
                 )
             )
 
-        private fun getCustomSwipeOptionsOnItem(): List<CustomSwipeOption<MyCustomItemModel>> =
+        private fun getCustomSwipeOptionsOnItem(): List<GenericSwipeOption> =
             listOf(
-                CustomSwipeOption(
+                GenericSwipeOption(
                     icon = R.drawable.ic_delete,
                     iconColor = R.color.white,
                     backgroundColor = R.color.holo_red_dark,

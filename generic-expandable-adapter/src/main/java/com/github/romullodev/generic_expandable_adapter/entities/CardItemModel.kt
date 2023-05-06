@@ -4,6 +4,6 @@ data class CardItemModel(
     val id: Long,
     val itemTitle: String = String(),
     val cardItemStyle: CardItemStyle = CardItemStyle()
-) : BaseItemCustomModel {
+) : BaseItemModel {
     override fun getItemId(): Long = id
 }

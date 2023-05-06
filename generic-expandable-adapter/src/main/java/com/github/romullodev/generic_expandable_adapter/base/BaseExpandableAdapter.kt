@@ -1,7 +1,6 @@
 package com.github.romullodev.generic_expandable_adapter.base
 
 import android.content.Context
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.apachat.swipereveallayout.core.ViewBinder
-import com.github.romullodev.generic_expandable_adapter.databinding.CustomHeaderCardContainerBinding
-import com.github.romullodev.generic_expandable_adapter.databinding.CustomItemCardContainerBinding
-import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.BaseItemCustomModel
-import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOption
+import com.github.romullodev.generic_expandable_adapter.databinding.HeaderCardContainerBinding
+import com.github.romullodev.generic_expandable_adapter.databinding.ItemCardContainerBinding
+import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.BaseItemModel
+import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
 import com.github.romullodev.generic_expandable_adapter.utils.ExpandableAdapterConstants.IC_COLLAPSED_ROTATION_DEG
 import com.github.romullodev.generic_expandable_adapter.utils.ExpandableAdapterConstants.IC_EXPANDED_ROTATION_DEG
 import com.github.romullodev.generic_expandable_adapter.utils.setupShapeWithBackground
@@ -30,64 +29,64 @@ import com.github.romullodev.generic_expandable_adapter.utils.visibleOrGone
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
-typealias OnBindingItemCustom<I, H> = (item: I, header: H, itemBinding: ViewDataBinding) -> Unit
-typealias OnBindingHeaderCustom<H> = (header: H, headerBinding: ViewDataBinding) -> Unit
-typealias OnHeaderViewHolderInitMethodCustom = (headerBinding: ViewDataBinding) -> Unit
-typealias OnItemViewHolderInitMethodCustom = (itemBinding: ViewDataBinding) -> Unit
-typealias OnBindViewHolderHeaderCustom<H> = (headerBinding: ViewDataBinding, header: H) -> Unit
-typealias OnBindViewHolderItemCustom<I, H> = (itemBinding: ViewDataBinding, item: I, header: H) -> Unit
-typealias OnCustomSwipeOption<H, I> = (optionId: Int, header: H?, item: I?) -> Unit
+typealias OnBindingItem<I, H> = (item: I, header: H, itemBinding: ViewDataBinding) -> Unit
+typealias OnBindingHeader<H> = (header: H, headerBinding: ViewDataBinding) -> Unit
+typealias OnHeaderViewHolderInitMethod = (headerBinding: ViewDataBinding) -> Unit
+typealias OnItemViewHolderInitMethod = (itemBinding: ViewDataBinding) -> Unit
+typealias OnBindViewHolderHeader<H> = (headerBinding: ViewDataBinding, header: H) -> Unit
+typealias OnBindViewHolderItem<I, H> = (itemBinding: ViewDataBinding, item: I, header: H) -> Unit
+typealias OnSwipeOption<H, I> = (optionId: Int, header: H?, item: I?) -> Unit
 
 private const val SPACE_BETWEEN_OPTIONS = 5
 
-abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<AdapterH, AdapterI>, AdapterI : BaseItemCustomModel>(
+abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, AdapterI>, AdapterI : BaseItemModel>(
     data: AdapterH,
-    private val headerLayoutRes: Int,
-    private val itemLayoutRes: Int,
-    private val customSwipeOptionsOnHeader: List<CustomSwipeOption<AdapterH>>?,
-    private val customSwipeOptionsOnItem: List<CustomSwipeOption<AdapterI>>?,
+    private val headerLayoutRes: Int, //TODO: colocar como metodo abstrato
+    private val itemLayoutRes: Int, //TODO: colocar como metodo abstrato
+    private val optionsOnHeader: List<GenericSwipeOption>?, //TODO: colocar como metodo abstrato
+    private val optionsOnItem: List<GenericSwipeOption>?, //TODO: colocar como metodo abstrato
     expandAllAtFirst: Boolean
-) : RecyclerView.Adapter<BaseCustomExpandableAdapter.BaseCustomExpandableViewHolder<AdapterH, AdapterI>>() {
+) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableViewHolder<AdapterH, AdapterI>>() {
 
     private val viewBinderHelper: ViewBinder = ViewBinder()
 
-    private var headerObject = data
+    private var headerData = data
 
     internal fun updateData(data: AdapterH) {
-        headerObject = data
+        headerData = data
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
 
-    abstract fun onBindingItem(): OnBindingItemCustom<AdapterI, AdapterH>
+    abstract fun onBindingItem(): OnBindingItem<AdapterI, AdapterH>
 
-    abstract fun onBindingHeader(): OnBindingHeaderCustom<AdapterH>
+    abstract fun onBindingHeader(): OnBindingHeader<AdapterH>
 
     abstract fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView?
 
-    abstract fun onCustomSwipeOption(): OnCustomSwipeOption<AdapterH, AdapterI>
+    abstract fun onSwipeOption(): OnSwipeOption<AdapterH, AdapterI>
 
-    open fun onHeaderViewHolderInitMethod(): OnHeaderViewHolderInitMethodCustom = { _ -> }
+    open fun onHeaderViewHolderInitMethod(): OnHeaderViewHolderInitMethod = { _ -> }
 
-    open fun onItemViewHolderInitMethod(): OnItemViewHolderInitMethodCustom = { _ -> }
+    open fun onItemViewHolderInitMethod(): OnItemViewHolderInitMethod = { _ -> }
 
-    open fun onBindViewHolderHeader(): OnBindViewHolderHeaderCustom<AdapterH> =
+    open fun onBindViewHolderHeader(): OnBindViewHolderHeader<AdapterH> =
         { headerBinding, header ->
-            customSwipeOptionsOnHeader?.let {
+            optionsOnHeader?.let {
                 viewBinderHelper.bind(
-                    (headerBinding as CustomHeaderCardContainerBinding).swipeRevealLayoutContainer,
+                    (headerBinding as HeaderCardContainerBinding).swipeRevealLayoutContainer,
                     header.getHeaderId().toString()
                 )
             }
         }
 
-    open fun onBindViewHolderItem(): OnBindViewHolderItemCustom<AdapterI, AdapterH> =
+    open fun onBindViewHolderItem(): OnBindViewHolderItem<AdapterI, AdapterH> =
         { itemBinding, item, _ ->
-            customSwipeOptionsOnItem?.let {
+            optionsOnItem?.let {
                 viewBinderHelper.bind(
-                    (itemBinding as CustomItemCardContainerBinding).swipeRevealLayoutContainer,
+                    (itemBinding as ItemCardContainerBinding).swipeRevealLayoutContainer,
                     item.getItemId().toString()
                 )
             }
@@ -97,11 +96,11 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
 
     private var isExpanded: Boolean by Delegates.observable(expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
         if (newExpandedValue) {
-            notifyItemRangeInserted(1, getItems(headerObject).size)
+            notifyItemRangeInserted(1, getItems(headerData).size)
             //To update the header expand icon
             notifyItemChanged(0)
         } else {
-            notifyItemRangeRemoved(1, getItems(headerObject).size)
+            notifyItemRangeRemoved(1, getItems(headerData).size)
             //To update the header expand icon
             notifyItemChanged(0)
         }
@@ -111,77 +110,77 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): BaseCustomExpandableViewHolder<AdapterH, AdapterI> =
+    ): BaseExpandableViewHolder<AdapterH, AdapterI> =
         DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context), if (viewType == VIEW_TYPE_HEADER) headerLayoutRes
             else itemLayoutRes, FrameLayout(parent.context), false
         ).run {
-            if (viewType == VIEW_TYPE_HEADER) BaseCustomExpandableViewHolder.CustomHeaderExpandableViewHolder(
+            if (viewType == VIEW_TYPE_HEADER) BaseExpandableViewHolder.HeaderExpandableViewHolder(
                 headerBinding = this,
                 icExpanded = getExpandedIcImageView(this),
                 bindHeaderCallback = onBindingHeader(),
                 performOperationOnHeaderViewHolderInitMethod = onHeaderViewHolderInitMethod(),
             )
-            else BaseCustomExpandableViewHolder.CustomItemExpandableViewHolder(
+            else BaseExpandableViewHolder.ItemExpandableViewHolder(
                 itemBinding = this,
                 bindItemCallback = onBindingItem(),
                 performOperationOnItemViewHolderInitMethod = onItemViewHolderInitMethod()
             )
         }
 
-    override fun getItemCount(): Int = if (isExpanded) getItems(headerObject).size + 1 else 1
+    override fun getItemCount(): Int = if (isExpanded) getItems(headerData).size + 1 else 1
 
     override fun onBindViewHolder(
-        holder: BaseCustomExpandableViewHolder<AdapterH, AdapterI>,
+        holder: BaseExpandableViewHolder<AdapterH, AdapterI>,
         position: Int
     ) {
         when (holder) {
-            is BaseCustomExpandableViewHolder.CustomHeaderExpandableViewHolder<AdapterH, AdapterI> -> {
+            is BaseExpandableViewHolder.HeaderExpandableViewHolder<AdapterH, AdapterI> -> {
                 holder.headerBindingContainer?.let {
                     onBindViewHolderHeader().invoke(
-                        it, headerObject
+                        it, headerData
                     )
                 }
                 holder.bindHeader(
-                    header = headerObject,
-                    totalItems = getItems(headerObject).size,
+                    header = headerData,
+                    totalItems = getItems(headerData).size,
                     onHeaderClickListener = onHeaderClickListener,
                     isExpanded = isExpanded,
-                    onHeaderSwipeOption = onCustomSwipeOption(),
-                    customSwipeOptionsOnHeader = customSwipeOptionsOnHeader
+                    onSwipeOption = onSwipeOption(),
+                    optionsOnHeader = optionsOnHeader
                 )
             }
-            is BaseCustomExpandableViewHolder.CustomItemExpandableViewHolder<AdapterH, AdapterI> -> {
+            is BaseExpandableViewHolder.ItemExpandableViewHolder<AdapterH, AdapterI> -> {
                 holder.itemBindingContainer?.let {
                     onBindViewHolderItem().invoke(
                         it,
-                        getItems(headerObject)[position - 1],
-                        headerObject,
+                        getItems(headerData)[position - 1],
+                        headerData,
                     )
                 }
                 holder.bindItem(
-                    item = getItems(headerObject)[position - 1],
-                    header = headerObject,
-                    onItemSwipeOption = onCustomSwipeOption(),
-                    customSwipeOptionsOnItem = customSwipeOptionsOnItem
+                    item = getItems(headerData)[position - 1],
+                    header = headerData,
+                    onSwipeOption = onSwipeOption(),
+                    optionsOnItem = optionsOnItem
                 )
             }
         }
     }
 
-    sealed class BaseCustomExpandableViewHolder<H : BaseHeaderCustomModel<H, I>, I : BaseItemCustomModel>(
+    sealed class BaseExpandableViewHolder<H : BaseHeaderModel<H, I>, I : BaseItemModel>(
         binding: ViewDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        class CustomHeaderExpandableViewHolder<H : BaseHeaderCustomModel<H, I>, I : BaseItemCustomModel>(
+        class HeaderExpandableViewHolder<H : BaseHeaderModel<H, I>, I : BaseItemModel>(
             val headerBinding: ViewDataBinding,
             icExpanded: ImageView?,
-            performOperationOnHeaderViewHolderInitMethod: OnHeaderViewHolderInitMethodCustom,
-            private val bindHeaderCallback: OnBindingHeaderCustom<H>
-        ) : BaseCustomExpandableViewHolder<H, I>(
+            performOperationOnHeaderViewHolderInitMethod: OnHeaderViewHolderInitMethod,
+            private val bindHeaderCallback: OnBindingHeader<H>
+        ) : BaseExpandableViewHolder<H, I>(
             getHeaderViewContainerWithChild(headerBinding.root, headerBinding.root.context)
         ) {
-            val headerBindingContainer: CustomHeaderCardContainerBinding? =
+            val headerBindingContainer: HeaderCardContainerBinding? =
                 DataBindingUtil.getBinding(itemView)
 
             init {
@@ -194,8 +193,8 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                 totalItems: Int,
                 isExpanded: Boolean,
                 onHeaderClickListener: View.OnClickListener,
-                onHeaderSwipeOption: OnCustomSwipeOption<H, I>,
-                customSwipeOptionsOnHeader: List<CustomSwipeOption<H>>?,
+                onSwipeOption: OnSwipeOption<H, I>,
+                optionsOnHeader: List<GenericSwipeOption>?,
             ) {
                 icExpand?.run {
                     rotation =
@@ -207,25 +206,30 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                     onHeaderClickListener
                 )
                 bindHeaderCallback.invoke(header, headerBinding)
-                setupSwipeLayoutOnHeader(header, onHeaderSwipeOption, customSwipeOptionsOnHeader)
+                setupSwipeLayoutOnHeader(header, onSwipeOption, optionsOnHeader)
             }
 
             private fun setupSwipeLayoutOnHeader(
                 header: H,
-                onHeaderSwipeOption: OnCustomSwipeOption<H, I>,
-                customSwipeOptionsOnHeader: List<CustomSwipeOption<H>>?
+                onSwipeOption: OnSwipeOption<H, I>,
+                optionsOnHeader: List<GenericSwipeOption>?
             ) {
                 headerBindingContainer?.layoutSwipeOnHeader?.linearLayoutGenericSwipeContainer?.run {
                     if (childCount == 0) {
-                        customSwipeOptionsOnHeader?.map {
+                        optionsOnHeader?.map {
                             addView(
                                 Space(context).apply {
                                     minimumWidth = SPACE_BETWEEN_OPTIONS
                                 }
                             )
                             addView(
-                                getSwipeOptionViewOnHeader(
-                                    header, it, context, onHeaderSwipeOption
+                                getOptionView(
+                                    id = header.getHeaderId(),
+                                    header = header,
+                                    item = null,
+                                    context = context,
+                                    option = it,
+                                    onSwipeOption = onSwipeOption
                                 )
                             )
                         }
@@ -239,7 +243,7 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                                 setPadding(
                                     0,
                                     it.topMargin,
-                                    0,
+                                    it.marginEnd,
                                     it.bottomMargin
                                 )
                             }
@@ -247,39 +251,17 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                     }
                 }
             }
-
-            private fun getSwipeOptionViewOnHeader(
-                header: H,
-                option: CustomSwipeOption<H>,
-                context: Context,
-                onHeaderSwipeOption: OnCustomSwipeOption<H, I>
-            ): View = getSetupImageView(context, option, header.getHeaderId()).apply {
-                setOnClickListener {
-                    onHeaderSwipeOption.invoke(option.optionId, header, null)
-                }
-                layoutParams = ViewGroup.LayoutParams(
-                    context.resources.getDimension(option.width).toInt(),
-                    context.resources.getDimension(option.height).toInt(),
-                )
-
-                setupShapeWithBackground(
-                    backgroundColorRes = option.backgroundColor,
-                    hasThickness = option.hasThickness,
-                    thicknessColorRes = option.thicknessColor,
-                    radiusDimenRes = option.radius
-                )
-            }
         }
 
-        class CustomItemExpandableViewHolder<H : BaseHeaderCustomModel<H, I>, I : BaseItemCustomModel>(
+        class ItemExpandableViewHolder<H : BaseHeaderModel<H, I>, I : BaseItemModel>(
             val itemBinding: ViewDataBinding,
-            performOperationOnItemViewHolderInitMethod: OnItemViewHolderInitMethodCustom,
-            private val bindItemCallback: OnBindingItemCustom<I, H>
-        ) : BaseCustomExpandableViewHolder<H, I>(
+            performOperationOnItemViewHolderInitMethod: OnItemViewHolderInitMethod,
+            private val bindItemCallback: OnBindingItem<I, H>
+        ) : BaseExpandableViewHolder<H, I>(
             getItemViewContainerWithChild(itemBinding.root, itemBinding.root.context)
         ) {
 
-            val itemBindingContainer: CustomItemCardContainerBinding? =
+            val itemBindingContainer: ItemCardContainerBinding? =
                 DataBindingUtil.getBinding(itemView)
 
             init {
@@ -289,27 +271,36 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
             fun bindItem(
                 item: I,
                 header: H,
-                onItemSwipeOption: OnCustomSwipeOption<H, I>,
-                customSwipeOptionsOnItem: List<CustomSwipeOption<I>>?
+                onSwipeOption: OnSwipeOption<H, I>,
+                optionsOnItem: List<GenericSwipeOption>?
             ) {
                 bindItemCallback.invoke(item, header, itemBinding)
-                setupSwipeLayoutOnItem(item, onItemSwipeOption, customSwipeOptionsOnItem)
+                setupSwipeLayoutOnItem(item, onSwipeOption, optionsOnItem)
             }
 
             private fun setupSwipeLayoutOnItem(
                 item: I,
-                onItemSwipeOption: OnCustomSwipeOption<H, I>,
-                customSwipeOptionsOnItem: List<CustomSwipeOption<I>>?
+                onItemSwipeOption: OnSwipeOption<H, I>,
+                genericSwipeOptionsOnItem: List<GenericSwipeOption>?
             ) {
                 itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.run {
                     if (childCount == 0) {
-                        customSwipeOptionsOnItem?.map {
+                        genericSwipeOptionsOnItem?.map {
                             addView(
                                 Space(context).apply {
                                     minimumWidth = SPACE_BETWEEN_OPTIONS
                                 }
                             )
-                            addView(getSwipeOptionViewOnItem(item, it, context, onItemSwipeOption))
+                            addView(
+                                getOptionView<H, I>(
+                                    id = item.getItemId(),
+                                    header = null,
+                                    item = item,
+                                    context = context,
+                                    option = it,
+                                    onSwipeOption = onItemSwipeOption
+                                )
+                            )
                         }
                         addView(
                             Space(context).apply {
@@ -318,32 +309,16 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                         )
                         layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
-                                setPadding(0, it.topMargin, 0, it.bottomMargin)
+                                setPadding(
+                                    0,
+                                    it.topMargin,
+                                    it.marginEnd,
+                                    it.bottomMargin
+                                )
                             }
                         }
                     }
                 }
-            }
-
-            private fun getSwipeOptionViewOnItem(
-                item: I,
-                option: CustomSwipeOption<I>,
-                context: Context,
-                onItemSwipeOption: OnCustomSwipeOption<H, I>
-            ): View = getSetupImageView(context, option, item.getItemId()).apply {
-                setOnClickListener {
-                    onItemSwipeOption.invoke(option.optionId, null, item)
-                }
-                layoutParams = ViewGroup.LayoutParams(
-                    context.resources.getDimension(option.width).toInt(),
-                    context.resources.getDimension(option.height).toInt()
-                )
-                setupShapeWithBackground(
-                    backgroundColorRes = option.backgroundColor,
-                    hasThickness = option.hasThickness,
-                    thicknessColorRes = option.thicknessColor,
-                    radiusDimenRes = option.radius
-                )
             }
         }
     }
@@ -353,7 +328,7 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
         private const val VIEW_TYPE_HEADER = 2
 
         private fun getItemViewContainerWithChild(child: View?, context: Context): ViewDataBinding =
-            CustomItemCardContainerBinding.inflate(
+            ItemCardContainerBinding.inflate(
                 LayoutInflater.from(context), null, false
             ).run {
                 frameLayoutCustomItemContainer.addView(child)
@@ -367,7 +342,7 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
 
         private fun getHeaderViewContainerWithChild(
             child: View?, context: Context
-        ): ViewDataBinding = CustomHeaderCardContainerBinding.inflate(
+        ): ViewDataBinding = HeaderCardContainerBinding.inflate(
             LayoutInflater.from(context), null, false
         ).run {
             frameLayoutCustomHeaderContainer.addView(child)
@@ -379,14 +354,38 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
             this
         }
 
-        private fun <T> getSetupImageView(
-            context: Context, option: CustomSwipeOption<T>, id: Long
+        private fun getSetupImageView(
+            context: Context, option: GenericSwipeOption, id: Long
         ) = ImageButton(context).run {
             setImageResource(option.icon)
             setupTintColor(option.iconColor)
             tag = id
             setId(id.toInt())
             this
+        }
+
+        private fun <H : BaseHeaderModel<H, I>, I : BaseItemModel> getOptionView(
+            id: Long,
+            header: H?,
+            item: I?,
+            option: GenericSwipeOption,
+            context: Context,
+            onSwipeOption: OnSwipeOption<H, I>
+        ): View = getSetupImageView(context, option, id).apply {
+            setOnClickListener {
+                onSwipeOption.invoke(option.optionId, header, item)
+            }
+            layoutParams = ViewGroup.LayoutParams(
+                context.resources.getDimension(option.width).toInt(),
+                context.resources.getDimension(option.height).toInt(),
+            )
+
+            setupShapeWithBackground(
+                backgroundColorRes = option.backgroundColor,
+                hasThickness = option.hasThickness,
+                thicknessColorRes = option.thicknessColor,
+                radiusDimenRes = option.radius
+            )
         }
     }
 }

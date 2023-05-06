@@ -8,31 +8,31 @@ import com.github.romullodev.generic_expandable_adapter.databinding.ItemCardStyl
 import com.github.romullodev.generic_expandable_adapter.entities.*
 import com.github.romullodev.generic_expandable_adapter.utils.*
 
-class DefaultGenericExpandableAdapterV2(
+class DefaultGenericExpandableAdapter(
     header: CardHeaderModel,
     headerLayout: Int = R.layout.header_card_style_1,
     itemLayout: Int = R.layout.item_card_style_1,
-    customSwipeOptionsOnHeader: List<CustomSwipeOption<CardHeaderModel>>,
-    customSwipeOptionsOnItem: List<CustomSwipeOption<CardItemModel>>,
-    private val onCustomSwipeOption: OnCustomSwipeOption<CardHeaderModel, CardItemModel>,
+    private val optionsOnHeader: List<GenericSwipeOption>,
+    private val optionsOnItem: List<GenericSwipeOption>,
+    private val onSwipeOption: OnSwipeOption<CardHeaderModel, CardItemModel>,
     expandAllAtFirst: Boolean,
     private val layoutStyle: LayoutStyle
-) : BaseCustomExpandableAdapter<CardHeaderModel, CardItemModel>(
+) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     data = header,
     headerLayoutRes = headerLayout,
     itemLayoutRes = itemLayout,
-    customSwipeOptionsOnHeader = customSwipeOptionsOnHeader,
-    customSwipeOptionsOnItem = customSwipeOptionsOnItem,
+    optionsOnHeader = optionsOnHeader,
+    optionsOnItem = optionsOnItem,
     expandAllAtFirst = expandAllAtFirst
 ) {
 
-    fun getOnCustomSwipeOption(): OnCustomSwipeOption<CardHeaderModel, CardItemModel> = onCustomSwipeOption
+    fun getOnCustomSwipeOption(): OnSwipeOption<CardHeaderModel, CardItemModel> = onSwipeOption
 
-    fun getCustomSwipeOptionsOnHeader(): List<CustomSwipeOption<CardHeaderModel>> = getCustomSwipeOptionsOnHeader()
+    fun getOptionsOnHeader(): List<GenericSwipeOption> = optionsOnHeader
 
-    fun getCustomSwipeOptionsOnItem(): List<CustomSwipeOption<CardItemModel>> = getCustomSwipeOptionsOnItem()
+    fun getOptionsOnItem(): List<GenericSwipeOption> = optionsOnItem
 
-    override fun onBindingItem(): OnBindingItemCustom<CardItemModel, CardHeaderModel> =
+    override fun onBindingItem(): OnBindingItem<CardItemModel, CardHeaderModel> =
         { item, header, binding ->
             (binding as? ItemCardStyle1Binding)?.run {
                 textViewItemCardStyle1Title.text = item.itemTitle
@@ -40,7 +40,7 @@ class DefaultGenericExpandableAdapterV2(
             }
         }
 
-    override fun onBindingHeader(): OnBindingHeaderCustom<CardHeaderModel> =
+    override fun onBindingHeader(): OnBindingHeader<CardHeaderModel> =
         { header, binding ->
             (binding as? HeaderCardStyle1Binding)?.run {
                 textViewCardStyle1Title.text = header.headerTitle
@@ -54,8 +54,8 @@ class DefaultGenericExpandableAdapterV2(
             imageViewArrowDown
         } ?: throw Exception("error on perform cast do header binding")
 
-    override fun onCustomSwipeOption(): OnCustomSwipeOption<CardHeaderModel, CardItemModel> =
-        onCustomSwipeOption
+    override fun onSwipeOption(): OnSwipeOption<CardHeaderModel, CardItemModel> =
+        onSwipeOption
 
     private fun setupHeaderStyle(
         binding: HeaderCardStyle1Binding,

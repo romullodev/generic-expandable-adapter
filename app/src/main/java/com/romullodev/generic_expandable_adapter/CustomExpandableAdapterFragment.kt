@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ConcatAdapter
-import com.github.romullodev.generic_expandable_adapter.base.CustomExpandableAdapterAnimation
-import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOption
-import com.github.romullodev.generic_expandable_adapter.utils.setupCustomExpandableAdapterV2
-import com.romullodev.generic_expandable_adapter.adapter.MyCustomExpandableAdapterV2
+import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapterAnimation
+import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
+import com.github.romullodev.generic_expandable_adapter.utils.setupGenericExpandableAdapter
+import com.romullodev.generic_expandable_adapter.adapter.MyExpandableAdapterV2
 import com.romullodev.generic_expandable_adapter.databinding.*
 import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
@@ -42,8 +42,8 @@ class CustomExpandableAdapterFragment : Fragment() {
 
     private fun setupCustomAdapterByAdapterV2() {
         MockData.getCustomHeader().map {
-            MyCustomExpandableAdapterV2(
-                onCustomSwipeOption = onCustomSwipeOption(),
+            MyExpandableAdapterV2(
+                onSwipeOption = onCustomSwipeOption(),
                 header = it,
             )
         }.let {
@@ -53,22 +53,22 @@ class CustomExpandableAdapterFragment : Fragment() {
                     ConcatAdapter(this, it).also {
                         binding.recyclerViewExpandableAdapterDemo.adapter = it
                         binding.recyclerViewExpandableAdapterDemo.itemAnimator =
-                            CustomExpandableAdapterAnimation()
+                            BaseExpandableAdapterAnimation()
                     }
                 }
         }
 
-        MyCustomExpandableAdapterV2
+        MyExpandableAdapterV2
     }
 
     private fun setupCustomAdapterByExtensionV2() {
-        binding.recyclerViewExpandableAdapterDemo.setupCustomExpandableAdapterV2(
+        binding.recyclerViewExpandableAdapterDemo.setupGenericExpandableAdapter(
             onBindingHeader = onBindingHeader(),
             onBindingItem = onBindingItem(),
             getExpandedIcImageView = { getExpandedIcImageView(it) },
-            onCustomSwipeOption = onCustomSwipeOption(),
-            customSwipeOptionsOnHeader = getSwipeOptionsOnHeader(),
-            customSwipeOptionsOnItem = getSwipeOptionsOnItem(),
+            onSwipeOption = onCustomSwipeOption(),
+            optionsOnHeader = getSwipeOptionsOnHeader(),
+            optionsOnItem = getSwipeOptionsOnItem(),
             dataHeaders = MockData.getCustomHeader(),
             headerLayout = R.layout.my_custom_header,
             itemLayout = R.layout.my_custom_item,
@@ -115,9 +115,9 @@ class CustomExpandableAdapterFragment : Fragment() {
             }
         }
 
-    private fun getSwipeOptionsOnHeader(): List<CustomSwipeOption<MyCustomHeaderModel>> =
+    private fun getSwipeOptionsOnHeader(): List<GenericSwipeOption> =
         listOf(
-            CustomSwipeOption(
+            GenericSwipeOption(
                 icon = R.drawable.ic_delete,
                 iconColor = R.color.white,
                 backgroundColor = R.color.holo_red_dark,
@@ -126,7 +126,7 @@ class CustomExpandableAdapterFragment : Fragment() {
                 height = R.dimen.my_custom_height_header,
                 radius = R.dimen.my_custom_radius_option,
             ),
-            CustomSwipeOption(
+            GenericSwipeOption(
                 icon = R.drawable.ic_edit,
                 iconColor = R.color.white,
                 backgroundColor = R.color.darker_gray,
@@ -137,9 +137,9 @@ class CustomExpandableAdapterFragment : Fragment() {
             )
         )
 
-    private fun getSwipeOptionsOnItem(): List<CustomSwipeOption<MyCustomItemModel>> =
+    private fun getSwipeOptionsOnItem(): List<GenericSwipeOption> =
         listOf(
-            CustomSwipeOption(
+            GenericSwipeOption(
                 icon = R.drawable.ic_delete,
                 iconColor = R.color.white,
                 backgroundColor = R.color.holo_red_dark,
