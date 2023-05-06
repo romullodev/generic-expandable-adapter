@@ -26,6 +26,12 @@ class DefaultGenericExpandableAdapterV2(
     expandAllAtFirst = expandAllAtFirst
 ) {
 
+    fun getOnCustomSwipeOption(): OnCustomSwipeOption<CardHeaderModel, CardItemModel> = onCustomSwipeOption
+
+    fun getCustomSwipeOptionsOnHeader(): List<CustomSwipeOption<CardHeaderModel>> = getCustomSwipeOptionsOnHeader()
+
+    fun getCustomSwipeOptionsOnItem(): List<CustomSwipeOption<CardItemModel>> = getCustomSwipeOptionsOnItem()
+
     override fun onBindingItem(): OnBindingItemCustom<CardItemModel, CardHeaderModel> =
         { item, header, binding ->
             (binding as? ItemCardStyle1Binding)?.run {

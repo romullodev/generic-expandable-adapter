@@ -7,7 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/my_custom_height_item"
         android:background="@color/white"
-        android:paddingHorizontal="@dimen/padding_large">
+        android:layout_marginEnd="@dimen/margin_xsmall"
+        android:layout_marginBottom="@dimen/margin_xxsmall"
+        android:layout_marginStart="@dimen/margin_large">
 
         <TextView
             android:id="@+id/textViewCustomItemTitle"

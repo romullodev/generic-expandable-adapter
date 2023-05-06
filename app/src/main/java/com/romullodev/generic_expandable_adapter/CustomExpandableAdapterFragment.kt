@@ -8,8 +8,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ConcatAdapter
+import com.github.romullodev.generic_expandable_adapter.base.CustomExpandableAdapterAnimation
 import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOption
 import com.github.romullodev.generic_expandable_adapter.utils.setupCustomExpandableAdapterV2
+import com.romullodev.generic_expandable_adapter.adapter.MyCustomExpandableAdapterV2
 import com.romullodev.generic_expandable_adapter.databinding.*
 import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
@@ -34,7 +37,28 @@ class CustomExpandableAdapterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupCustomAdapterByExtensionV2()
-        //setupCustomAdapterByAdapter()
+        //setupCustomAdapterByAdapterV2()
+    }
+
+    private fun setupCustomAdapterByAdapterV2() {
+        MockData.getCustomHeader().map {
+            MyCustomExpandableAdapterV2(
+                onCustomSwipeOption = onCustomSwipeOption(),
+                header = it,
+            )
+        }.let {
+            ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .build().run {
+                    ConcatAdapter(this, it).also {
+                        binding.recyclerViewExpandableAdapterDemo.adapter = it
+                        binding.recyclerViewExpandableAdapterDemo.itemAnimator =
+                            CustomExpandableAdapterAnimation()
+                    }
+                }
+        }
+
+        MyCustomExpandableAdapterV2
     }
 
     private fun setupCustomAdapterByExtensionV2() {

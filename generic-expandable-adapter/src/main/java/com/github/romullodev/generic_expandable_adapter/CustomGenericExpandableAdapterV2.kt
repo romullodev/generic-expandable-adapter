@@ -9,7 +9,7 @@ import com.github.romullodev.generic_expandable_adapter.entities.CustomSwipeOpti
 
 class CustomGenericExpandableAdapterV2<AdapterH: BaseHeaderCustomModel<AdapterH, AdapterI> , AdapterI: BaseItemCustomModel>(
     private val onBindingItem: OnBindingItemCustom<AdapterI, AdapterH>,
-    private val onBindingHeader: HeaderBindingCallback<AdapterH>,
+    private val onBindingHeader: OnBindingHeaderCustom<AdapterH>,
     private val getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
     private val onCustomSwipeOption: OnCustomSwipeOption<AdapterH, AdapterI>,
     customSwipeOptionsOnHeader: List<CustomSwipeOption<AdapterH>>,

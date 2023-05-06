@@ -1,6 +1,7 @@
 package com.github.romullodev.generic_expandable_adapter.base
 
 import android.content.Context
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Space
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -217,15 +219,30 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                     if (childCount == 0) {
                         customSwipeOptionsOnHeader?.map {
                             addView(
-                                getSwipeOptionViewOnHeader(
-                                    header, it, context, onHeaderSwipeOption
-                                )
-                            )
-                            addView(
                                 Space(context).apply {
                                     minimumWidth = SPACE_BETWEEN_OPTIONS
                                 }
                             )
+                            addView(
+                                getSwipeOptionViewOnHeader(
+                                    header, it, context, onHeaderSwipeOption
+                                )
+                            )
+                        }
+                        addView(
+                            Space(context).apply {
+                                minimumWidth = SPACE_BETWEEN_OPTIONS
+                            }
+                        )
+                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                            (headerBindingContainer.frameLayoutCustomHeaderContainer.children.first().layoutParams as MarginLayoutParams).let {
+                                setPadding(
+                                    0,
+                                    it.topMargin,
+                                    0,
+                                    it.bottomMargin
+                                )
+                            }
                         }
                     }
                 }
@@ -287,12 +304,22 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
                 itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.run {
                     if (childCount == 0) {
                         customSwipeOptionsOnItem?.map {
-                            addView(getSwipeOptionViewOnItem(item, it, context, onItemSwipeOption))
                             addView(
                                 Space(context).apply {
                                     minimumWidth = SPACE_BETWEEN_OPTIONS
                                 }
                             )
+                            addView(getSwipeOptionViewOnItem(item, it, context, onItemSwipeOption))
+                        }
+                        addView(
+                            Space(context).apply {
+                                minimumWidth = SPACE_BETWEEN_OPTIONS
+                            }
+                        )
+                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                            (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
+                                setPadding(0, it.topMargin, 0, it.bottomMargin)
+                            }
                         }
                     }
                 }
@@ -359,11 +386,7 @@ abstract class BaseCustomExpandableAdapter<AdapterH : BaseHeaderCustomModel<Adap
             setupTintColor(option.iconColor)
             tag = id
             setId(id.toInt())
-            this.apply {
-                    layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                    marginEnd = 10
-                }
-            }
+            this
         }
     }
 }
