@@ -3,8 +3,8 @@ package com.github.romullodev.generic_expandable_adapter.util
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
-import com.github.romullodev.generic_expandable_adapter.utils.addNewHeaderModel
-import com.github.romullodev.generic_expandable_adapter.utils.updateDefaultExpandableAdapterHeaderAt
+import com.github.romullodev.generic_expandable_adapter.utils.addHeaderDefaultExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.utils.updateHeaderDefaultExpandableAdapterHeader
 
 fun RecyclerView.updateMeasure() {
     val screenSize = 2000
@@ -16,11 +16,11 @@ fun RecyclerView.updateMeasure() {
 }
 
 fun RecyclerView.updateHeaderAt(position: Int, data: CardHeaderModel) {
-    updateDefaultExpandableAdapterHeaderAt(position, data)
+    updateHeaderDefaultExpandableAdapterHeader(position, data)
     updateMeasure()
 }
 
 fun RecyclerView.addHeader(data: CardHeaderModel) {
-    addNewHeaderModel(data, true)
+    addHeaderDefaultExpandableAdapter(data, true)
     updateMeasure()
 }

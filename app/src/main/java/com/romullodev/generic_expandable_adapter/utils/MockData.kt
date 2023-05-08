@@ -235,10 +235,6 @@ object MockData {
         CardHeaderModel(
             id = 48L,
             headerTitle = "Rock",
-            headerSubtitle = context.getString(
-                R.string.total_bands,
-                getRockBands().size.toString()
-            ),
             items = getRockBands(),
             cardHeaderStyle = CardHeaderStyle(
                 backgroundColorItems = R.color.rock_color

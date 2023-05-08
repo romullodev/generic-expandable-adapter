@@ -1,6 +1,8 @@
 package com.github.romullodev.generic_expandable_adapter.entities
 
-interface BaseHeaderModel<H, I> {
+interface BaseHeaderModel<H, I>: BaseGenericModel {
     fun getCustomItems(): List<I>
-    fun getHeaderId(): Long
+    override fun getModelId(): Long
+    override fun isEqualTo(model: Any): Boolean
+    fun getHeaderWithUpdatedItems(newItems: List<I>): H
 }

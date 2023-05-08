@@ -6,5 +6,6 @@ data class MyCustomItemModel(
     val myCustomItemId: Long,
     val myCustomItemName: String
 ) : BaseItemModel {
-    override fun getItemId(): Long = myCustomItemId
+    override fun getModelId(): Long = myCustomItemId
+    override fun isEqualTo(model: Any): Boolean = this == (model as MyCustomItemModel)
 }

@@ -5,5 +5,6 @@ data class CardItemModel(
     val itemTitle: String = String(),
     val cardItemStyle: CardItemStyle = CardItemStyle()
 ) : BaseItemModel {
-    override fun getItemId(): Long = id
+    override fun getModelId(): Long = id
+    override fun isEqualTo(model: Any): Boolean = this == (model as CardItemModel)
 }

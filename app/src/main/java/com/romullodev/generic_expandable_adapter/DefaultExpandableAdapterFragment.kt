@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.github.romullodev.generic_expandable_adapter.entities.*
+import com.github.romullodev.generic_expandable_adapter.utils.removeHeaderDefaultExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.utils.removeItemDefaultExpandableAdapter
 import com.github.romullodev.generic_expandable_adapter.utils.setupDefaultExpandableAdapter
 import com.romullodev.generic_expandable_adapter.databinding.FragmentDefaultExpandableAdapterBinding
 import com.romullodev.generic_expandable_adapter.utils.MockData
@@ -32,39 +34,48 @@ class DefaultExpandableAdapterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAdapterByDefaultV2()
+        setupDefaultExpandableAdapter()
     }
 
-    private fun setupAdapterByDefaultV2() {
+    private fun setupDefaultExpandableAdapter() {
         binding.recyclerViewExpandableAdapterDemo.setupDefaultExpandableAdapter(
             dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = true),
-            optionsOnHeader = getDefaultSwipeOptionsOnHeader(),
-            optionsOnItem = getDefaultSwipeOptionsOnItem(),
-            layoutStyle = LayoutStyle(radius = R.dimen.my_custom_radius)
-        ) { optionId, cardHeaderModel, cardItemModel ->
+            optionsOnHeader = getDefaultOptionsOnHeader(),
+            optionsOnItem = getDefaultOptionsOnItem(),
+            layoutStyle = LayoutStyle.DEFAULT
+        ) { optionId, model->
             when (optionId) {
-                HEADER_SWIPE_DELETE_ID ->
-                    Toast.makeText(
-                        requireContext(),
-                        "${cardHeaderModel?.headerTitle} deleted", Toast.LENGTH_LONG
-                    ).show()
+                HEADER_SWIPE_DELETE_ID -> {
+                    binding.recyclerViewExpandableAdapterDemo.removeHeaderDefaultExpandableAdapter(header = model as CardHeaderModel)
+                        .takeIf { it }?.let {
+                        Toast.makeText(
+                            requireContext(),
+                            "${model.headerTitle} deleted", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
                 HEADER_SWIPE_EDIT_ID ->
                     Toast.makeText(
                         requireContext(),
-                        "${cardHeaderModel?.headerTitle} edited",
+                        "${(model as CardHeaderModel).headerTitle} edited",
                         Toast.LENGTH_LONG
                     ).show()
-                ITEM_SWIPE_DELETE_ID ->
-                    Toast.makeText(
-                        requireContext(),
-                        "${cardItemModel?.itemTitle} deleted",
-                        Toast.LENGTH_LONG
-                    ).show()
+                ITEM_SWIPE_DELETE_ID -> {
+                    binding.recyclerViewExpandableAdapterDemo.removeItemDefaultExpandableAdapter(item = model as CardItemModel)
+                        .takeIf { it }?.let {
+                        Toast.makeText(
+                            requireContext(),
+                            "${model.itemTitle} deleted",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
 
-    private fun getDefaultSwipeOptionsOnHeader(): List<DefaultSwipeOption> =
+    private fun getDefaultOptionsOnHeader(): List<DefaultSwipeOption> =
         listOf(
             DefaultSwipeOption(
                 icon = R.drawable.ic_delete,
@@ -82,7 +93,7 @@ class DefaultExpandableAdapterFragment : Fragment() {
             )
         )
 
-    private fun getDefaultSwipeOptionsOnItem(): List<DefaultSwipeOption> = listOf(
+    private fun getDefaultOptionsOnItem(): List<DefaultSwipeOption> = listOf(
         DefaultSwipeOption(
             icon = R.drawable.ic_delete,
             iconColor = R.color.white,

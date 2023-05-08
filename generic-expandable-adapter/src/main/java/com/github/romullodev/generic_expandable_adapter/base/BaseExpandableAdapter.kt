@@ -35,7 +35,7 @@ typealias OnHeaderViewHolderInitMethod = (headerBinding: ViewDataBinding) -> Uni
 typealias OnItemViewHolderInitMethod = (itemBinding: ViewDataBinding) -> Unit
 typealias OnBindViewHolderHeader<H> = (headerBinding: ViewDataBinding, header: H) -> Unit
 typealias OnBindViewHolderItem<I, H> = (itemBinding: ViewDataBinding, item: I, header: H) -> Unit
-typealias OnSwipeOption<H, I> = (optionId: Int, header: H?, item: I?) -> Unit
+typealias OnSwipeOption = (optionId: Int, model: Any) -> Unit
 
 private const val SPACE_BETWEEN_OPTIONS = 5
 
@@ -50,12 +50,45 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
     private val viewBinderHelper: ViewBinder = ViewBinder()
 
-    private var headerData = data
+    private var headerData: AdapterH = data
+    private val deletedItems: List<AdapterI> = data.getCustomItems()
 
-    internal fun updateData(data: AdapterH) {
+
+    internal fun updateItem(itemToUpdate: AdapterI): Boolean =
+        headerData.getCustomItems().let { items ->
+            items.find {
+                it.getModelId() == itemToUpdate.getModelId()
+            }?.let {
+                headerData = headerData.getHeaderWithUpdatedItems(items - it + itemToUpdate)
+                notifyItemRangeChanged(
+                    0,
+                    headerData.getCustomItems().size
+                )
+                true
+            } ?: false
+        }
+
+    internal fun updateHeader(data: AdapterH) {
         headerData = data
         notifyDataSetChanged()
     }
+
+    internal fun isEqualTo(data: AdapterH): Boolean = headerData.isEqualTo(data)
+
+    internal fun removeItem(item: AdapterI): Boolean =
+        headerData.getCustomItems().run {
+            find { it.isEqualTo(item) }?.let {
+                headerData = headerData.getHeaderWithUpdatedItems(this - it)
+                notifyItemRemoved(
+                    indexOf(item) + 1
+                )
+                notifyItemRangeChanged(
+                    0,
+                    headerData.getCustomItems().size
+                )
+                true
+            } ?: false
+        }
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
@@ -66,7 +99,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
     abstract fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView?
 
-    abstract fun onSwipeOption(): OnSwipeOption<AdapterH, AdapterI>
+    abstract fun onSwipeOption(): OnSwipeOption
 
     open fun onHeaderViewHolderInitMethod(): OnHeaderViewHolderInitMethod = { _ -> }
 
@@ -77,7 +110,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
             optionsOnHeader?.let {
                 viewBinderHelper.bind(
                     (headerBinding as HeaderCardContainerBinding).swipeRevealLayoutContainer,
-                    header.getHeaderId().toString()
+                    header.getModelId().toString()
                 )
             }
         }
@@ -87,20 +120,20 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
             optionsOnItem?.let {
                 viewBinderHelper.bind(
                     (itemBinding as ItemCardContainerBinding).swipeRevealLayoutContainer,
-                    item.getItemId().toString()
+                    item.getModelId().toString()
                 )
             }
         }
 
-    private fun getItems(headerObject: AdapterH): List<AdapterI> = headerObject.getCustomItems()
+    private fun getItems(): List<AdapterI> = headerData.getCustomItems()
 
     private var isExpanded: Boolean by Delegates.observable(expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
         if (newExpandedValue) {
-            notifyItemRangeInserted(1, getItems(headerData).size)
+            notifyItemRangeInserted(1, getItems().size)
             //To update the header expand icon
             notifyItemChanged(0)
         } else {
-            notifyItemRangeRemoved(1, getItems(headerData).size)
+            notifyItemRangeRemoved(1, getItems().size)
             //To update the header expand icon
             notifyItemChanged(0)
         }
@@ -112,8 +145,11 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
         parent: ViewGroup, viewType: Int
     ): BaseExpandableViewHolder<AdapterH, AdapterI> =
         DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context), if (viewType == VIEW_TYPE_HEADER) headerLayoutRes
-            else itemLayoutRes, FrameLayout(parent.context), false
+            LayoutInflater.from(parent.context),
+            if (viewType == VIEW_TYPE_HEADER) headerLayoutRes
+            else itemLayoutRes,
+            FrameLayout(parent.context),
+            false
         ).run {
             if (viewType == VIEW_TYPE_HEADER) BaseExpandableViewHolder.HeaderExpandableViewHolder(
                 headerBinding = this,
@@ -128,7 +164,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
             )
         }
 
-    override fun getItemCount(): Int = if (isExpanded) getItems(headerData).size + 1 else 1
+    override fun getItemCount(): Int = if (isExpanded) getItems().size + 1 else 1
 
     override fun onBindViewHolder(
         holder: BaseExpandableViewHolder<AdapterH, AdapterI>,
@@ -141,9 +177,10 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                         it, headerData
                     )
                 }
+
                 holder.bindHeader(
                     header = headerData,
-                    totalItems = getItems(headerData).size,
+                    totalItems = getItems().size,
                     onHeaderClickListener = onHeaderClickListener,
                     isExpanded = isExpanded,
                     onSwipeOption = onSwipeOption(),
@@ -154,15 +191,15 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                 holder.itemBindingContainer?.let {
                     onBindViewHolderItem().invoke(
                         it,
-                        getItems(headerData)[position - 1],
+                        getItems()[position - 1],
                         headerData,
                     )
                 }
                 holder.bindItem(
-                    item = getItems(headerData)[position - 1],
+                    item = getItems()[position - 1],
                     header = headerData,
                     onSwipeOption = onSwipeOption(),
-                    optionsOnItem = optionsOnItem
+                    optionsOnItem = optionsOnItem,
                 )
             }
         }
@@ -193,7 +230,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                 totalItems: Int,
                 isExpanded: Boolean,
                 onHeaderClickListener: View.OnClickListener,
-                onSwipeOption: OnSwipeOption<H, I>,
+                onSwipeOption: OnSwipeOption,
                 optionsOnHeader: List<GenericSwipeOption>?,
             ) {
                 icExpand?.run {
@@ -211,44 +248,43 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
             private fun setupSwipeLayoutOnHeader(
                 header: H,
-                onSwipeOption: OnSwipeOption<H, I>,
+                onSwipeOption: OnSwipeOption,
                 optionsOnHeader: List<GenericSwipeOption>?
             ) {
                 headerBindingContainer?.layoutSwipeOnHeader?.linearLayoutGenericSwipeContainer?.run {
-                    if (childCount == 0) {
-                        optionsOnHeader?.map {
-                            addView(
-                                Space(context).apply {
-                                    minimumWidth = SPACE_BETWEEN_OPTIONS
-                                }
-                            )
-                            addView(
-                                getOptionView(
-                                    id = header.getHeaderId(),
-                                    header = header,
-                                    item = null,
-                                    context = context,
-                                    option = it,
-                                    onSwipeOption = onSwipeOption
-                                )
-                            )
-                        }
+                    removeAllViews()
+                    optionsOnHeader?.map {
                         addView(
                             Space(context).apply {
                                 minimumWidth = SPACE_BETWEEN_OPTIONS
                             }
                         )
-                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                            (headerBindingContainer.frameLayoutCustomHeaderContainer.children.first().layoutParams as MarginLayoutParams).let {
-                                setPadding(
-                                    0,
-                                    it.topMargin,
-                                    it.marginEnd,
-                                    it.bottomMargin
-                                )
-                            }
+                        addView(
+                            getOptionView(
+                                id = header.getModelId(),
+                                model = header,
+                                context = context,
+                                option = it,
+                                onSwipeOption = onSwipeOption
+                            )
+                        )
+                    }
+                    addView(
+                        Space(context).apply {
+                            minimumWidth = SPACE_BETWEEN_OPTIONS
+                        }
+                    )
+                    layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                        (headerBindingContainer.frameLayoutCustomHeaderContainer.children.first().layoutParams as MarginLayoutParams).let {
+                            setPadding(
+                                0,
+                                it.topMargin,
+                                it.marginEnd,
+                                it.bottomMargin
+                            )
                         }
                     }
+
                 }
             }
         }
@@ -271,7 +307,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
             fun bindItem(
                 item: I,
                 header: H,
-                onSwipeOption: OnSwipeOption<H, I>,
+                onSwipeOption: OnSwipeOption,
                 optionsOnItem: List<GenericSwipeOption>?
             ) {
                 bindItemCallback.invoke(item, header, itemBinding)
@@ -280,42 +316,40 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
             private fun setupSwipeLayoutOnItem(
                 item: I,
-                onItemSwipeOption: OnSwipeOption<H, I>,
+                onItemSwipeOption: OnSwipeOption,
                 genericSwipeOptionsOnItem: List<GenericSwipeOption>?
             ) {
                 itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.run {
-                    if (childCount == 0) {
-                        genericSwipeOptionsOnItem?.map {
-                            addView(
-                                Space(context).apply {
-                                    minimumWidth = SPACE_BETWEEN_OPTIONS
-                                }
-                            )
-                            addView(
-                                getOptionView<H, I>(
-                                    id = item.getItemId(),
-                                    header = null,
-                                    item = item,
-                                    context = context,
-                                    option = it,
-                                    onSwipeOption = onItemSwipeOption
-                                )
-                            )
-                        }
+                    removeAllViews()
+                    genericSwipeOptionsOnItem?.map {
                         addView(
                             Space(context).apply {
                                 minimumWidth = SPACE_BETWEEN_OPTIONS
                             }
                         )
-                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                            (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
-                                setPadding(
-                                    0,
-                                    it.topMargin,
-                                    it.marginEnd,
-                                    it.bottomMargin
-                                )
-                            }
+                        addView(
+                            getOptionView(
+                                id = item.getModelId(),
+                                model = item,
+                                context = context,
+                                option = it,
+                                onSwipeOption = onItemSwipeOption
+                            )
+                        )
+                    }
+                    addView(
+                        Space(context).apply {
+                            minimumWidth = SPACE_BETWEEN_OPTIONS
+                        }
+                    )
+                    layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                        (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
+                            setPadding(
+                                0,
+                                it.topMargin,
+                                it.marginEnd,
+                                it.bottomMargin
+                            )
                         }
                     }
                 }
@@ -327,7 +361,10 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
         private const val VIEW_TYPE_ITEM = 1
         private const val VIEW_TYPE_HEADER = 2
 
-        private fun getItemViewContainerWithChild(child: View?, context: Context): ViewDataBinding =
+        private fun getItemViewContainerWithChild(
+            child: View?,
+            context: Context
+        ): ViewDataBinding =
             ItemCardContainerBinding.inflate(
                 LayoutInflater.from(context), null, false
             ).run {
@@ -364,16 +401,15 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
             this
         }
 
-        private fun <H : BaseHeaderModel<H, I>, I : BaseItemModel> getOptionView(
+        private fun getOptionView(
             id: Long,
-            header: H?,
-            item: I?,
+            model: Any,
             option: GenericSwipeOption,
             context: Context,
-            onSwipeOption: OnSwipeOption<H, I>
+            onSwipeOption: OnSwipeOption
         ): View = getSetupImageView(context, option, id).apply {
             setOnClickListener {
-                onSwipeOption.invoke(option.optionId, header, item)
+                onSwipeOption.invoke(option.optionId, model)
             }
             layoutParams = ViewGroup.LayoutParams(
                 context.resources.getDimension(option.width).toInt(),

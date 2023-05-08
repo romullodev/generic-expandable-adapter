@@ -10,6 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ConcatAdapter
 import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapterAnimation
+import com.github.romullodev.generic_expandable_adapter.base.OnSwipeOption
 import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
 import com.github.romullodev.generic_expandable_adapter.utils.setupGenericExpandableAdapter
 import com.romullodev.generic_expandable_adapter.adapter.MyExpandableAdapterV2
@@ -36,11 +37,11 @@ class CustomExpandableAdapterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupCustomAdapterByExtensionV2()
-        //setupCustomAdapterByAdapterV2()
+        //setupCustomAdapterByExtension()
+        setupCustomAdapterByAdapter()
     }
 
-    private fun setupCustomAdapterByAdapterV2() {
+    private fun setupCustomAdapterByAdapter() {
         MockData.getCustomHeader().map {
             MyExpandableAdapterV2(
                 onSwipeOption = onCustomSwipeOption(),
@@ -48,7 +49,6 @@ class CustomExpandableAdapterFragment : Fragment() {
             )
         }.let {
             ConcatAdapter.Config.Builder()
-                .setIsolateViewTypes(true)
                 .build().run {
                     ConcatAdapter(this, it).also {
                         binding.recyclerViewExpandableAdapterDemo.adapter = it
@@ -57,11 +57,9 @@ class CustomExpandableAdapterFragment : Fragment() {
                     }
                 }
         }
-
-        MyExpandableAdapterV2
     }
 
-    private fun setupCustomAdapterByExtensionV2() {
+    private fun setupCustomAdapterByExtension() {
         binding.recyclerViewExpandableAdapterDemo.setupGenericExpandableAdapter(
             onBindingHeader = onBindingHeader(),
             onBindingItem = onBindingItem(),
@@ -92,24 +90,24 @@ class CustomExpandableAdapterFragment : Fragment() {
             }
         }
 
-    private fun onCustomSwipeOption(): (optionId: Int, header: MyCustomHeaderModel?, item: MyCustomItemModel?) -> Unit =
-        { optionId, header, item ->
+    private fun onCustomSwipeOption(): OnSwipeOption =
+        { optionId, model ->
             when (optionId) {
                 MockData.HEADER_SWIPE_DELETE_ID ->
                     Toast.makeText(
                         requireContext(),
-                        "${header?.myCustomHeaderName} deleted", Toast.LENGTH_LONG
+                        "${(model as MyCustomHeaderModel).myCustomHeaderName} deleted", Toast.LENGTH_LONG
                     ).show()
                 MockData.HEADER_SWIPE_EDIT_ID ->
                     Toast.makeText(
                         requireContext(),
-                        "${header?.myCustomHeaderName} edited",
+                        "${(model as MyCustomHeaderModel).myCustomHeaderName} edited",
                         Toast.LENGTH_LONG
                     ).show()
                 MockData.ITEM_SWIPE_DELETE_ID ->
                     Toast.makeText(
                         requireContext(),
-                        "${item?.myCustomItemName} deleted",
+                        "${(model as MyCustomItemModel).myCustomItemName} deleted",
                         Toast.LENGTH_LONG
                     ).show()
             }

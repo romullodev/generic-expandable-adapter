@@ -14,7 +14,7 @@ class DefaultGenericExpandableAdapter(
     itemLayout: Int = R.layout.item_card_style_1,
     private val optionsOnHeader: List<GenericSwipeOption>,
     private val optionsOnItem: List<GenericSwipeOption>,
-    private val onSwipeOption: OnSwipeOption<CardHeaderModel, CardItemModel>,
+    private val onSwipeOption: OnSwipeOption,
     expandAllAtFirst: Boolean,
     private val layoutStyle: LayoutStyle
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
@@ -26,7 +26,7 @@ class DefaultGenericExpandableAdapter(
     expandAllAtFirst = expandAllAtFirst
 ) {
 
-    fun getOnCustomSwipeOption(): OnSwipeOption<CardHeaderModel, CardItemModel> = onSwipeOption
+    fun getOnCustomSwipeOption(): OnSwipeOption = onSwipeOption
 
     fun getOptionsOnHeader(): List<GenericSwipeOption> = optionsOnHeader
 
@@ -40,6 +40,7 @@ class DefaultGenericExpandableAdapter(
             }
         }
 
+    // TODO: fornecer a opcao do usuario sobrescrever esse metodo
     override fun onBindingHeader(): OnBindingHeader<CardHeaderModel> =
         { header, binding ->
             (binding as? HeaderCardStyle1Binding)?.run {
@@ -54,8 +55,7 @@ class DefaultGenericExpandableAdapter(
             imageViewArrowDown
         } ?: throw Exception("error on perform cast do header binding")
 
-    override fun onSwipeOption(): OnSwipeOption<CardHeaderModel, CardItemModel> =
-        onSwipeOption
+    override fun onSwipeOption(): OnSwipeOption = onSwipeOption
 
     private fun setupHeaderStyle(
         binding: HeaderCardStyle1Binding,

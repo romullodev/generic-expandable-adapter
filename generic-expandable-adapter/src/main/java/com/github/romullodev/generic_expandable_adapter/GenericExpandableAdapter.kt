@@ -11,7 +11,7 @@ class GenericExpandableAdapter<AdapterH: BaseHeaderModel<AdapterH, AdapterI> , A
     private val onBindingItem: OnBindingItem<AdapterI, AdapterH>,
     private val onBindingHeader: OnBindingHeader<AdapterH>,
     private val getExpandedIcImageView: (headerBinding: ViewDataBinding) -> ImageView?,
-    private val onSwipeOption: OnSwipeOption<AdapterH, AdapterI>,
+    private val onSwipeOption: OnSwipeOption,
     optionsOnHeader: List<GenericSwipeOption>,
     optionsOnItem: List<GenericSwipeOption>,
     header: AdapterH,
@@ -33,5 +33,5 @@ class GenericExpandableAdapter<AdapterH: BaseHeaderModel<AdapterH, AdapterI> , A
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         getExpandedIcImageView.invoke(headerBinding)
 
-    override fun onSwipeOption(): OnSwipeOption<AdapterH, AdapterI> = onSwipeOption
+    override fun onSwipeOption(): OnSwipeOption = onSwipeOption
 }

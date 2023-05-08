@@ -15,7 +15,7 @@ import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
 
 class MyExpandableAdapterV2(
     header: MyCustomHeaderModel,
-    private val onSwipeOption: OnSwipeOption<MyCustomHeaderModel, MyCustomItemModel>
+    private val onSwipeOption: OnSwipeOption
 ) : BaseExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
     data = header,
     headerLayoutRes = R.layout.my_custom_header,
@@ -41,7 +41,7 @@ class MyExpandableAdapterV2(
     override fun getExpandedIcImageView(headerBinding: ViewDataBinding): ImageView? =
         (headerBinding as? MyCustomHeaderBinding)?.imageViewArrowDown
 
-    override fun onSwipeOption(): OnSwipeOption<MyCustomHeaderModel, MyCustomItemModel> =
+    override fun onSwipeOption(): OnSwipeOption =
         onSwipeOption
 
     companion object {
