@@ -40,7 +40,6 @@ class DefaultExpandableAdapterFragment : Fragment() {
             dataHeaders = MockData.getMusics(requireContext(), hasBackgroundImg = true),
             optionsOnHeader = getDefaultOptionsOnHeader(),
             optionsOnItem = getDefaultOptionsOnItem(),
-            layoutStyle = LayoutStyle.DEFAULT
         ) { optionId, model->
             when (optionId) {
                 HEADER_SWIPE_DELETE_ID -> {

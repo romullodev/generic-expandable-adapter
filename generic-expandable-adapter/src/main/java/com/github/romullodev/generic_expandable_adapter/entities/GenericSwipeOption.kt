@@ -13,6 +13,6 @@ data class GenericSwipeOption(
     @DimenRes val width: Int,
     @DimenRes val height: Int,
     @DimenRes val radius: Int,
-    val hasThickness: Boolean = false,
-    @ColorRes val thicknessColor: Int = R.color.black
+    val hasThickness: Boolean = true,
+    @ColorRes val thicknessColor: Int = R.color.white
 )

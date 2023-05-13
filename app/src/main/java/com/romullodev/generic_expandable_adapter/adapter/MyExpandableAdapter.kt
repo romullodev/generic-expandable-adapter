@@ -6,6 +6,7 @@ import com.github.romullodev.generic_expandable_adapter.base.*
 import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderModel
 import com.github.romullodev.generic_expandable_adapter.entities.BaseItemModel
 import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
+import com.github.romullodev.generic_expandable_adapter.entities.LayoutOptions
 import com.romullodev.generic_expandable_adapter.R
 import com.romullodev.generic_expandable_adapter.databinding.MyCustomHeaderBinding
 import com.romullodev.generic_expandable_adapter.databinding.MyCustomItemBinding
@@ -18,12 +19,13 @@ class MyExpandableAdapter(
     private val onSwipeOption: OnSwipeOption
 ) : BaseExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
     data = header,
-    headerLayoutRes = R.layout.my_custom_header,
-    itemLayoutRes = R.layout.my_custom_item,
-    expandAllAtFirst = false,
+    layoutOptions = LayoutOptions.DEFAULT,
     optionsOnHeader = getCustomSwipeOptionsOnHeader(),
     optionsOnItem = getCustomSwipeOptionsOnItem()
 ) {
+    override val headerLayoutRes: Int get() = R.layout.my_custom_header
+    override val itemLayoutRes: Int get() = R.layout.my_custom_item
+
     override fun onBindingItem(): OnBindingItem<BaseItemModel, BaseHeaderModel<MyCustomHeaderModel, MyCustomItemModel>> =
         { item: BaseItemModel, _, itemBinding ->
             (itemBinding as? MyCustomItemBinding)?.run {

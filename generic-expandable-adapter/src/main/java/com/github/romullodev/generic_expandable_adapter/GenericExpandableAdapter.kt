@@ -6,6 +6,7 @@ import com.github.romullodev.generic_expandable_adapter.base.*
 import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderModel
 import com.github.romullodev.generic_expandable_adapter.entities.BaseItemModel
 import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
+import com.github.romullodev.generic_expandable_adapter.entities.LayoutOptions
 
 class GenericExpandableAdapter<AdapterH: BaseHeaderModel<AdapterH, AdapterI> , AdapterI: BaseItemModel>(
     private val onBindingItem: OnBindingItem<AdapterI, AdapterH>,
@@ -17,12 +18,12 @@ class GenericExpandableAdapter<AdapterH: BaseHeaderModel<AdapterH, AdapterI> , A
     header: AdapterH,
     private val headerLayout: Int,
     private val itemLayout: Int,
-    expandAllAtFirst: Boolean = false
+    layoutOptions: LayoutOptions = LayoutOptions.DEFAULT
 ) : BaseExpandableAdapter<AdapterH, AdapterI>(
     data = header,
     optionsOnHeader = optionsOnHeader,
     optionsOnItem = optionsOnItem,
-    expandAllAtFirst
+    layoutOptions = layoutOptions
 ) {
     override val headerLayoutRes: Int get() = headerLayout
     override val itemLayoutRes: Int get() = itemLayout

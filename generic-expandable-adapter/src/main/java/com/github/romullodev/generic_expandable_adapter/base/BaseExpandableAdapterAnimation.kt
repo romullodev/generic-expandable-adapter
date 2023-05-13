@@ -56,7 +56,7 @@ class BaseExpandableAdapterAnimation : DefaultItemAnimator() {
                     .also {
                         it.addListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                holder.icExpand?.run {
+                                holder.icExpand.run {
                                     rotation = postInfo.arrowRotation
                                 }
                                 dispatchAnimationFinished(holder)

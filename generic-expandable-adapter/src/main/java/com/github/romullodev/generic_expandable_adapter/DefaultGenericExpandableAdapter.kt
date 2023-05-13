@@ -13,13 +13,12 @@ class DefaultGenericExpandableAdapter(
     private val optionsOnHeader: List<GenericSwipeOption>,
     private val optionsOnItem: List<GenericSwipeOption>,
     private val onSwipeOption: OnSwipeOption,
-    expandAllAtFirst: Boolean,
-    private val layoutStyle: LayoutStyle
+    private val layoutOptions: LayoutOptions
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     data = header,
     optionsOnHeader = optionsOnHeader,
     optionsOnItem = optionsOnItem,
-    expandAllAtFirst = expandAllAtFirst
+    layoutOptions = layoutOptions
 ) {
 
     override val headerLayoutRes: Int get() = R.layout.header_card_style_1
@@ -65,16 +64,16 @@ class DefaultGenericExpandableAdapter(
             cardHeaderStyle.backgroundImgRes?.let {
                 imageViewBackgroundCardStyle1.setupImage(it)
                 cardViewHeaderCardContainer.setupShapeWithNoBackground(
-                    hasThickness = cardHeaderStyle.hasThickness,
-                    thicknessColorRes = cardHeaderStyle.thicknessColor,
-                    radiusDimenRes = layoutStyle.radius
+                    hasThickness = cardHeaderStyle.hasThicknessOnHeader ?: layoutOptions.hasThicknessForAll,
+                    thicknessColorRes = layoutOptions.thicknessColorForAll,
+                    radiusDimenRes = layoutOptions.radius
                 )
             } ?: run {
                 constraintLayoutHeaderCardContainer.setupShapeWithBackground(
                     backgroundColorRes = cardHeaderStyle.backgroundColorRes,
-                    hasThickness = cardHeaderStyle.hasThickness,
-                    thicknessColorRes = cardHeaderStyle.thicknessColor,
-                    radiusDimenRes = layoutStyle.radius
+                    hasThickness = cardHeaderStyle.hasThicknessOnHeader ?: layoutOptions.hasThicknessForAll,
+                    thicknessColorRes = layoutOptions.thicknessColorForAll,
+                    radiusDimenRes = layoutOptions.radius
                 )
             }
             imageViewArrowDown.setupTintColor(cardHeaderStyle.arrowDownIconColorRes)
@@ -88,14 +87,14 @@ class DefaultGenericExpandableAdapter(
     ) {
         binding.run {
             textViewItemCardStyle1Title.setupTextColor(cardItemStyle.titleColorRes)
-            cardViewItemCardContainer.setupCardRadius(layoutStyle.radius)
+            cardViewItemCardContainer.setupCardRadius(layoutOptions.radius)
             constraintLayoutItemCardContainer.setupShapeWithBackground(
                 backgroundColorRes = cardItemStyle.backgroundColorRes
                     ?: cardHeaderStyle.backgroundColorItems
                     ?: R.color.black,
-                hasThickness = cardItemStyle.hasThickness,
-                thicknessColorRes = cardItemStyle.thicknessColor,
-                radiusDimenRes = layoutStyle.radius
+                hasThickness = cardItemStyle.hasThicknessOnItem ?: layoutOptions.hasThicknessForAll,
+                thicknessColorRes = layoutOptions.thicknessColorForAll,
+                radiusDimenRes = layoutOptions.radius
             )
         }
     }

@@ -1,14 +1,15 @@
 package com.github.romullodev.generic_expandable_adapter.entities
 
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.github.romullodev.generic_expandable_adapter.R
 
 data class CardHeaderStyle(
-    val backgroundColorRes: Int = R.color.black,
-    val backgroundImgRes: Int? = null,
-    val titleColorRes: Int = R.color.white,
-    val subtitleColorRes: Int = R.color.a_40_white,
-    val arrowDownIconColorRes: Int = R.color.white,
-    val hasThickness: Boolean = true,
-    val thicknessColor: Int = R.color.white,
+    @ColorRes val backgroundColorRes: Int = R.color.black,
+    @DrawableRes val backgroundImgRes: Int? = null,
+    @ColorRes val titleColorRes: Int = R.color.white,
+    @ColorRes val subtitleColorRes: Int = R.color.a_40_white,
+    @ColorRes val arrowDownIconColorRes: Int = R.color.white,
+    val hasThicknessOnHeader: Boolean? = null,
     val backgroundColorItems: Int? = null
 )

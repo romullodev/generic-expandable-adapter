@@ -17,8 +17,7 @@ fun RecyclerView.setupDefaultExpandableAdapter(
     dataHeaders: List<CardHeaderModel>,
     optionsOnHeader: List<DefaultSwipeOption> = emptyList(),
     optionsOnItem: List<DefaultSwipeOption> = emptyList(),
-    expandAllAtFirst: Boolean = false,
-    layoutStyle: LayoutStyle = LayoutStyle.DEFAULT,
+    layoutOptions: LayoutOptions = LayoutOptions.DEFAULT,
     onSwipeOption: OnSwipeOption = { _, _ -> },
 ) {
     dataHeaders.map {
@@ -32,9 +31,9 @@ fun RecyclerView.setupDefaultExpandableAdapter(
                     optionId = defaultOption.optionId,
                     width = defaultOption.width,
                     height = R.dimen.default_header_height,
-                    radius = layoutStyle.radius,
-                    hasThickness = it.cardHeaderStyle.hasThickness,
-                    thicknessColor = it.cardHeaderStyle.thicknessColor,
+                    radius = layoutOptions.radius,
+                    hasThickness = it.cardHeaderStyle.hasThicknessOnHeader ?: layoutOptions.hasThicknessForAll,
+                    thicknessColor = layoutOptions.thicknessColorForAll,
                 )
             },
             optionsOnItem = optionsOnItem.map { defaultOption ->
@@ -45,23 +44,16 @@ fun RecyclerView.setupDefaultExpandableAdapter(
                     optionId = defaultOption.optionId,
                     width = defaultOption.width,
                     height = R.dimen.default_item_height,
-                    radius = layoutStyle.radius
-                ).run {
-                    if (it.items.isNotEmpty()) {
-                        copy(
-                            hasThickness = it.items.first().cardItemStyle.hasThickness,
-                            thicknessColor = it.items.first().cardItemStyle.thicknessColor,
-                        )
-                    } else
-                        this
-                }
+                    radius = layoutOptions.radius,
+                    thicknessColor = layoutOptions.thicknessColorForAll
+                )
             },
-            expandAllAtFirst = expandAllAtFirst,
-            onSwipeOption = onSwipeOption,
-            layoutStyle = layoutStyle
+            layoutOptions = layoutOptions,
+            onSwipeOption = onSwipeOption
         )
     }.let {
         ConcatAdapter.Config.Builder()
+            .setIsolateViewTypes(false)
             .build().run {
                 ConcatAdapter(this, it).also {
                     adapter = it
@@ -73,18 +65,16 @@ fun RecyclerView.setupDefaultExpandableAdapter(
 
 fun RecyclerView.addHeaderDefaultExpandableAdapter(
     newHeader: CardHeaderModel,
-    expandAllAtFirst: Boolean = false,
     onSwipeOption: OnSwipeOption = { _, _, -> },
     optionsOnHeader: List<GenericSwipeOption>? = null,
     optionsOnItem: List<GenericSwipeOption>? = null,
-    layoutStyle: LayoutStyle = LayoutStyle.DEFAULT
+    layoutOptions: LayoutOptions = LayoutOptions.DEFAULT
 ) {
     (adapter as ConcatAdapter).run {
         adapters.size.let {
             addAdapter(
                 DefaultGenericExpandableAdapter(
                     header = newHeader,
-                    expandAllAtFirst = expandAllAtFirst,
                     onSwipeOption =
                     if (it == 0)
                         onSwipeOption
@@ -98,7 +88,7 @@ fun RecyclerView.addHeaderDefaultExpandableAdapter(
                         ?: (adapters.firstOrNull()
                             ?.let { adapter -> (adapter as DefaultGenericExpandableAdapter).getOptionsOnItem() })
                         ?: emptyList(),
-                    layoutStyle = layoutStyle
+                    layoutOptions = layoutOptions
                 )
             )
             notifyItemInserted(
@@ -161,7 +151,8 @@ fun <H : BaseHeaderModel<H, I>, I : BaseItemModel> RecyclerView.setupGenericExpa
     onSwipeOption: OnSwipeOption = { _, _ -> },
     optionsOnHeader: List<GenericSwipeOption> = emptyList(),
     optionsOnItem: List<GenericSwipeOption> = emptyList(),
-    expandAllAtFirst: Boolean = false,
+    layoutOptions: LayoutOptions = LayoutOptions.DEFAULT,
+    isolateViewTypes: Boolean = false
 ) {
     dataHeaders.map {
         GenericExpandableAdapter(
@@ -172,13 +163,13 @@ fun <H : BaseHeaderModel<H, I>, I : BaseItemModel> RecyclerView.setupGenericExpa
             header = it,
             headerLayout = headerLayout,
             itemLayout = itemLayout,
-            expandAllAtFirst = expandAllAtFirst,
+            layoutOptions = layoutOptions,
             optionsOnHeader = optionsOnHeader,
             optionsOnItem = optionsOnItem
         )
     }.let {
         ConcatAdapter.Config.Builder()
-            .setIsolateViewTypes(true)
+            .setIsolateViewTypes(isolateViewTypes)
             .build().run {
                 ConcatAdapter(this, it).also {
                     adapter = it

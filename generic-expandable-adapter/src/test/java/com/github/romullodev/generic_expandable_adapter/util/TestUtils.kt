@@ -4,7 +4,7 @@ import com.github.romullodev.generic_expandable_adapter.R
 import com.github.romullodev.generic_expandable_adapter.entities.*
 import com.github.romullodev.generic_expandable_adapter.test.R as testR
 
-class Utils {
+class TestUtils {
     companion object {
         const val HEADER_TITLE = "header.title"
         const val HEADER_SUBTITLE = "header.subtitle"
@@ -12,7 +12,6 @@ class Utils {
         val HEADER_BACKGROUND_COLOR = R.color.color_1
         val HEADER_TITLE_COLOR = R.color.color_3
         val HEADER_SUBTITLE_COLOR = R.color.color_4
-        val HEADER_THICKNESS_COLOR = R.color.color_2
         val HEADER_BACKGROUND_ITEMS = R.color.color_3
         val HEADER_EXPANDABLE_IC_COLOR = R.color.color_1
         val HEADER_OPTION_ICON = testR.drawable.delete_icon
@@ -23,11 +22,12 @@ class Utils {
         const val ITEM_TITLE = "item.title"
         val ITEM_BACKGROUND_COLOR = R.color.color_2
         val ITEM_TITLE_COLOR = R.color.color_1
-        val ITEM_THICKNESS_COLOR = R.color.color_3
         val ITEM_OPTION_ICON = testR.drawable.edit_icon
         val ITEM_OPTION_ICON_COLOR = R.color.color_2
         const val ITEM_OPTION_ID = 3
         const val ITEM_OPTION_WITH = testR.dimen.item_width
+
+        val LAYOUT_THICKNESS_COLOR = R.color.color_2
 
         fun getHeaderModelFilled() = CardHeaderModel(
             id = 1L,
@@ -41,7 +41,6 @@ class Utils {
                 backgroundColorRes = HEADER_BACKGROUND_COLOR,
                 titleColorRes = HEADER_TITLE_COLOR,
                 subtitleColorRes = HEADER_SUBTITLE_COLOR,
-                thicknessColor = HEADER_THICKNESS_COLOR,
                 arrowDownIconColorRes = HEADER_EXPANDABLE_IC_COLOR
             )
         )
@@ -51,8 +50,7 @@ class Utils {
             itemTitle = ITEM_TITLE,
             cardItemStyle = CardItemStyle(
                 backgroundColorRes = ITEM_BACKGROUND_COLOR,
-                titleColorRes = ITEM_TITLE_COLOR,
-                thicknessColor = ITEM_THICKNESS_COLOR
+                titleColorRes = ITEM_TITLE_COLOR
             )
         )
 
@@ -72,6 +70,11 @@ class Utils {
                 backgroundColor = ITEM_BACKGROUND_COLOR,
                 optionId = ITEM_OPTION_ID,
                 width = ITEM_OPTION_WITH
+            )
+
+        fun getLayoutOptions(): LayoutOptions =
+            LayoutOptions.DEFAULT.copy(
+                thicknessColorForAll = LAYOUT_THICKNESS_COLOR
             )
     }
 }

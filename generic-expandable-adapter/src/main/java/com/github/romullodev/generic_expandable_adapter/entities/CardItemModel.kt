@@ -7,4 +7,5 @@ data class CardItemModel(
 ) : BaseItemModel {
     override fun getModelId(): Long = id
     override fun isEqualTo(model: Any): Boolean = this == (model as CardItemModel)
+    override fun hasThickness(): Boolean? = cardItemStyle.hasThicknessOnItem
 }

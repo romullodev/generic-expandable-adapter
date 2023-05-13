@@ -8,4 +8,5 @@ data class MyCustomItemModel(
 ) : BaseItemModel {
     override fun getModelId(): Long = myCustomItemId
     override fun isEqualTo(model: Any): Boolean = this == (model as MyCustomItemModel)
+    override fun hasThickness(): Boolean? = null
 }

@@ -4,43 +4,38 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.recyclerview.widget.ConcatAdapter
 import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapter
 import com.github.romullodev.generic_expandable_adapter.base.OnSwipeOption
-import com.github.romullodev.generic_expandable_adapter.databinding.HeaderCardStyle1Binding
 import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
 import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
-import com.github.romullodev.generic_expandable_adapter.entities.DefaultSwipeOption
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_ITEMS
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_EXPANDABLE_IC_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_IMG_BACKGROUND
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ICON_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ICON
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ID
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_WITH
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_THICKNESS_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_BACKGROUND_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ICON
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ICON_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ID
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_WITH
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_THICKNESS_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE_COLOR
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getHeaderModelFilled
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getItemModelFilled
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getOptionOnHeader
-import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getOptionOnItem
+import com.github.romullodev.generic_expandable_adapter.entities.LayoutOptions
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_BACKGROUND_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_BACKGROUND_ITEMS
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_EXPANDABLE_IC_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_IMG_BACKGROUND
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_OPTION_ICON_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_OPTION_ICON
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_OPTION_ID
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_OPTION_WITH
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_SUBTITLE
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_SUBTITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_TITLE
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.HEADER_TITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_BACKGROUND_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_OPTION_ICON
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_OPTION_ICON_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_OPTION_ID
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_OPTION_WITH
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_TITLE
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.ITEM_TITLE_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.LAYOUT_THICKNESS_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.getHeaderModelFilled
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.getItemModelFilled
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.getOptionOnHeader
+import com.github.romullodev.generic_expandable_adapter.util.TestUtils.Companion.getOptionOnItem
 import com.github.romullodev.generic_expandable_adapter.util.addHeader
-import com.github.romullodev.generic_expandable_adapter.util.performSwipeToLeft
 import com.github.romullodev.generic_expandable_adapter.util.updateHeaderAt
 import org.junit.Assert.*
 import org.junit.Test
@@ -68,7 +63,10 @@ import org.robolectric.Shadows.shadowOf
  *  2.1-STYLES PRIORITY
  *   check priority with header and item background color
  *   check priority with img and background color on header
- *
+ *   check thickness priority on header
+ *   check thickness priority on item
+ *   check thickness priority on headerOptions
+ *   check thickness priority on itemOptions
  * 3-OPERATIONS
  *  check add new header model extension
  *  check update header extension
@@ -110,9 +108,9 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             )
         )
         val expectedDrawable = (ContextCompat.getDrawable(
-            headerBinding.root.context, R.drawable.shape_with_background
+            context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
-            setColor(ContextCompat.getColor(headerBinding.root.context, HEADER_BACKGROUND_COLOR))
+            setColor(ContextCompat.getColor(context, HEADER_BACKGROUND_COLOR))
             this
         }
 
@@ -126,10 +124,10 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     @Test
     fun `check background color on item`() {
         val expectedDrawable = (ContextCompat.getDrawable(
-            itemBinding.root.context, R.drawable.shape_with_background
+            context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
             setColor(
-                ContextCompat.getColor(itemBinding.root.context, ITEM_BACKGROUND_COLOR)
+                ContextCompat.getColor(context, ITEM_BACKGROUND_COLOR)
             )
             this
         }
@@ -143,11 +141,11 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     @Test
     fun `check title and subtitle color on header`() {
         assertEquals(
-            ContextCompat.getColor(headerBinding.root.context, HEADER_TITLE_COLOR),
+            ContextCompat.getColor(context, HEADER_TITLE_COLOR),
             headerBinding.textViewCardStyle1Title.currentTextColor,
         )
         assertEquals(
-            ContextCompat.getColor(headerBinding.root.context, HEADER_SUBTITLE_COLOR),
+            ContextCompat.getColor(context, HEADER_SUBTITLE_COLOR),
             headerBinding.textViewCardStyle1Subtitle.currentTextColor,
         )
     }
@@ -155,7 +153,7 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     @Test
     fun `check tile color on item`() {
         assertEquals(
-            ContextCompat.getColor(itemBinding.root.context, ITEM_TITLE_COLOR),
+            ContextCompat.getColor(context, ITEM_TITLE_COLOR),
             itemBinding.textViewItemCardStyle1Title.currentTextColor,
         )
     }
@@ -163,24 +161,23 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     @Test
     fun `check stroke with background color on header`() {
         headerBinding = getHeaderBindingInflated(
-            listOf(
+            data = listOf(
                 getHeaderModelFilled().copy(
                     cardHeaderStyle = getHeaderModelFilled().cardHeaderStyle.copy(
                         backgroundImgRes = null
                     )
                 )
+            ),
+            layoutOptions = LayoutOptions.DEFAULT.copy(
+                expandAllAtFirst = true,
+                thicknessColorForAll = LAYOUT_THICKNESS_COLOR
             )
         )
 
-        val expectedDrawable = (ContextCompat.getDrawable(
-            headerBinding.root.context, R.drawable.shape_with_background
-        ) as GradientDrawable).run {
-            setStroke(
-                headerBinding.root.context.resources.getDimension(R.dimen.thickness).toInt(),
-                ContextCompat.getColor(headerBinding.root.context, HEADER_THICKNESS_COLOR)
-            )
-            this
-        }
+        val expectedDrawable = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
 
         assertEquals(
             shadowOf(expectedDrawable).strokeColor,
@@ -194,16 +191,10 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
 
     @Test
     fun `check stroke on item`() {
-        val context = itemBinding.root.context
-        val expectedDrawable = (ContextCompat.getDrawable(
-            context, R.drawable.shape_with_background
-        ) as GradientDrawable).run {
-            setStroke(
-                context.resources.getDimension(R.dimen.thickness).toInt(),
-                ContextCompat.getColor(context, ITEM_THICKNESS_COLOR)
-            )
-            this
-        }
+        val expectedDrawable = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
 
         assertEquals(
             shadowOf(expectedDrawable).strokeColor,
@@ -213,24 +204,22 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             shadowOf(expectedDrawable).strokeWidth,
             shadowOf(itemBinding.constraintLayoutItemCardContainer.background as GradientDrawable).strokeWidth
         )
-
     }
 
     @Test
     fun `check stroke with background img on header`() {
-        headerBinding = getHeaderBindingInflated(listOf(getHeaderModelFilled()))
-
-        val context = headerBinding.root.context
-        val expectedDrawable = (ContextCompat.getDrawable(
-            context,
-            R.drawable.shape_no_background
-        ) as GradientDrawable).run {
-            setStroke(
-                context.resources.getDimension(R.dimen.thickness).toInt(),
-                ContextCompat.getColor(context, HEADER_THICKNESS_COLOR)
+        headerBinding = getHeaderBindingInflated(
+            data = listOf(getHeaderModelFilled()),
+            layoutOptions = LayoutOptions.DEFAULT.copy(
+                expandAllAtFirst = true,
+                thicknessColorForAll = LAYOUT_THICKNESS_COLOR
             )
-            this
-        }
+        )
+
+        val expectedDrawable = getGradientDrawable(
+            R.drawable.shape_no_background,
+            LAYOUT_THICKNESS_COLOR
+        )
 
         assertEquals(
             shadowOf(expectedDrawable).strokeColor,
@@ -246,7 +235,7 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     fun `check expandable icon color`() {
         assertEquals(
             ColorStateList.valueOf(
-                ContextCompat.getColor(headerBinding.root.context, HEADER_EXPANDABLE_IC_COLOR)
+                ContextCompat.getColor(context, HEADER_EXPANDABLE_IC_COLOR)
             ).defaultColor,
             headerBinding.imageViewArrowDown.imageTintList?.defaultColor
         )
@@ -275,19 +264,19 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             shadowOf(imageButtonOption.drawable).createdFromResId,
             shadowOf(
                 ContextCompat.getDrawable(
-                    headerBinding.root.context,
+                    context,
                     HEADER_OPTION_ICON
                 )
             ).createdFromResId
         )
         assertEquals(
             ColorStateList.valueOf(
-                ContextCompat.getColor(headerBinding.root.context, HEADER_OPTION_ICON_COLOR)
+                ContextCompat.getColor(context, HEADER_OPTION_ICON_COLOR)
             ).defaultColor,
             imageButtonOption.imageTintList?.defaultColor
         )
         assertEquals(
-            headerBinding.root.context.resources.getDimension(HEADER_OPTION_WITH).toInt(),
+            context.resources.getDimension(HEADER_OPTION_WITH).toInt(),
             imageButtonOption.width
         )
     }
@@ -315,19 +304,19 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             shadowOf(imageButtonOption.drawable).createdFromResId,
             shadowOf(
                 ContextCompat.getDrawable(
-                    headerBinding.root.context,
+                    context,
                     ITEM_OPTION_ICON
                 )
             ).createdFromResId
         )
         assertEquals(
             ColorStateList.valueOf(
-                ContextCompat.getColor(headerBinding.root.context, ITEM_OPTION_ICON_COLOR)
+                ContextCompat.getColor(context, ITEM_OPTION_ICON_COLOR)
             ).defaultColor,
             imageButtonOption.imageTintList?.defaultColor
         )
         assertEquals(
-            headerBinding.root.context.resources.getDimension(ITEM_OPTION_WITH).toInt(),
+            context.resources.getDimension(ITEM_OPTION_WITH).toInt(),
             imageButtonOption.width
         )
     }
@@ -355,19 +344,19 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
         }
 
         val expectedDrawableOnFirstItem = (ContextCompat.getDrawable(
-            itemBinding.root.context, R.drawable.shape_with_background
+            context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
             setColor(
-                ContextCompat.getColor(itemBinding.root.context, ITEM_BACKGROUND_COLOR)
+                ContextCompat.getColor(context, ITEM_BACKGROUND_COLOR)
             )
             this
         }
 
         val expectedDrawableOnSecondItem = (ContextCompat.getDrawable(
-            itemBinding.root.context, R.drawable.shape_with_background
+            context, R.drawable.shape_with_background
         ) as GradientDrawable).run {
             setColor(
-                ContextCompat.getColor(itemBinding.root.context, HEADER_BACKGROUND_ITEMS)
+                ContextCompat.getColor(context, HEADER_BACKGROUND_ITEMS)
             )
             this
         }
@@ -387,7 +376,7 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     @Test
     fun `check priority with img and background color on header`() {
         assertEquals(
-            shadowOf(ContextCompat.getDrawable(headerBinding.root.context, HEADER_IMG_BACKGROUND))
+            shadowOf(ContextCompat.getDrawable(context, HEADER_IMG_BACKGROUND))
                 .createdFromResId,
             shadowOf(headerBinding.imageViewBackgroundCardStyle1.background)
                 .createdFromResId
@@ -636,4 +625,219 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
         assertEquals(ITEM_OPTION_ID, testOptionId)
         assertTrue(modelTest is CardItemModel)
     }
+
+    @Test
+    fun `check thickness priority on header`() {
+        // Arrange
+        val headerModel = getHeaderModelFilled()
+        val data = listOf(
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = null)),
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = false)),
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = true))
+        )
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(data)
+
+        // Act
+        val headerBinding1 = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(0)
+        )
+        val headerBinding2 = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(2)
+        )
+        val headerBinding3 = getHeaderBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(4)
+        )
+
+        // Assert
+        val drawableWithStrokeExpected = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
+
+        val drawableNoStrokeExpected = getGradientDrawable(R.drawable.shape_with_background)
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(
+                headerBinding1.cardViewHeaderCardContainer.foreground as GradientDrawable
+            ).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableNoStrokeExpected).strokeWidth,
+            shadowOf(
+                headerBinding2.cardViewHeaderCardContainer.foreground as GradientDrawable
+            ).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(
+                headerBinding3.cardViewHeaderCardContainer.foreground as GradientDrawable
+            ).strokeWidth
+        )
+    }
+
+    @Test
+    fun `check thickness priority on item`() {
+        // Arrange
+        val headerModel = getHeaderModelFilled()
+        val itemModel = getItemModelFilled()
+        val data = listOf(
+            headerModel.copy(
+                items = listOf(
+                    itemModel,
+                    itemModel.copy(
+                        cardItemStyle = itemModel.cardItemStyle.copy(hasThicknessOnItem = true)
+                    ),
+                    itemModel.copy(
+                        cardItemStyle = itemModel.cardItemStyle.copy(hasThicknessOnItem = false)
+                    )
+                )
+            )
+        )
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(data)
+
+        // Act
+        val itemBinding1 = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(1)
+        )
+        val itemBinding2 = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(2)
+        )
+        val itemBinding3 = getItemBindingFromViewHolder(
+            recyclerView.findViewHolderForAdapterPosition(3)
+        )
+
+        // Assert
+        val drawableWithStrokeExpected = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
+        val drawableNoStrokeExpected = getGradientDrawable(R.drawable.shape_with_background)
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(
+                itemBinding1.constraintLayoutItemCardContainer.background as GradientDrawable
+            ).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(
+                itemBinding2.constraintLayoutItemCardContainer.background as GradientDrawable
+            ).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableNoStrokeExpected).strokeWidth,
+            shadowOf(
+                itemBinding3.constraintLayoutItemCardContainer.background as GradientDrawable
+            ).strokeWidth
+        )
+
+    }
+
+    @Test
+    fun `check thickness priority on headerOptions`() {
+        val headerModel = getHeaderModelFilled()
+        val data = listOf(
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = null)),
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = false)),
+            headerModel.copy(cardHeaderStyle = headerModel.cardHeaderStyle.copy(hasThicknessOnHeader = true))
+        )
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = data,
+            optionsOnHeader = listOf(getOptionOnHeader())
+        )
+
+        // Act
+        val viewHolder1 = recyclerView.findViewHolderForAdapterPosition(0)
+        val viewHolder2 = recyclerView.findViewHolderForAdapterPosition(2)
+        val viewHolder3 = recyclerView.findViewHolderForAdapterPosition(4)
+
+        // Assert
+        val optionDrawable1 = getGradientDrawableFromOptionHeader(viewHolder1)
+        val optionDrawable2 = getGradientDrawableFromOptionHeader(viewHolder2)
+        val optionDrawable3 = getGradientDrawableFromOptionHeader(viewHolder3)
+
+        val drawableWithStrokeExpected = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
+
+        val drawableNoStrokeExpected = getGradientDrawable(R.drawable.shape_with_background)
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable1).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableNoStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable2).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable3).strokeWidth
+        )
+    }
+
+    @Test
+    fun `check thickness priority on itemOptions`() {
+        val headerModel = getHeaderModelFilled()
+        val itemModel = getItemModelFilled()
+        val data = listOf(
+            headerModel.copy(
+                items = listOf(
+                    itemModel,
+                    itemModel.copy(
+                        cardItemStyle = itemModel.cardItemStyle.copy(hasThicknessOnItem = true)
+                    ),
+                    itemModel.copy(
+                        cardItemStyle = itemModel.cardItemStyle.copy(hasThicknessOnItem = false)
+                    )
+                )
+            )
+        )
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = data,
+            optionsOnItem = listOf(getOptionOnItem())
+        )
+
+        // Act
+        val viewHolder1 = recyclerView.findViewHolderForAdapterPosition(1)
+        val viewHolder2 = recyclerView.findViewHolderForAdapterPosition(2)
+        val viewHolder3 = recyclerView.findViewHolderForAdapterPosition(3)
+
+        // Assert
+        val optionDrawable1 = getGradientDrawableFromOptionItem(viewHolder1)
+        val optionDrawable2 = getGradientDrawableFromOptionItem(viewHolder2)
+        val optionDrawable3 = getGradientDrawableFromOptionItem(viewHolder3)
+
+        val drawableWithStrokeExpected = getGradientDrawable(
+            R.drawable.shape_with_background,
+            LAYOUT_THICKNESS_COLOR
+        )
+
+        val drawableNoStrokeExpected = getGradientDrawable(R.drawable.shape_with_background)
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable1).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableWithStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable2).strokeWidth
+        )
+
+        assertEquals(
+            shadowOf(drawableNoStrokeExpected).strokeWidth,
+            shadowOf(optionDrawable3).strokeWidth
+        )
+    }
+
 }

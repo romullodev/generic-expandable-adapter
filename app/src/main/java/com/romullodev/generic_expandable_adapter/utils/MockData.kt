@@ -15,24 +15,23 @@ object MockData {
             id = 1L,
             itemTitle = "Arctic Monkeys",
             cardItemStyle = CardItemStyle(
-                backgroundColorRes = R.color.green,
-                thicknessColor = R.color.pop_color
+                backgroundColorRes = R.color.electronic_color,
+                hasThicknessOnItem = false
             )
         ),
         CardItemModel(
             id = 2L,
             itemTitle = "Imagine Dragons",
             cardItemStyle = CardItemStyle(
-                backgroundColorRes = R.color.rock_color,
-                thicknessColor = R.color.reggae_color
+                backgroundColorRes = R.color.reggae_color
             )
         ),
         CardItemModel(
             id = 3L,
             itemTitle = "Foo Fighters",
             cardItemStyle = CardItemStyle(
-                backgroundColorRes = R.color.rock_color,
-                hasThickness = false
+                backgroundColorRes = R.color.pop_color,
+                hasThicknessOnItem = false
             )
         ),
         CardItemModel(

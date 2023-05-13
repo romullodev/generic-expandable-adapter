@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.LayoutOptions
 import com.github.romullodev.generic_expandable_adapter.utils.addHeaderDefaultExpandableAdapter
 import com.github.romullodev.generic_expandable_adapter.utils.updateHeaderDefaultExpandableAdapterHeader
 
@@ -25,7 +26,10 @@ fun RecyclerView.updateHeaderAt(position: Int, data: CardHeaderModel) {
 }
 
 fun RecyclerView.addHeader(data: CardHeaderModel) {
-    addHeaderDefaultExpandableAdapter(data, true)
+    addHeaderDefaultExpandableAdapter(
+        data,
+        layoutOptions = LayoutOptions.DEFAULT.copy(expandAllAtFirst = true)
+    )
     updateMeasure()
 }
 

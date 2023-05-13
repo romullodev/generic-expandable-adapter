@@ -21,6 +21,7 @@ import com.github.romullodev.generic_expandable_adapter.databinding.ItemCardCont
 import com.github.romullodev.generic_expandable_adapter.entities.BaseHeaderModel
 import com.github.romullodev.generic_expandable_adapter.entities.BaseItemModel
 import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
+import com.github.romullodev.generic_expandable_adapter.entities.LayoutOptions
 import com.github.romullodev.generic_expandable_adapter.utils.ExpandableAdapterConstants.IC_COLLAPSED_ROTATION_DEG
 import com.github.romullodev.generic_expandable_adapter.utils.ExpandableAdapterConstants.IC_EXPANDED_ROTATION_DEG
 import com.github.romullodev.generic_expandable_adapter.utils.setupShapeWithBackground
@@ -43,7 +44,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
     data: AdapterH,
     private val optionsOnHeader: List<GenericSwipeOption>,
     private val optionsOnItem: List<GenericSwipeOption>,
-    expandAllAtFirst: Boolean
+    private val layoutOptions: LayoutOptions
 ) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableViewHolder<AdapterH, AdapterI>>() {
 
     abstract val headerLayoutRes: Int
@@ -128,7 +129,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
     private fun getItems(): List<AdapterI> = headerData.getCustomItems()
 
-    private var isExpanded: Boolean by Delegates.observable(expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
+    private var isExpanded: Boolean by Delegates.observable(layoutOptions.expandAllAtFirst) { _: KProperty<*>, _: Boolean, newExpandedValue: Boolean ->
         if (newExpandedValue) {
             notifyItemRangeInserted(1, getItems().size)
             //To update the header expand icon
@@ -200,7 +201,12 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                     item = getItems()[position - 1],
                     header = headerData,
                     onSwipeOption = onSwipeOption(),
-                    optionsOnItem = optionsOnItem,
+                    optionsOnItem = optionsOnItem.map {
+                        it.copy(
+                            hasThickness = getItems()[position - 1].hasThickness()
+                                ?: layoutOptions.hasThicknessForAll
+                        )
+                    },
                 )
             }
         }
