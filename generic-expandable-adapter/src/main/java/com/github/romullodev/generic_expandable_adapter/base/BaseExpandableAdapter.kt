@@ -268,23 +268,23 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                                 onSwipeOption = onSwipeOption
                             )
                         )
-                    }
-                    addView(
-                        Space(context).apply {
-                            minimumWidth = SPACE_BETWEEN_OPTIONS
+                    }?.takeIf { it.isNotEmpty() }?.let {
+                        addView(
+                            Space(context).apply {
+                                minimumWidth = SPACE_BETWEEN_OPTIONS
+                            }
+                        )
+                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                            (headerBindingContainer.frameLayoutCustomHeaderContainer.children.first().layoutParams as MarginLayoutParams).let {
+                                setPadding(
+                                    0,
+                                    it.topMargin,
+                                    it.marginEnd,
+                                    it.bottomMargin
+                                )
+                            }
                         }
-                    )
-                    layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                        (headerBindingContainer.frameLayoutCustomHeaderContainer.children.first().layoutParams as MarginLayoutParams).let {
-                            setPadding(
-                                0,
-                                it.topMargin,
-                                it.marginEnd,
-                                it.bottomMargin
-                            )
-                        }
                     }
-
                 }
             }
         }
@@ -336,20 +336,21 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
                                 onSwipeOption = onItemSwipeOption
                             )
                         )
-                    }
-                    addView(
-                        Space(context).apply {
-                            minimumWidth = SPACE_BETWEEN_OPTIONS
-                        }
-                    )
-                    layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                        (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
-                            setPadding(
-                                0,
-                                it.topMargin,
-                                it.marginEnd,
-                                it.bottomMargin
-                            )
+                    }?.takeIf{ it.isNotEmpty() }?.let {
+                        addView(
+                            Space(context).apply {
+                                minimumWidth = SPACE_BETWEEN_OPTIONS
+                            }
+                        )
+                        layoutParams = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                            (itemBindingContainer.frameLayoutCustomItemContainer.children.first().layoutParams as MarginLayoutParams).let {
+                                setPadding(
+                                    0,
+                                    it.topMargin,
+                                    it.marginEnd,
+                                    it.bottomMargin
+                                )
+                            }
                         }
                     }
                 }
