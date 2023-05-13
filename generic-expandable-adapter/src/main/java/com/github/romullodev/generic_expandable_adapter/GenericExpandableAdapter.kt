@@ -15,17 +15,18 @@ class GenericExpandableAdapter<AdapterH: BaseHeaderModel<AdapterH, AdapterI> , A
     optionsOnHeader: List<GenericSwipeOption>,
     optionsOnItem: List<GenericSwipeOption>,
     header: AdapterH,
-    headerLayout: Int,
-    itemLayout: Int,
+    private val headerLayout: Int,
+    private val itemLayout: Int,
     expandAllAtFirst: Boolean = false
 ) : BaseExpandableAdapter<AdapterH, AdapterI>(
     data = header,
-    headerLayoutRes = headerLayout,
-    itemLayoutRes = itemLayout,
     optionsOnHeader = optionsOnHeader,
     optionsOnItem = optionsOnItem,
     expandAllAtFirst
 ) {
+    override val headerLayoutRes: Int get() = headerLayout
+    override val itemLayoutRes: Int get() = itemLayout
+
     override fun onBindingItem(): OnBindingItem<AdapterI, AdapterH> = onBindingItem
 
     override fun onBindingHeader(): OnBindingHeader<AdapterH> = onBindingHeader

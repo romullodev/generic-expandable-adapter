@@ -13,7 +13,7 @@ import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapt
 import com.github.romullodev.generic_expandable_adapter.base.OnSwipeOption
 import com.github.romullodev.generic_expandable_adapter.entities.GenericSwipeOption
 import com.github.romullodev.generic_expandable_adapter.utils.setupGenericExpandableAdapter
-import com.romullodev.generic_expandable_adapter.adapter.MyExpandableAdapterV2
+import com.romullodev.generic_expandable_adapter.adapter.MyExpandableAdapter
 import com.romullodev.generic_expandable_adapter.databinding.*
 import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
@@ -43,7 +43,7 @@ class CustomExpandableAdapterFragment : Fragment() {
 
     private fun setupCustomAdapterByAdapter() {
         MockData.getCustomHeader().map {
-            MyExpandableAdapterV2(
+            MyExpandableAdapter(
                 onSwipeOption = onCustomSwipeOption(),
                 header = it,
             )

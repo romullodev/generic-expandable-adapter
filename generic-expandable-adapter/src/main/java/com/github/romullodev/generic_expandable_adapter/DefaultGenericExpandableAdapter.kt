@@ -10,8 +10,6 @@ import com.github.romullodev.generic_expandable_adapter.utils.*
 
 class DefaultGenericExpandableAdapter(
     header: CardHeaderModel,
-    headerLayout: Int = R.layout.header_card_style_1,
-    itemLayout: Int = R.layout.item_card_style_1,
     private val optionsOnHeader: List<GenericSwipeOption>,
     private val optionsOnItem: List<GenericSwipeOption>,
     private val onSwipeOption: OnSwipeOption,
@@ -19,12 +17,13 @@ class DefaultGenericExpandableAdapter(
     private val layoutStyle: LayoutStyle
 ) : BaseExpandableAdapter<CardHeaderModel, CardItemModel>(
     data = header,
-    headerLayoutRes = headerLayout,
-    itemLayoutRes = itemLayout,
     optionsOnHeader = optionsOnHeader,
     optionsOnItem = optionsOnItem,
     expandAllAtFirst = expandAllAtFirst
 ) {
+
+    override val headerLayoutRes: Int get() = R.layout.header_card_style_1
+    override val itemLayoutRes: Int get() = R.layout.item_card_style_1
 
     fun getOnCustomSwipeOption(): OnSwipeOption = onSwipeOption
 
@@ -40,7 +39,6 @@ class DefaultGenericExpandableAdapter(
             }
         }
 
-    // TODO: fornecer a opcao do usuario sobrescrever esse metodo
     override fun onBindingHeader(): OnBindingHeader<CardHeaderModel> =
         { header, binding ->
             (binding as? HeaderCardStyle1Binding)?.run {

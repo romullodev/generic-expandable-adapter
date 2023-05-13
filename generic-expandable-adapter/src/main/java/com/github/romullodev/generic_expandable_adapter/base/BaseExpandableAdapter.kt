@@ -41,12 +41,13 @@ private const val SPACE_BETWEEN_OPTIONS = 5
 
 abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, AdapterI>, AdapterI : BaseItemModel>(
     data: AdapterH,
-    private val headerLayoutRes: Int, //TODO: colocar como metodo abstrato
-    private val itemLayoutRes: Int, //TODO: colocar como metodo abstrato
-    private val optionsOnHeader: List<GenericSwipeOption>?, //TODO: colocar como metodo abstrato
-    private val optionsOnItem: List<GenericSwipeOption>?, //TODO: colocar como metodo abstrato
+    private val optionsOnHeader: List<GenericSwipeOption>,
+    private val optionsOnItem: List<GenericSwipeOption>,
     expandAllAtFirst: Boolean
 ) : RecyclerView.Adapter<BaseExpandableAdapter.BaseExpandableViewHolder<AdapterH, AdapterI>>() {
+
+    abstract val headerLayoutRes: Int
+    abstract val itemLayoutRes: Int
 
     private val viewBinderHelper: ViewBinder = ViewBinder()
 
@@ -107,7 +108,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
     open fun onBindViewHolderHeader(): OnBindViewHolderHeader<AdapterH> =
         { headerBinding, header ->
-            optionsOnHeader?.let {
+            optionsOnHeader.let {
                 viewBinderHelper.bind(
                     (headerBinding as HeaderCardContainerBinding).swipeRevealLayoutContainer,
                     header.getModelId().toString()
@@ -117,7 +118,7 @@ abstract class BaseExpandableAdapter<AdapterH : BaseHeaderModel<AdapterH, Adapte
 
     open fun onBindViewHolderItem(): OnBindViewHolderItem<AdapterI, AdapterH> =
         { itemBinding, item, _ ->
-            optionsOnItem?.let {
+            optionsOnItem.let {
                 viewBinderHelper.bind(
                     (itemBinding as ItemCardContainerBinding).swipeRevealLayoutContainer,
                     item.getModelId().toString()

@@ -13,7 +13,7 @@ import com.romullodev.generic_expandable_adapter.utils.MockData
 import com.romullodev.generic_expandable_adapter.utils.MyCustomHeaderModel
 import com.romullodev.generic_expandable_adapter.utils.MyCustomItemModel
 
-class MyExpandableAdapterV2(
+class MyExpandableAdapter(
     header: MyCustomHeaderModel,
     private val onSwipeOption: OnSwipeOption
 ) : BaseExpandableAdapter<MyCustomHeaderModel, MyCustomItemModel>(
