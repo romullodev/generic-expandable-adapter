@@ -1,10 +1,8 @@
 package com.github.romullodev.generic_expandable_adapter.util
 
 import com.github.romullodev.generic_expandable_adapter.R
-import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderStyle
-import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
-import com.github.romullodev.generic_expandable_adapter.entities.CardItemStyle
+import com.github.romullodev.generic_expandable_adapter.entities.*
+import com.github.romullodev.generic_expandable_adapter.test.R as testR
 
 class Utils {
     companion object {
@@ -17,13 +15,22 @@ class Utils {
         val HEADER_THICKNESS_COLOR = R.color.color_2
         val HEADER_BACKGROUND_ITEMS = R.color.color_3
         val HEADER_EXPANDABLE_IC_COLOR = R.color.color_1
+        val HEADER_OPTION_ICON = testR.drawable.delete_icon
+        val HEADER_OPTION_ICON_COLOR = R.color.color_3
+        const val HEADER_OPTION_ID = 2
+        const val HEADER_OPTION_WITH = testR.dimen.header_width
 
         const val ITEM_TITLE = "item.title"
         val ITEM_BACKGROUND_COLOR = R.color.color_2
         val ITEM_TITLE_COLOR = R.color.color_1
         val ITEM_THICKNESS_COLOR = R.color.color_3
+        val ITEM_OPTION_ICON = testR.drawable.edit_icon
+        val ITEM_OPTION_ICON_COLOR = R.color.color_2
+        const val ITEM_OPTION_ID = 3
+        const val ITEM_OPTION_WITH = testR.dimen.item_width
 
         fun getHeaderModelFilled() = CardHeaderModel(
+            id = 1L,
             headerTitle = HEADER_TITLE,
             headerSubtitle = HEADER_SUBTITLE,
             items = listOf(
@@ -40,6 +47,7 @@ class Utils {
         )
 
         fun getItemModelFilled() = CardItemModel(
+            id = 2L,
             itemTitle = ITEM_TITLE,
             cardItemStyle = CardItemStyle(
                 backgroundColorRes = ITEM_BACKGROUND_COLOR,
@@ -47,5 +55,23 @@ class Utils {
                 thicknessColor = ITEM_THICKNESS_COLOR
             )
         )
+
+        fun getOptionOnHeader(): DefaultSwipeOption =
+            DefaultSwipeOption(
+                icon = HEADER_OPTION_ICON,
+                iconColor = HEADER_OPTION_ICON_COLOR,
+                backgroundColor = HEADER_BACKGROUND_COLOR,
+                optionId = HEADER_OPTION_ID,
+                width = HEADER_OPTION_WITH
+            )
+
+        fun getOptionOnItem(): DefaultSwipeOption =
+            DefaultSwipeOption(
+                icon = ITEM_OPTION_ICON,
+                iconColor = ITEM_OPTION_ICON_COLOR,
+                backgroundColor = ITEM_BACKGROUND_COLOR,
+                optionId = ITEM_OPTION_ID,
+                width = ITEM_OPTION_WITH
+            )
     }
 }

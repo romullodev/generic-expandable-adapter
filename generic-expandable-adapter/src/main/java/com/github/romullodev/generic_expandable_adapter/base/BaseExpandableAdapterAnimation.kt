@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class ExpandableAdapterAnimation : DefaultItemAnimator() {
+class BaseExpandableAdapterAnimation : DefaultItemAnimator() {
 
     override fun recordPreLayoutInformation(
         state: RecyclerView.State,
@@ -17,7 +17,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         payloads: MutableList<Any>
     ): ItemHolderInfo {
         return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
-            HeaderItemInfo().also {
+            CustomHeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
         } else {
@@ -30,7 +30,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         viewHolder: ViewHolder
     ): ItemHolderInfo {
         return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
-            HeaderItemInfo().also {
+            CustomHeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
         } else {
@@ -44,7 +44,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         preInfo: ItemHolderInfo,
         postInfo: ItemHolderInfo
     ): Boolean {
-        if (preInfo is HeaderItemInfo && postInfo is HeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
+        if (preInfo is CustomHeaderItemInfo && postInfo is CustomHeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             holder.icExpand?.run {
                 ObjectAnimator
                     .ofFloat(
@@ -75,7 +75,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
     }
 }
 
-class HeaderItemInfo : RecyclerView.ItemAnimator.ItemHolderInfo() {
+class CustomHeaderItemInfo : RecyclerView.ItemAnimator.ItemHolderInfo() {
 
     internal var arrowRotation: Float = 0F
 

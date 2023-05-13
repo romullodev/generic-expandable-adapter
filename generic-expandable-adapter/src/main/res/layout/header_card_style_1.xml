@@ -6,18 +6,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewHeaderCardContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:foreground="@drawable/shape_thickness_no_background"
-        app:cardBackgroundColor="@color/transparent"
-        android:layout_marginHorizontal="@dimen/margin_small"
+        android:layout_height="@dimen/default_header_height"
+        android:layout_marginHorizontal="@dimen/margin_xsmall"
         android:layout_marginBottom="@dimen/margin_xsmall"
-        app:cardCornerRadius="@dimen/card_radius">
+        app:cardBackgroundColor="@color/transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutHeaderCardContainer"
             android:layout_width="match_parent"
-            android:clipToPadding="true"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="true">
 
             <ImageView
                 android:id="@+id/imageViewBackgroundCardStyle1"

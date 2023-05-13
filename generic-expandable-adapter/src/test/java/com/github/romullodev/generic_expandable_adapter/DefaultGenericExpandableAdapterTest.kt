@@ -3,30 +3,86 @@ package com.github.romullodev.generic_expandable_adapter
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.ConcatAdapter
+import com.github.romullodev.generic_expandable_adapter.base.BaseExpandableAdapter
+import com.github.romullodev.generic_expandable_adapter.base.OnSwipeOption
+import com.github.romullodev.generic_expandable_adapter.databinding.HeaderCardStyle1Binding
+import com.github.romullodev.generic_expandable_adapter.entities.CardHeaderModel
+import com.github.romullodev.generic_expandable_adapter.entities.CardItemModel
+import com.github.romullodev.generic_expandable_adapter.entities.DefaultSwipeOption
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_BACKGROUND_ITEMS
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_EXPANDABLE_IC_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_IMG_BACKGROUND
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ICON_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ICON
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_ID
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_OPTION_WITH
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_SUBTITLE_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_THICKNESS_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.HEADER_TITLE_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_BACKGROUND_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ICON
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ICON_COLOR
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_ID
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_OPTION_WITH
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_THICKNESS_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.ITEM_TITLE_COLOR
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getHeaderModelFilled
 import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getItemModelFilled
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getOptionOnHeader
+import com.github.romullodev.generic_expandable_adapter.util.Utils.Companion.getOptionOnItem
 import com.github.romullodev.generic_expandable_adapter.util.addHeader
+import com.github.romullodev.generic_expandable_adapter.util.performSwipeToLeft
 import com.github.romullodev.generic_expandable_adapter.util.updateHeaderAt
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+
+/**
+ * SUMMARY
+ * 1-TEXTS
+ *   check info on header
+ *   check info on item
+ *
+ * 2-STYLES
+ *  check background color on header
+ *  check background color on item
+ *  check title and subtitle color on header
+ *  check tile color on item
+ *  check stroke with background color on header
+ *  check stroke on item
+ *  check stroke with background img on header
+ *  check expandable icon color
+ *  check option style on header
+ *  check option style on item
+ *  2.1-STYLES PRIORITY
+ *   check priority with header and item background color
+ *   check priority with img and background color on header
+ *
+ * 3-OPERATIONS
+ *  check add new header model extension
+ *  check update header extension
+ *
+ * 4-OPTIONS
+ *  check options number on header
+ *  check options number on item
+ *  check click on header
+ *  check click on item
+ *
+ * 5-OTHERS
+ *  check expandable icon visibility
+ *  check total items on adapter
+ */
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultGenericExpandableAdapterTest : BaseTest() {
@@ -187,6 +243,96 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
     }
 
     @Test
+    fun `check expandable icon color`() {
+        assertEquals(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(headerBinding.root.context, HEADER_EXPANDABLE_IC_COLOR)
+            ).defaultColor,
+            headerBinding.imageViewArrowDown.imageTintList?.defaultColor
+        )
+    }
+
+    @Test
+    fun `check option style on header`() {
+        // Arrange
+        val optionsOnHeader = listOf(getOptionOnHeader())
+
+        // Act
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnHeader = optionsOnHeader,
+        )
+
+        // Assert
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(0)
+        val imageButtonOption =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>
+                    ).headerBindingContainer?.layoutSwipeOnHeader?.linearLayoutGenericSwipeContainer?.getChildAt(
+                    1
+                ) as ImageButton
+
+        assertEquals(
+            shadowOf(imageButtonOption.drawable).createdFromResId,
+            shadowOf(
+                ContextCompat.getDrawable(
+                    headerBinding.root.context,
+                    HEADER_OPTION_ICON
+                )
+            ).createdFromResId
+        )
+        assertEquals(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(headerBinding.root.context, HEADER_OPTION_ICON_COLOR)
+            ).defaultColor,
+            imageButtonOption.imageTintList?.defaultColor
+        )
+        assertEquals(
+            headerBinding.root.context.resources.getDimension(HEADER_OPTION_WITH).toInt(),
+            imageButtonOption.width
+        )
+    }
+
+    @Test
+    fun `check option style on item`() {
+        // Arrange
+        val optionsOnItem = listOf(getOptionOnItem())
+
+        // Act
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnItem = optionsOnItem,
+        )
+
+        // Assert
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(1)
+        val imageButtonOption =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.ItemExpandableViewHolder<*, *>
+                    ).itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.getChildAt(
+                    1
+                ) as ImageButton
+
+        assertEquals(
+            shadowOf(imageButtonOption.drawable).createdFromResId,
+            shadowOf(
+                ContextCompat.getDrawable(
+                    headerBinding.root.context,
+                    ITEM_OPTION_ICON
+                )
+            ).createdFromResId
+        )
+        assertEquals(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(headerBinding.root.context, ITEM_OPTION_ICON_COLOR)
+            ).defaultColor,
+            imageButtonOption.imageTintList?.defaultColor
+        )
+        assertEquals(
+            headerBinding.root.context.resources.getDimension(ITEM_OPTION_WITH).toInt(),
+            imageButtonOption.width
+        )
+    }
+
+    @Test
     fun `check priority with header and item background color`() {
         val data = getHeaderModelFilled().let { headerModel ->
             getItemModelFilled().let { itemModel ->
@@ -231,7 +377,7 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
             shadowOf(expectedDrawableOnFirstItem).lastSetColor,
             shadowOf(itemBinding.constraintLayoutItemCardContainer.background as GradientDrawable).lastSetColor
         )
-        itemBinding = getItemBindingInflated(data,2)
+        itemBinding = getItemBindingInflated(data, 2)
         assertEquals(
             shadowOf(expectedDrawableOnSecondItem).lastSetColor,
             shadowOf(itemBinding.constraintLayoutItemCardContainer.background as GradientDrawable).lastSetColor
@@ -309,7 +455,8 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
                 )
             )
         )
-        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(listOf(getHeaderModelFilled()))
+        val recyclerView =
+            getSetupAdapterOnRecyclerViewWithAllExpanded(listOf(getHeaderModelFilled()))
         headerBinding = getHeaderBindingFromViewHolder(
             recyclerView.findViewHolderForAdapterPosition(0)
         )
@@ -330,16 +477,6 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
 
         assertEquals(newHeaderTitle, headerBinding.textViewCardStyle1Title.text)
         assertEquals(newItemTitle, itemBinding.textViewItemCardStyle1Title.text)
-    }
-
-    @Test
-    fun `check expandable icon color`() {
-        assertEquals(
-            ColorStateList.valueOf(
-                ContextCompat.getColor(headerBinding.root.context, HEADER_EXPANDABLE_IC_COLOR)
-            ).defaultColor,
-            headerBinding.imageViewArrowDown.imageTintList?.defaultColor
-        )
     }
 
     @Test
@@ -392,5 +529,111 @@ class DefaultGenericExpandableAdapterTest : BaseTest() {
         assertEquals(
             3 + 5 + 4, (recyclerView.adapter as ConcatAdapter).itemCount
         )
+    }
+
+    @Test
+    fun `check options number on header`() {
+        // Arrange
+        val optionsOnHeader = listOf(
+            getOptionOnHeader(),
+            getOptionOnHeader(),
+            getOptionOnHeader()
+        )
+
+        // Act
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnHeader = optionsOnHeader
+        )
+        // Assert
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(0)
+        val headerOptionsNumber =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>
+                    ).headerBindingContainer?.layoutSwipeOnHeader?.linearLayoutGenericSwipeContainer?.childCount
+        assertEquals(
+            2 * (optionsOnHeader.size) + 1, headerOptionsNumber
+        )
+    }
+
+    @Test
+    fun `check options number on item`() {
+        // Arrange
+        val optionsOnItem = listOf(
+            getOptionOnItem(),
+            getOptionOnItem(),
+            getOptionOnItem(),
+        )
+
+        // Act
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnItem = optionsOnItem
+        )
+        // Assert
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(1)
+        val itemOptionsNumber =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.ItemExpandableViewHolder<*, *>
+                    ).itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.childCount
+        assertEquals(
+            2 * (optionsOnItem.size) + 1, itemOptionsNumber
+        )
+    }
+
+    @Test
+    fun `check click on header`() {
+        // Arrange
+        val optionsOnHeader = listOf(getOptionOnHeader())
+        var testOptionId = -1
+        var modelTest: Any? = null
+        val onSwipeOption: OnSwipeOption = { optionId, model ->
+            testOptionId = optionId
+            modelTest = model
+        }
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnHeader = optionsOnHeader,
+            onSwipeOption = onSwipeOption
+        )
+        // Act
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(0)
+        val imageButtonOption =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>
+                    ).headerBindingContainer?.layoutSwipeOnHeader?.linearLayoutGenericSwipeContainer?.getChildAt(
+                    1
+                ) as ImageButton
+        imageButtonOption.performClick()
+
+        // Assert
+        assertEquals(HEADER_OPTION_ID, testOptionId)
+        assertTrue(modelTest is CardHeaderModel)
+    }
+
+    @Test
+    fun `check click on item`() {
+        // Arrange
+        val optionsOnItem = listOf(getOptionOnItem())
+        var testOptionId = -1
+        var modelTest: Any? = null
+        val onSwipeOption: OnSwipeOption = { optionId, model ->
+            testOptionId = optionId
+            modelTest = model
+        }
+        val recyclerView = getSetupAdapterOnRecyclerViewWithAllExpanded(
+            data = listOf(getHeaderModelFilled()),
+            optionsOnItem = optionsOnItem,
+            onSwipeOption = onSwipeOption
+        )
+        // Act
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(1)
+        val imageButtonOption =
+            (viewHolder as BaseExpandableAdapter.BaseExpandableViewHolder.ItemExpandableViewHolder<*, *>
+                    ).itemBindingContainer?.layoutSwipeOnItem?.linearLayoutGenericSwipeContainer?.getChildAt(
+                    1
+                ) as ImageButton
+        imageButtonOption.performClick()
+
+        // Assert
+        assertEquals(ITEM_OPTION_ID, testOptionId)
+        assertTrue(modelTest is CardItemModel)
     }
 }

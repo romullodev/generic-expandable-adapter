@@ -12,5 +12,8 @@ class DemoActivity : AppCompatActivity() {
         theme.applyStyle(androidx.appcompat.R.style.Theme_AppCompat_Light_NoActionBar, true)
         binding = ActivityDemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.setOnClickListener {
+
+        }
     }
 }

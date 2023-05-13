@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 - create local tests for generic default adapter
+- add swipe reveal layout lib with generic layout
 
 ## Changed
 
