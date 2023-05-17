@@ -58,6 +58,7 @@ android {
 dependencies {
     
     implementation project(path: ':generic-expandable-adapter')
+    //implementation 'com.local.romullodev:generic-expandable-adapter:1.1.0'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'

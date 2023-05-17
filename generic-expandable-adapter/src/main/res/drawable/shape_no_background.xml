@@ -4,6 +4,4 @@
     <stroke
         android:width="@dimen/thickness"
         android:color="#FFFFFF" />
-    <corners
-        android:radius="@dimen/card_radius"/>
 </shape>

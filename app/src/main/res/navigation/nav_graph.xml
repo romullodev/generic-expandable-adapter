@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/defaultExpandableAdapterFragment">
+<!--    defaultExpandableAdapterFragment-->
+<!--    customExpandableAdapterFragment-->
 
     <fragment
         android:id="@+id/defaultExpandableAdapterFragment"

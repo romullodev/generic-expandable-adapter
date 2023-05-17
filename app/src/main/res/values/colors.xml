@@ -12,4 +12,7 @@
     <color name="blues_color">#006D9B</color>
     <color name="reggae_color">#015F43</color>
     <color name="green">#0E936C</color>
+
+    <color name="darker_gray">#aaa</color>
+    <color name="holo_red_dark">#ffcc0000</color>
 </resources>

@@ -6,31 +6,28 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewItemCardContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_small"
+        android:layout_marginHorizontal="@dimen/margin_xsmall"
         android:layout_marginBottom="@dimen/margin_xxsmall"
-        app:cardCornerRadius="@dimen/card_radius">
+        android:layout_height="@dimen/default_item_height">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutItemCardContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="@drawable/shape_thickness_with_background">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textViewItemCardStyle1Name"
+                android:id="@+id/textViewItemCardStyle1Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_xlarge"
                 android:gravity="start"
-                android:paddingTop="@dimen/padding_medium"
-                android:paddingBottom="@dimen/padding_medium"
-                tools:textColor="@color/black"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlSymmetry"
-                tools:text="Arctic Monkeys" />
+                tools:text="Arctic Monkeys"
+                tools:textColor="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

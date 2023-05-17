@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class ExpandableAdapterAnimation : DefaultItemAnimator() {
+class BaseExpandableAdapterAnimation : DefaultItemAnimator() {
 
     override fun recordPreLayoutInformation(
         state: RecyclerView.State,
@@ -16,8 +16,8 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         changeFlags: Int,
         payloads: MutableList<Any>
     ): ItemHolderInfo {
-        return if (viewHolder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
-            HeaderItemInfo().also {
+        return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
+            CustomHeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
         } else {
@@ -29,8 +29,8 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         state: RecyclerView.State,
         viewHolder: ViewHolder
     ): ItemHolderInfo {
-        return if (viewHolder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
-            HeaderItemInfo().also {
+        return if (viewHolder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
+            CustomHeaderItemInfo().also {
                 it.setFrom(viewHolder)
             }
         } else {
@@ -44,7 +44,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
         preInfo: ItemHolderInfo,
         postInfo: ItemHolderInfo
     ): Boolean {
-        if (preInfo is HeaderItemInfo && postInfo is HeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        if (preInfo is CustomHeaderItemInfo && postInfo is CustomHeaderItemInfo && holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             holder.icExpand?.run {
                 ObjectAnimator
                     .ofFloat(
@@ -56,7 +56,7 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
                     .also {
                         it.addListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                holder.icExpand?.run {
+                                holder.icExpand.run {
                                     rotation = postInfo.arrowRotation
                                 }
                                 dispatchAnimationFinished(holder)
@@ -75,12 +75,12 @@ class ExpandableAdapterAnimation : DefaultItemAnimator() {
     }
 }
 
-class HeaderItemInfo : RecyclerView.ItemAnimator.ItemHolderInfo() {
+class CustomHeaderItemInfo : RecyclerView.ItemAnimator.ItemHolderInfo() {
 
     internal var arrowRotation: Float = 0F
 
     override fun setFrom(holder: ViewHolder): RecyclerView.ItemAnimator.ItemHolderInfo {
-        if (holder is BaseExpandableAdapter.BaseExpandableAdapterViewHolder.HeaderExpandableAdapter<*, *>) {
+        if (holder is BaseExpandableAdapter.BaseExpandableViewHolder.HeaderExpandableViewHolder<*, *>) {
             holder.icExpand?.run {
                 arrowRotation = rotation
             }
