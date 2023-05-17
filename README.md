@@ -22,7 +22,7 @@ allprojects {
 ### Adicione a dependência da biblioteca
 
 ```groove
-implementation 'com.github.romullodev:generic-expandable-adapter:1.2.0'
+implementation 'com.github.romullodev:generic-expandable-adapter:1.1.0'
 ```
 
 ## Implementação Default via Extension
